@@ -7,7 +7,6 @@
 
   <style>
     :root{
-      /* ✅ lighter + soothing palette */
       --bg1:#f6fbff;
       --bg2:#f9fffe;
       --card:#ffffff;
@@ -21,7 +20,6 @@
     }
 
     *{ box-sizing:border-box; }
-
     body{
       margin:0;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
@@ -40,7 +38,6 @@
       gap: 14px;
     }
 
-    /* 🔥 Header area moves based on "active" state */
     .topControls{
       background: var(--card);
       border: 1px solid var(--border);
@@ -53,7 +50,6 @@
       transition: all 0.35s ease;
     }
 
-    /* Initial: controls appear centered */
     .wrap.centerMode{
       justify-content:center;
       align-items:stretch;
@@ -63,7 +59,6 @@
       margin: 0 auto;
     }
 
-    /* After user finds: controls move to top and layout opens */
     .wrap.activeMode{
       justify-content:flex-start;
     }
@@ -124,7 +119,6 @@
       cursor:pointer;
     }
 
-    /* Content section appears only after Find */
     .content{
       display:none;
       gap: 14px;
@@ -141,7 +135,6 @@
       to{ opacity:1; transform: translateY(0); }
     }
 
-    /* Connecting Points box (scrollable) */
     .panel{
       background: var(--card);
       border: 1px solid var(--border);
@@ -230,7 +223,6 @@
       line-height: 1.4;
     }
 
-    /* Image box */
     .imgBox{
       background: var(--card);
       border: 1px solid var(--border);
@@ -254,7 +246,6 @@
       font-size: 1.1rem;
     }
 
-    /* Description box */
     .descBox{
       background: var(--card);
       border: 1px solid var(--border);
@@ -277,7 +268,13 @@
       font-size: 0.95rem;
     }
 
-    /* Mobile touch spacing */
+    .loadingLine{
+      color: var(--muted);
+      font-weight: 800;
+      font-size: 0.95rem;
+      padding: 6px 2px;
+    }
+
     @media (max-width: 420px){
       .controlsRow{
         grid-template-columns: 1fr 1fr;
@@ -292,39 +289,31 @@
 
 <body>
   <div class="wrap centerMode" id="wrap">
+
     <!-- Controls -->
     <div class="topControls">
       <div class="controlsRow">
-        <select id="el1">
-          <option value="" selected disabled>Element-1</option>
-          <option value="FIRE">FIRE</option>
-          <option value="EARTH">EARTH</option>
-          <option value="AIR">AIR</option>
-          <option value="WATER">WATER</option>
-          <option value="WOOD">WOOD</option>
+        <select id="el1" disabled>
+          <option value="" selected disabled>Loading...</option>
         </select>
 
-        <select id="el2">
-          <option value="" selected disabled>Element-2</option>
-          <option value="FIRE">FIRE</option>
-          <option value="EARTH">EARTH</option>
-          <option value="AIR">AIR</option>
-          <option value="WATER">WATER</option>
-          <option value="WOOD">WOOD</option>
+        <select id="el2" disabled>
+          <option value="" selected disabled>Loading...</option>
         </select>
 
-        <button class="findBtn" id="btnFind">Find</button>
+        <button class="findBtn" id="btnFind" disabled>Find</button>
       </div>
 
       <div class="miniBtns">
-        <button class="ghostBtn" id="btnSwap">Swap</button>
-        <button class="ghostBtn" id="btnReset">Reset</button>
+        <button class="ghostBtn" id="btnSwap" disabled>Swap</button>
+        <button class="ghostBtn" id="btnReset" disabled>Reset</button>
       </div>
+
+      <div class="loadingLine" id="loadStatus">Loading data from JSON...</div>
     </div>
 
-    <!-- Content (appears after Find) -->
+    <!-- Content -->
     <div class="content" id="content">
-      <!-- Connecting Points box -->
       <div class="panel">
         <div class="panelTitle">
           <span>Connecting Points</span>
@@ -334,75 +323,53 @@
         <div class="scrollBox" id="outputBox"></div>
       </div>
 
-      <!-- Image placeholder -->
       <div class="imgBox">
         <div class="imgPlaceholder" id="imgHolder">Image Placeholder</div>
       </div>
 
-      <!-- Description -->
       <div class="descBox">
         <div class="descTitle">Description</div>
         <p class="descText" id="descText">
           Select two elements and tap <b>Find</b>. Later, this section can show
-          details fetched from your database based on the connecting point codes.
+          details fetched from your database.
         </p>
       </div>
     </div>
+
   </div>
 
   <script>
-    // ✅ Data structure kept same (easy to connect DB later)
-    const matrix = {
-      FIRE: {
-        FIRE:  { yin:["HT-8","PC-8"],            yang:["SI-5","TW-6"] },
-        EARTH: { yin:["HT-7","PC-7","SP-2"],     yang:["SI-8","TW-10","ST-41"] },
-        AIR:   { yin:["HT-4","PC-5","LU-10"],    yang:["SI-1","TW-1","LI-5"] },
-        WATER: { yin:["HT-3","PC-3","KD-2"],     yang:["SI-2","TW-2","UB-60"] },
-        WOOD:  { yin:["HT-9","PC-9","LV-2"],     yang:["ST-3","TW-3","GB-38"] }
-      },
-      EARTH: {
-        FIRE:  { yin:[],                        yang:[] },
-        EARTH: { yin:["SP3"],                   yang:["ST36"] },
-        AIR:   { yin:["SP-5","LU-9"],           yang:["ST-45","LI-11"] },
-        WATER: { yin:["SP-9","KD-3"],           yang:["ST-44","UB-40"] },
-        WOOD:  { yin:["SP-1","LV-3"],           yang:["ST-43","GB-34"] }
-      },
-      AIR: {
-        FIRE:  { yin:[],                        yang:[] },
-        EARTH: { yin:[],                        yang:[] },
-        AIR:   { yin:["LU-8"],                  yang:["LI-1"] },
-        WATER: { yin:["LU-5","KD-7"],           yang:["LI-2","UB-67"] },
-        WOOD:  { yin:["LU-11","LV-4"],          yang:["LI-3","GB-44"] }
-      },
-      WATER: {
-        FIRE:  { yin:[],                        yang:[] },
-        EARTH: { yin:[],                        yang:[] },
-        AIR:   { yin:[],                        yang:[] },
-        WATER: { yin:["KD-10"],                 yang:["UB66"] },
-        WOOD:  { yin:["KD-1","LV-8"],           yang:["UB-65","GB-43"] }
-      },
-      WOOD: {
-        FIRE:  { yin:[],                        yang:[] },
-        EARTH: { yin:[],                        yang:[] },
-        AIR:   { yin:[],                        yang:[] },
-        WATER: { yin:[],                        yang:[] },
-        WOOD:  { yin:["LV-1"],                  yang:["GB-41"] }
-      }
-    };
+    // ✅ this will be loaded from JSON
+    let db = null;
 
     const wrap = document.getElementById("wrap");
-    const content = document.getElementById("content");
 
     const el1 = document.getElementById("el1");
     const el2 = document.getElementById("el2");
-    const btnFind = document.getElementById("btnFind");
-    const btnSwap = document.getElementById("btnSwap");
+
+    const btnFind  = document.getElementById("btnFind");
+    const btnSwap  = document.getElementById("btnSwap");
     const btnReset = document.getElementById("btnReset");
 
     const outputBox = document.getElementById("outputBox");
     const pairBadge = document.getElementById("pairBadge");
-    const descText = document.getElementById("descText");
+    const descText  = document.getElementById("descText");
     const imgHolder = document.getElementById("imgHolder");
+    const loadStatus = document.getElementById("loadStatus");
+
+    function setActiveMode(active){
+      if(active){
+        wrap.classList.remove("centerMode");
+        wrap.classList.add("activeMode");
+      }else{
+        wrap.classList.remove("activeMode");
+        wrap.classList.add("centerMode");
+      }
+    }
+
+    function toTitleCase(s){
+      return (s || "").slice(0,1).toUpperCase() + (s || "").slice(1);
+    }
 
     function chips(list){
       if(!list || list.length === 0){
@@ -416,12 +383,12 @@
     }
 
     function renderResult(a, b){
-      const cell = matrix?.[a]?.[b];
-      pairBadge.textContent = `${a} × ${b}`;
+      const cell = db?.table?.[a]?.[b];
+      pairBadge.textContent = `${toTitleCase(a)} × ${toTitleCase(b)}`;
 
       if(!cell){
         outputBox.innerHTML = `<div class="emptyState">No mapping exists for this pair.</div>`;
-        descText.innerHTML = `No data found for <b>${a}</b> × <b>${b}</b>.`;
+        descText.innerHTML = `No data found for <b>${toTitleCase(a)}</b> × <b>${toTitleCase(b)}</b>.`;
         imgHolder.textContent = "No Image";
         return;
       }
@@ -444,30 +411,57 @@
         </div>
       `;
 
-      // ✅ Placeholder for future DB
+      // ✅ Placeholder: future DB usage for image + description
       // Example later:
-      // fetch(`/api/points?yin=${cell.yin.join(",")}&yang=${cell.yang.join(",")}`)
-      descText.innerHTML = `
-        Showing results for <b>${a}</b> × <b>${b}</b>.
-        This description can later come from your database using these point codes.
-      `;
+      // const imgUrl = getImageUrlFromPoint(cell.yin[0]) ...
       imgHolder.textContent = "Image Placeholder";
+
+      descText.innerHTML = `
+        Showing results for <b>${toTitleCase(a)}</b> × <b>${toTitleCase(b)}</b>.
+        This description can later be fetched based on connecting point codes.
+      `;
     }
 
-    function setActiveMode(active){
-      if(active){
-        wrap.classList.remove("centerMode");
-        wrap.classList.add("activeMode");
-      }else{
-        wrap.classList.remove("activeMode");
-        wrap.classList.add("centerMode");
+    function fillDropdown(selectEl, elements){
+      selectEl.innerHTML = `
+        <option value="" selected disabled>Select</option>
+        ${elements.map(e => `<option value="${e}">${toTitleCase(e)}</option>`).join("")}
+      `;
+    }
+
+    async function loadJson(){
+      try{
+        loadStatus.textContent = "Loading data from JSON...";
+        const res = await fetch("./acup.json", { cache: "no-store" });
+
+        if(!res.ok){
+          throw new Error("Could not load acup.json");
+        }
+
+        db = await res.json();
+
+        if(!db?.elements || !db?.table){
+          throw new Error("JSON format invalid (missing elements/table).");
+        }
+
+        fillDropdown(el1, db.elements);
+        fillDropdown(el2, db.elements);
+
+        el1.disabled = false;
+        el2.disabled = false;
+        btnFind.disabled = false;
+        btnSwap.disabled = false;
+        btnReset.disabled = false;
+
+        loadStatus.textContent = "Ready ✅ Select elements and tap Find.";
+      }catch(err){
+        console.error(err);
+        loadStatus.textContent = "Error: Could not load JSON data ❌";
+        alert("Failed to load acup.json. Keep acup.json in same folder as HTML, and open using Live Server.");
       }
     }
 
-    // ✅ Initial state: NO inputs selected, ONLY controls visible in center
-    setActiveMode(false);
-    outputBox.innerHTML = "";
-
+    // ✅ Events
     btnFind.addEventListener("click", () => {
       const a = el1.value;
       const b = el2.value;
@@ -480,7 +474,6 @@
       setActiveMode(true);
       renderResult(a, b);
 
-      // Bring controls to top smoothly
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
 
@@ -496,7 +489,6 @@
       el1.value = b;
       el2.value = a;
 
-      // If already active, update results immediately
       if(wrap.classList.contains("activeMode")){
         renderResult(el1.value, el2.value);
       }
@@ -505,14 +497,17 @@
     btnReset.addEventListener("click", () => {
       el1.value = "";
       el2.value = "";
-
-      // Hide everything except dropdowns + buttons, move to center again
       setActiveMode(false);
+
       outputBox.innerHTML = "";
       pairBadge.textContent = "—";
       imgHolder.textContent = "Image Placeholder";
       descText.innerHTML = `Select two elements and tap <b>Find</b>.`;
     });
+
+    // ✅ Start
+    setActiveMode(false);
+    loadJson();
   </script>
 </body>
-  </html>
+</html>
