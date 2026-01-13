@@ -1,0 +1,88 @@
+{
+  "elements": ["fire", "earth", "air", "water", "wood"],
+
+  "table": {
+    "fire": {
+      "fire": {
+        "yin": ["HT-8", "PC-8"],
+        "yang": ["SI-5", "TW-6"]
+      },
+      "earth": {
+        "yin": ["HT-7", "PC-7", "SP-2"],
+        "yang": ["SI-8", "TW-10", "ST-41"]
+      },
+      "air": {
+        "yin": ["HT-4", "PC-5", "LU-10"],
+        "yang": ["SI-1", "TW-1", "LI-5"]
+      },
+      "water": {
+        "yin": ["HT-3", "PC-3", "KD-2"],
+        "yang": ["SI-2", "TW-2", "UB-60"]
+      },
+      "wood": {
+        "yin": ["HT-9", "PC-9", "LV-2"],
+        "yang": ["ST-3", "TW-3", "GB-38"]
+      }
+    },
+
+    "earth": {
+      "fire": { "yin": [], "yang": [] },
+      "earth": { "yin": ["SP3"], "yang": ["ST36"] },
+      "air": { "yin": ["SP-5", "LU-9"], "yang": ["ST-45", "LI-11"] },
+      "water": { "yin": ["SP-9", "KD-3"], "yang": ["ST-44", "UB-40"] },
+      "wood": { "yin": ["SP-1", "LV-3"], "yang": ["ST-43", "GB-34"] }
+    },
+
+    "air": {
+      "fire": { "yin": [], "yang": [] },
+      "earth": { "yin": [], "yang": [] },
+      "air": { "yin": ["LU-8"], "yang": ["LI-1"] },
+      "water": { "yin": ["LU-5", "KD-7"], "yang": ["LI-2", "UB-67"] },
+      "wood": { "yin": ["LU-11", "LV-4"], "yang": ["LI-3", "GB-44"] }
+    },
+
+    "water": {
+      "fire": { "yin": [], "yang": [] },
+      "earth": { "yin": [], "yang": [] },
+      "air": { "yin": [], "yang": [] },
+      "water": { "yin": ["KD-10"], "yang": ["UB66"] },
+      "wood": { "yin": ["KD-1", "LV-8"], "yang": ["UB-65", "GB-43"] }
+    },
+
+    "wood": {
+      "fire": { "yin": [], "yang": [] },
+      "earth": { "yin": [], "yang": [] },
+      "air": { "yin": [], "yang": [] },
+      "water": { "yin": [], "yang": [] },
+      "wood": { "yin": ["LV-1"], "yang": ["GB-41"] }
+    }
+  },
+
+  "points": {
+    "HT-8": {
+      "name": "Heart 8",
+      "image": "https://cdn.jsdelivr.net/gh/YOUR_USERNAME/YOUR_REPO@main/images/HT-8.jpg",
+      "description": "Placeholder description for HT-8. Replace with your actual content."
+    },
+    "PC-8": {
+      "name": "Pericardium 8",
+      "image": "https://cdn.jsdelivr.net/gh/YOUR_USERNAME/YOUR_REPO@main/images/PC-8.jpg",
+      "description": "Placeholder description for PC-8. Replace with your actual content."
+    },
+    "SP-5": {
+      "name": "Spleen 5",
+      "image": "https://cdn.jsdelivr.net/gh/YOUR_USERNAME/YOUR_REPO@main/images/SP-5.jpg",
+      "description": "Placeholder description for SP-5. Replace with your actual content."
+    },
+    "LU-9": {
+      "name": "Lung 9",
+      "image": "https://cdn.jsdelivr.net/gh/YOUR_USERNAME/YOUR_REPO@main/images/LU-9.jpg",
+      "description": "Placeholder description for LU-9. Replace with your actual content."
+    },
+    "ST-45": {
+      "name": "Stomach 45",
+      "image": "https://cdn.jsdelivr.net/gh/YOUR_USERNAME/YOUR_REPO@main/images/ST-45.jpg",
+      "description": "Placeholder description for ST-45. Replace with your actual content."
+    }
+  }
+}
