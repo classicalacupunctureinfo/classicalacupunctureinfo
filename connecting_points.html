@@ -369,7 +369,7 @@
   </div>
 
   <script>
-    // ✅ Loaded from JSON (acup.json)
+    // ✅ Loaded from JSON (only elements + table)
     let db = null;
 
     // Track selected chip
@@ -416,57 +416,46 @@
     function setSelectedChip(pointCode){
       selectedPointCode = pointCode;
 
-      // remove old selection
       document.querySelectorAll(".chip").forEach(ch => ch.classList.remove("selected"));
 
-      // add selection to the clicked one
       const active = document.querySelector(`.chip[data-code="${CSS.escape(pointCode)}"]`);
       if(active) active.classList.add("selected");
     }
 
-    function showPointDetails(pointCode){
+    async function showPointDetails(pointCode){
       const code = sanitizeCode(pointCode);
-      const pointData = db?.points?.[code];
-
       setSelectedChip(code);
 
-      if(!pointData){
+      // ✅ IMAGE from local folder: pics/<CODE>.jpg
+      const imageUrl = `./pics/${code}.jpg`;
+
+      imgHolder.style.display = "none";
+      imgActual.style.display = "block";
+
+      imgActual.onerror = () => {
         imgActual.style.display = "none";
         imgActual.src = "";
 
         imgHolder.style.display = "flex";
-        imgHolder.textContent = `No Image Found for ${code}`;
+        imgHolder.textContent = `No Image Found: pics/${code}.jpg`;
+      };
 
-        descTitle.textContent = "Description";
-        descText.innerHTML = `No description available for <b>${code}</b>. Add it inside JSON under <b>"points"</b>.`;
-        return;
-      }
+      imgActual.src = imageUrl;
 
-      // Title
-      descTitle.textContent = pointData.name ? pointData.name : `Point ${code}`;
+      // ✅ DESCRIPTION from local folder: desc/<CODE>.txt
+      const descUrl = `./desc/${code}.txt`;
 
-      // Description
-      descText.textContent = pointData.description || "No description provided.";
+      try{
+        const res = await fetch(descUrl, { cache: "no-store" });
+        if(!res.ok) throw new Error("desc file missing");
 
-      // Image
-      if(pointData.image){
-        imgHolder.style.display = "none";
-        imgActual.style.display = "block";
+        const text = await res.text();
 
-        imgActual.onerror = () => {
-          imgActual.style.display = "none";
-          imgActual.src = "";
-          imgHolder.style.display = "flex";
-          imgHolder.textContent = `Image failed to load for ${code}`;
-        };
-
-        imgActual.src = pointData.image;
-      }else{
-        imgActual.style.display = "none";
-        imgActual.src = "";
-
-        imgHolder.style.display = "flex";
-        imgHolder.textContent = `No Image URL for ${code}`;
+        descTitle.textContent = code;
+        descText.textContent = (text || "").trim() || "Description file is empty.";
+      }catch(err){
+        descTitle.textContent = code;
+        descText.innerHTML = `No description found: <b>desc/${code}.txt</b>`;
       }
     }
 
@@ -482,8 +471,7 @@
     }
 
     function attachChipClickHandlers(){
-      const chips = document.querySelectorAll(".chip");
-      chips.forEach(ch => {
+      document.querySelectorAll(".chip").forEach(ch => {
         ch.addEventListener("click", () => {
           const code = ch.getAttribute("data-code");
           showPointDetails(code);
@@ -495,8 +483,8 @@
       const cell = db?.table?.[a]?.[b];
       pairBadge.textContent = `${toTitleCase(a)} × ${toTitleCase(b)}`;
 
-      // Reset point area for new pair
       selectedPointCode = null;
+
       descTitle.textContent = "Description";
       descText.innerHTML = `Tap any connecting point to load image + description.`;
 
@@ -543,9 +531,7 @@
         loadStatus.textContent = "Loading data from JSON...";
         const res = await fetch("./acup.json", { cache: "no-store" });
 
-        if(!res.ok){
-          throw new Error("Could not load acup.json");
-        }
+        if(!res.ok) throw new Error("Could not load acup.json");
 
         db = await res.json();
 
@@ -566,11 +552,11 @@
       }catch(err){
         console.error(err);
         loadStatus.textContent = "Error: Could not load JSON data ❌";
-        alert("Failed to load acup.json.\n\nMake sure:\n1) acup.json is in same folder\n2) You open with Live Server (not file://)");
+        alert("Failed to load acup.json.\n\nMake sure:\n1) acup.json is in same folder\n2) Open using Live Server (not file://)");
       }
     }
 
-    // ✅ Events
+    // Events
     btnFind.addEventListener("click", () => {
       const a = el1.value;
       const b = el2.value;
@@ -611,7 +597,6 @@
 
       outputBox.innerHTML = "";
       pairBadge.textContent = "—";
-
       selectedPointCode = null;
 
       imgActual.style.display = "none";
@@ -623,9 +608,10 @@
       descText.innerHTML = `Select two elements and tap <b>Find</b>. Then tap any connecting point.`;
     });
 
-    // ✅ Start
+    // Start
     setActiveMode(false);
     loadJson();
   </script>
 </body>
 </html>
+
