@@ -215,6 +215,19 @@
       font-weight: 900;
       font-size: 0.92rem;
       color: var(--text);
+      cursor:pointer;
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
+      user-select:none;
+    }
+
+    .chip:active{
+      transform: scale(0.98);
+    }
+
+    .chip.selected{
+      background: #e7fffa;
+      border-color: rgba(63,183,161,0.5);
+      box-shadow: 0 8px 18px rgba(63,183,161,0.18);
     }
 
     .emptyState{
@@ -244,6 +257,18 @@
       font-weight: 900;
       color: rgba(22,49,44,0.5);
       font-size: 1.1rem;
+      text-align:center;
+      padding: 10px;
+    }
+
+    .imgActual{
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      display:none;
+      background: #ffffff;
     }
 
     .descBox{
@@ -321,17 +346,22 @@
         </div>
 
         <div class="scrollBox" id="outputBox"></div>
+        <div class="loadingLine" style="padding-top:10px;">
+          Tap any point chip to load Image + Description.
+        </div>
       </div>
 
+      <!-- Image -->
       <div class="imgBox">
         <div class="imgPlaceholder" id="imgHolder">Image Placeholder</div>
+        <img id="imgActual" class="imgActual" alt="Point Image"/>
       </div>
 
+      <!-- Description -->
       <div class="descBox">
-        <div class="descTitle">Description</div>
+        <div class="descTitle" id="descTitle">Description</div>
         <p class="descText" id="descText">
-          Select two elements and tap <b>Find</b>. Later, this section can show
-          details fetched from your database.
+          Select two elements and tap <b>Find</b>. Then tap any connecting point.
         </p>
       </div>
     </div>
@@ -339,8 +369,11 @@
   </div>
 
   <script>
-    // ✅ this will be loaded from JSON
+    // ✅ Loaded from JSON (acup.json)
     let db = null;
+
+    // Track selected chip
+    let selectedPointCode = null;
 
     const wrap = document.getElementById("wrap");
 
@@ -353,8 +386,13 @@
 
     const outputBox = document.getElementById("outputBox");
     const pairBadge = document.getElementById("pairBadge");
-    const descText  = document.getElementById("descText");
+
     const imgHolder = document.getElementById("imgHolder");
+    const imgActual = document.getElementById("imgActual");
+
+    const descTitle = document.getElementById("descTitle");
+    const descText  = document.getElementById("descText");
+
     const loadStatus = document.getElementById("loadStatus");
 
     function setActiveMode(active){
@@ -371,25 +409,104 @@
       return (s || "").slice(0,1).toUpperCase() + (s || "").slice(1);
     }
 
+    function sanitizeCode(code){
+      return (code || "").trim();
+    }
+
+    function setSelectedChip(pointCode){
+      selectedPointCode = pointCode;
+
+      // remove old selection
+      document.querySelectorAll(".chip").forEach(ch => ch.classList.remove("selected"));
+
+      // add selection to the clicked one
+      const active = document.querySelector(`.chip[data-code="${CSS.escape(pointCode)}"]`);
+      if(active) active.classList.add("selected");
+    }
+
+    function showPointDetails(pointCode){
+      const code = sanitizeCode(pointCode);
+      const pointData = db?.points?.[code];
+
+      setSelectedChip(code);
+
+      if(!pointData){
+        imgActual.style.display = "none";
+        imgActual.src = "";
+
+        imgHolder.style.display = "flex";
+        imgHolder.textContent = `No Image Found for ${code}`;
+
+        descTitle.textContent = "Description";
+        descText.innerHTML = `No description available for <b>${code}</b>. Add it inside JSON under <b>"points"</b>.`;
+        return;
+      }
+
+      // Title
+      descTitle.textContent = pointData.name ? pointData.name : `Point ${code}`;
+
+      // Description
+      descText.textContent = pointData.description || "No description provided.";
+
+      // Image
+      if(pointData.image){
+        imgHolder.style.display = "none";
+        imgActual.style.display = "block";
+
+        imgActual.onerror = () => {
+          imgActual.style.display = "none";
+          imgActual.src = "";
+          imgHolder.style.display = "flex";
+          imgHolder.textContent = `Image failed to load for ${code}`;
+        };
+
+        imgActual.src = pointData.image;
+      }else{
+        imgActual.style.display = "none";
+        imgActual.src = "";
+
+        imgHolder.style.display = "flex";
+        imgHolder.textContent = `No Image URL for ${code}`;
+      }
+    }
+
     function chips(list){
       if(!list || list.length === 0){
         return `<div class="emptyState">No points available for this pair.</div>`;
       }
       return `
         <div class="points">
-          ${list.map(x => `<span class="chip">${x}</span>`).join("")}
+          ${list.map(x => `<span class="chip" data-code="${x}">${x}</span>`).join("")}
         </div>
       `;
+    }
+
+    function attachChipClickHandlers(){
+      const chips = document.querySelectorAll(".chip");
+      chips.forEach(ch => {
+        ch.addEventListener("click", () => {
+          const code = ch.getAttribute("data-code");
+          showPointDetails(code);
+        });
+      });
     }
 
     function renderResult(a, b){
       const cell = db?.table?.[a]?.[b];
       pairBadge.textContent = `${toTitleCase(a)} × ${toTitleCase(b)}`;
 
+      // Reset point area for new pair
+      selectedPointCode = null;
+      descTitle.textContent = "Description";
+      descText.innerHTML = `Tap any connecting point to load image + description.`;
+
+      imgActual.style.display = "none";
+      imgActual.src = "";
+      imgHolder.style.display = "flex";
+      imgHolder.textContent = "Image Placeholder";
+
       if(!cell){
         outputBox.innerHTML = `<div class="emptyState">No mapping exists for this pair.</div>`;
-        descText.innerHTML = `No data found for <b>${toTitleCase(a)}</b> × <b>${toTitleCase(b)}</b>.`;
-        imgHolder.textContent = "No Image";
         return;
       }
 
@@ -411,15 +528,7 @@
         </div>
       `;
 
-      // ✅ Placeholder: future DB usage for image + description
-      // Example later:
-      // const imgUrl = getImageUrlFromPoint(cell.yin[0]) ...
-      imgHolder.textContent = "Image Placeholder";
-
-      descText.innerHTML = `
-        Showing results for <b>${toTitleCase(a)}</b> × <b>${toTitleCase(b)}</b>.
-        This description can later be fetched based on connecting point codes.
-      `;
+      attachChipClickHandlers();
     }
 
     function fillDropdown(selectEl, elements){
@@ -457,7 +566,7 @@
       }catch(err){
         console.error(err);
         loadStatus.textContent = "Error: Could not load JSON data ❌";
-        alert("Failed to load acup.json. Keep acup.json in same folder as HTML, and open using Live Server.");
+        alert("Failed to load acup.json.\n\nMake sure:\n1) acup.json is in same folder\n2) You open with Live Server (not file://)");
       }
     }
 
@@ -497,12 +606,21 @@
     btnReset.addEventListener("click", () => {
       el1.value = "";
       el2.value = "";
+
       setActiveMode(false);
 
       outputBox.innerHTML = "";
       pairBadge.textContent = "—";
+
+      selectedPointCode = null;
+
+      imgActual.style.display = "none";
+      imgActual.src = "";
+      imgHolder.style.display = "flex";
       imgHolder.textContent = "Image Placeholder";
-      descText.innerHTML = `Select two elements and tap <b>Find</b>.`;
+
+      descTitle.textContent = "Description";
+      descText.innerHTML = `Select two elements and tap <b>Find</b>. Then tap any connecting point.`;
     });
 
     // ✅ Start
