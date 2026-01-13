@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Menu</title>
+
+  <style>
+    :root{
+      --bg1:#071c1f;
+      --bg2:#0b2b2f;
+      --card:#0f3a3f;
+      --card2:#0b3035;
+      --text:#e9fbff;
+      --muted:#a7d3dc;
+      --accent:#36c2c9;
+      --shadow: 0 18px 50px rgba(0,0,0,.35);
+      --border: rgba(255,255,255,.10);
+      --radius: 18px;
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue";
+      color:var(--text);
+      background:
+        radial-gradient(900px 500px at 20% 20%, rgba(54,194,201,.18), transparent 55%),
+        radial-gradient(900px 500px at 80% 30%, rgba(255,255,255,.08), transparent 60%),
+        linear-gradient(160deg, var(--bg1), var(--bg2));
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:22px;
+    }
+
+    .wrap{
+      width:min(860px, 100%);
+      display:grid;
+      gap:18px;
+    }
+
+    .header{
+      padding:18px 18px 10px;
+    }
+
+    .title{
+      font-size:1.25rem;
+      font-weight:700;
+      letter-spacing:.2px;
+      margin:0 0 6px;
+    }
+
+    .subtitle{
+      margin:0;
+      color:var(--muted);
+      font-size:.95rem;
+      line-height:1.35;
+    }
+
+    .panel{
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap:14px;
+      padding:18px;
+      background: linear-gradient(180deg, rgba(0,0,0,.10), rgba(0,0,0,.18));
+    }
+
+    .btn{
+      appearance:none;
+      border: 1px solid rgba(255,255,255,.12);
+      background: linear-gradient(180deg, rgba(15,58,63,.95), rgba(11,48,53,.95));
+      color: var(--text);
+      border-radius: 16px;
+      padding: 16px 16px;
+      text-align:left;
+      cursor:pointer;
+      transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease;
+      box-shadow: 0 10px 24px rgba(0,0,0,.25);
+      position:relative;
+      overflow:hidden;
+      min-height:86px;
+    }
+
+    .btn::before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background: radial-gradient(220px 120px at 20% 0%, rgba(54,194,201,.20), transparent 60%);
+      opacity:0;
+      transition: opacity .15s ease;
+      pointer-events:none;
+    }
+
+    .btn:hover{
+      transform: translateY(-2px);
+      border-color: rgba(54,194,201,.35);
+      box-shadow: 0 16px 36px rgba(0,0,0,.35);
+    }
+    .btn:hover::before{ opacity:1; }
+
+    .btn:active{
+      transform: translateY(0px);
+      box-shadow: 0 10px 24px rgba(0,0,0,.28);
+    }
+
+    .btn-top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:6px;
+    }
+
+    .btn-title{
+      font-weight:700;
+      font-size:1.02rem;
+      margin:0;
+    }
+
+    .chip{
+      font-size:.78rem;
+      color: rgba(233,251,255,.9);
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      white-space:nowrap;
+    }
+
+    .btn-desc{
+      margin:0;
+      color: var(--muted);
+      font-size:.92rem;
+      line-height:1.35;
+    }
+
+    .footer{
+      padding: 0 18px 16px;
+      color: rgba(167,211,220,.9);
+      font-size:.85rem;
+    }
+
+    .divider{
+      height:1px;
+      background: rgba(255,255,255,.08);
+    }
+
+    @media (max-width: 640px){
+      .grid{ grid-template-columns: 1fr; }
+      .header{ padding:16px 16px 8px; }
+      .grid{ padding:16px; }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="wrap">
+    <section class="panel">
+      <div class="header">
+        <h1 class="title">Quick Menu</h1>
+        <p class="subtitle">Choose a module to continue.</p>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="grid">
+        <!-- 1) Opens connecting_points.html -->
+        <button class="btn" onclick="window.location.href='connecting_points.html'">
+          <div class="btn-top">
+            <p class="btn-title">Connecting Points</p>
+            <span class="chip">Open</span>
+          </div>
+          <p class="btn-desc">Cross-reference selection and view connection output.</p>
+        </button>
+
+        <!-- Placeholder -->
+        <button class="btn" onclick="alert('Coming soon…')">
+          <div class="btn-top">
+            <p class="btn-title">Module 2</p>
+            <span class="chip">Placeholder</span>
+          </div>
+          <p class="btn-desc">Reserved for a future feature.</p>
+        </button>
+
+        <!-- Placeholder -->
+        <button class="btn" onclick="alert('Coming soon…')">
+          <div class="btn-top">
+            <p class="btn-title">Module 3</p>
+            <span class="chip">Placeholder</span>
+          </div>
+          <p class="btn-desc">Reserved for a future feature.</p>
+        </button>
+
+        <!-- Placeholder -->
+        <button class="btn" onclick="alert('Coming soon…')">
+          <div class="btn-top">
+            <p class="btn-title">Module 4</p>
+            <span class="chip">Placeholder</span>
+          </div>
+          <p class="btn-desc">Reserved for a future feature.</p>
+        </button>
+      </div>
+
+      <div class="footer">
+        Tip: You can replace placeholders with real pages later by changing the <b>onclick</b> action.
+      </div>
+    </section>
+  </main>
+</body>
+</html>
