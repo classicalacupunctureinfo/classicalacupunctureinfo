@@ -216,12 +216,7 @@
       font-size: 0.92rem;
       color: var(--text);
       cursor:pointer;
-      transition: transform 0.12s ease, box-shadow 0.12s ease;
       user-select:none;
-    }
-
-    .chip:active{
-      transform: scale(0.98);
     }
 
     .chip.selected{
@@ -315,7 +310,6 @@
 <body>
   <div class="wrap centerMode" id="wrap">
 
-    <!-- Controls -->
     <div class="topControls">
       <div class="controlsRow">
         <select id="el1" disabled>
@@ -337,7 +331,6 @@
       <div class="loadingLine" id="loadStatus">Loading data from JSON...</div>
     </div>
 
-    <!-- Content -->
     <div class="content" id="content">
       <div class="panel">
         <div class="panelTitle">
@@ -346,18 +339,17 @@
         </div>
 
         <div class="scrollBox" id="outputBox"></div>
+
         <div class="loadingLine" style="padding-top:10px;">
           Tap any point chip to load Image + Description.
         </div>
       </div>
 
-      <!-- Image -->
       <div class="imgBox">
         <div class="imgPlaceholder" id="imgHolder">Image Placeholder</div>
         <img id="imgActual" class="imgActual" alt="Point Image"/>
       </div>
 
-      <!-- Description -->
       <div class="descBox">
         <div class="descTitle" id="descTitle">Description</div>
         <p class="descText" id="descText">
@@ -369,10 +361,7 @@
   </div>
 
   <script>
-    // ✅ Loaded from JSON (only elements + table)
     let db = null;
-
-    // Track selected chip
     let selectedPointCode = null;
 
     const wrap = document.getElementById("wrap");
@@ -415,42 +404,46 @@
 
     function setSelectedChip(pointCode){
       selectedPointCode = pointCode;
-
       document.querySelectorAll(".chip").forEach(ch => ch.classList.remove("selected"));
-
       const active = document.querySelector(`.chip[data-code="${CSS.escape(pointCode)}"]`);
       if(active) active.classList.add("selected");
+    }
+
+    // ✅ GitHub Pages safe URL builder
+    function assetUrl(relativePath){
+      return new URL(relativePath, window.location.href).toString();
     }
 
     async function showPointDetails(pointCode){
       const code = sanitizeCode(pointCode);
       setSelectedChip(code);
 
-      // ✅ IMAGE from local folder: pics/<CODE>.jpg
-      const imageUrl = `./pics/${code}.jpg`;
+      // ✅ IMAGE: tries jpg -> png (GitHub Pages safe)
+      const jpgUrl = assetUrl(`pics/${code}.jpg`);
+      const pngUrl = assetUrl(`pics/${code}.png`);
 
       imgHolder.style.display = "none";
       imgActual.style.display = "block";
 
       imgActual.onerror = () => {
-        imgActual.style.display = "none";
-        imgActual.src = "";
-
-        imgHolder.style.display = "flex";
-        imgHolder.textContent = `No Image Found: pics/${code}.jpg`;
+        imgActual.onerror = () => {
+          imgActual.style.display = "none";
+          imgActual.src = "";
+          imgHolder.style.display = "flex";
+          imgHolder.textContent = `No Image Found: pics/${code}.jpg / .png`;
+        };
+        imgActual.src = pngUrl;
       };
+      imgActual.src = jpgUrl;
 
-      imgActual.src = imageUrl;
-
-      // ✅ DESCRIPTION from local folder: desc/<CODE>.txt
-      const descUrl = `./desc/${code}.txt`;
+      // ✅ DESCRIPTION (GitHub Pages safe)
+      const descUrl = assetUrl(`desc/${code}.txt`);
 
       try{
         const res = await fetch(descUrl, { cache: "no-store" });
-        if(!res.ok) throw new Error("desc file missing");
+        if(!res.ok) throw new Error("missing");
 
         const text = await res.text();
-
         descTitle.textContent = code;
         descText.textContent = (text || "").trim() || "Description file is empty.";
       }catch(err){
@@ -529,7 +522,10 @@
     async function loadJson(){
       try{
         loadStatus.textContent = "Loading data from JSON...";
-        const res = await fetch("./acup.json", { cache: "no-store" });
+
+        // ✅ GitHub Pages safe JSON URL
+        const jsonUrl = assetUrl("acup.json");
+        const res = await fetch(jsonUrl, { cache: "no-store" });
 
         if(!res.ok) throw new Error("Could not load acup.json");
 
@@ -552,11 +548,10 @@
       }catch(err){
         console.error(err);
         loadStatus.textContent = "Error: Could not load JSON data ❌";
-        alert("Failed to load acup.json.\n\nMake sure:\n1) acup.json is in same folder\n2) Open using Live Server (not file://)");
+        alert("Failed to load acup.json.\n\nOn GitHub Pages, ensure:\n- acup.json exists in repo root\n- file names match exactly");
       }
     }
 
-    // Events
     btnFind.addEventListener("click", () => {
       const a = el1.value;
       const b = el2.value;
@@ -568,7 +563,6 @@
 
       setActiveMode(true);
       renderResult(a, b);
-
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
 
@@ -608,10 +602,8 @@
       descText.innerHTML = `Select two elements and tap <b>Find</b>. Then tap any connecting point.`;
     });
 
-    // Start
     setActiveMode(false);
     loadJson();
   </script>
 </body>
 </html>
-
