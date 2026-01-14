@@ -590,7 +590,7 @@ desc/&lt;POINT&gt;.txt
     function renderPair(a, b){
       const cell = db?.pairs?.[a]?.[b];
 
-      pairBadge.textContent = `${toTitleCase(a)} × ${toTitleCase(b)}`;
+      pairBadge.textContent = `${toTitleCase(a)} + ${toTitleCase(b)}`;
       resetPointUI();
 
       if(!cell){
