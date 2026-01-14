@@ -38,7 +38,6 @@
       gap: 14px;
     }
 
-    /* Controls Card */
     .controlsCard{
       background: var(--card);
       border: 1px solid var(--border);
@@ -51,7 +50,6 @@
       transition: all 0.35s ease;
     }
 
-    /* Centered initial state */
     .wrap.centerMode{
       justify-content:center;
       align-items:stretch;
@@ -61,7 +59,6 @@
       margin: 0 auto;
     }
 
-    /* After Find */
     .wrap.activeMode{
       justify-content:flex-start;
     }
@@ -124,7 +121,6 @@
       padding: 2px 2px;
     }
 
-    /* Content appears after Find */
     .content{
       display:none;
       flex-direction:column;
@@ -139,7 +135,6 @@
       to{ opacity:1; transform: translateY(0); }
     }
 
-    /* Compact Connecting Points */
     .panel{
       background: var(--card);
       border: 1px solid var(--border);
@@ -173,7 +168,6 @@
       white-space: nowrap;
     }
 
-    /* Compact: smaller height + tighter padding */
     .compactBox{
       border: 1px solid var(--border);
       border-radius: 16px;
@@ -235,7 +229,6 @@
       line-height: 1.35;
     }
 
-    /* Image + Description */
     .imgBox, .descBox{
       background: var(--card);
       border: 1px solid var(--border);
@@ -268,6 +261,7 @@
       border: 1px solid var(--border);
       display:none;
       background:#fff;
+      cursor: zoom-in;
     }
 
     .descTitle{
@@ -285,7 +279,62 @@
       white-space: pre-wrap;
     }
 
-    /* Mobile tweak */
+    /* ✅ Fullscreen image overlay */
+    .overlay{
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      padding: 14px;
+    }
+
+    .overlay.show{
+      display: flex;
+    }
+
+    .overlayContent{
+      width: 100%;
+      max-width: 900px;
+      max-height: 92vh;
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+    }
+
+    .overlayTop{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      color: white;
+      font-weight: 900;
+      font-size: 0.95rem;
+    }
+
+    .overlayBtn{
+      border: none;
+      background: rgba(255,255,255,0.15);
+      color: white;
+      padding: 10px 14px;
+      border-radius: 14px;
+      cursor:pointer;
+      font-weight: 900;
+      backdrop-filter: blur(8px);
+    }
+
+    .overlayImg{
+      width: 100%;
+      height: auto;
+      max-height: 84vh;
+      object-fit: contain;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.05);
+    }
+
     @media (max-width: 420px){
       .row{
         grid-template-columns: 1fr 1fr;
@@ -300,7 +349,6 @@
 
 <body>
   <div class="wrap centerMode" id="wrap">
-    <!-- Controls -->
     <div class="controlsCard">
       <div class="row">
         <select id="el1" disabled>
@@ -318,9 +366,7 @@
       <div class="statusLine" id="statusLine">Loading data from JSON...</div>
     </div>
 
-    <!-- Content -->
     <div class="content" id="content">
-      <!-- Compact connecting points -->
       <div class="panel">
         <div class="panelHead">
           <div class="panelTitle">Connecting Points</div>
@@ -332,13 +378,11 @@
         </div>
       </div>
 
-      <!-- Image -->
       <div class="imgBox">
         <div class="imgPlaceholder" id="imgHolder">Image Placeholder</div>
         <img id="imgActual" class="imgActual" alt="Point Image"/>
       </div>
 
-      <!-- Description -->
       <div class="descBox">
         <div class="descTitle" id="descTitle">Description</div>
         <p class="descText" id="descText">
@@ -351,9 +395,18 @@ desc/&lt;POINT&gt;.txt
     </div>
   </div>
 
+  <!-- ✅ Fullscreen Overlay -->
+  <div class="overlay" id="imgOverlay">
+    <div class="overlayContent">
+      <div class="overlayTop">
+        <div id="overlayTitle">Image</div>
+        <button class="overlayBtn" id="overlayCloseBtn">Close ✕</button>
+      </div>
+      <img id="overlayImg" class="overlayImg" alt="Full Screen Image"/>
+    </div>
+  </div>
+
   <script>
-    // Optimized for acup.json format:
-    // { elements: [...], pairs: { element1: { element2: {yin:[], yang:[]} } } }
     let db = null;
 
     const wrap = document.getElementById("wrap");
@@ -372,6 +425,12 @@ desc/&lt;POINT&gt;.txt
     const descTitle = document.getElementById("descTitle");
     const descText = document.getElementById("descText");
 
+    // Overlay elements
+    const imgOverlay = document.getElementById("imgOverlay");
+    const overlayImg = document.getElementById("overlayImg");
+    const overlayTitle = document.getElementById("overlayTitle");
+    const overlayCloseBtn = document.getElementById("overlayCloseBtn");
+
     let selectedPointCode = null;
 
     function setActiveMode(active){
@@ -388,7 +447,7 @@ desc/&lt;POINT&gt;.txt
       return (s || "").slice(0,1).toUpperCase() + (s || "").slice(1);
     }
 
-    // ✅ GitHub Pages safe URL builder
+    // GitHub Pages safe URL builder
     function assetUrl(relativePath){
       return new URL(relativePath, window.location.href).toString();
     }
@@ -422,13 +481,40 @@ desc/&lt;POINT&gt;.txt
       if(active) active.classList.add("selected");
     }
 
+    // ✅ Fullscreen open/close
+    function openFullscreenImage(src, title){
+      if(!src) return;
+      overlayImg.src = src;
+      overlayTitle.textContent = title || "Image";
+      imgOverlay.classList.add("show");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeFullscreenImage(){
+      imgOverlay.classList.remove("show");
+      overlayImg.src = "";
+      document.body.style.overflow = "";
+    }
+
+    overlayCloseBtn.addEventListener("click", closeFullscreenImage);
+
+    // click outside image closes it
+    imgOverlay.addEventListener("click", (e) => {
+      if(e.target === imgOverlay) closeFullscreenImage();
+    });
+
+    // ESC closes
+    document.addEventListener("keydown", (e) => {
+      if(e.key === "Escape") closeFullscreenImage();
+    });
+
     async function showPointDetails(pointCode){
       const code = (pointCode || "").trim();
       if(!code) return;
 
       setSelectedChip(code);
 
-      // IMAGE: pics/<CODE>.jpg then pics/<CODE>.png
+      // IMAGE: pics/<CODE>.jpg then .png
       const jpgUrl = assetUrl(`pics/${code}.jpg`);
       const pngUrl = assetUrl(`pics/${code}.png`);
 
@@ -460,6 +546,13 @@ desc/&lt;POINT&gt;.txt
         descText.textContent = `No description found: desc/${code}.txt`;
       }
     }
+
+    // ✅ click image to open fullscreen
+    imgActual.addEventListener("click", () => {
+      if(imgActual.style.display === "none") return;
+      if(!imgActual.src) return;
+      openFullscreenImage(imgActual.src, selectedPointCode || "Image");
+    });
 
     function renderCompactPoints(yinList, yangList){
       const renderLine = (labelClass, labelText, list) => {
@@ -497,7 +590,7 @@ desc/&lt;POINT&gt;.txt
     function renderPair(a, b){
       const cell = db?.pairs?.[a]?.[b];
 
-      pairBadge.textContent = `${toTitleCase(a)} + ${toTitleCase(b)}`;
+      pairBadge.textContent = `${toTitleCase(a)} × ${toTitleCase(b)}`;
       resetPointUI();
 
       if(!cell){
@@ -559,9 +652,9 @@ desc/&lt;POINT&gt;.txt
 
       pointsBox.innerHTML = `<div class="emptyState">Select elements and tap <b>Find</b>.</div>`;
       resetPointUI();
+      closeFullscreenImage();
     });
 
-    // Start
     setActiveMode(false);
     loadJson();
   </script>
