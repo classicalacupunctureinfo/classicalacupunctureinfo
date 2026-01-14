@@ -27,7 +27,7 @@
     "earth": {
       "fire": {
         "yin": ["HT7", "PC7", "SP2"],
-        "yang": ["SI8", "TW10", "SI41"]
+        "yang": ["SI8", "TW10", "ST41"]
       },
       "earth": {
         "yin": ["SP3"],
@@ -39,11 +39,11 @@
       },
       "water": {
         "yin": ["SP9", "KD3"],
-        "yang": ["SI44", "UB40"]
+        "yang": ["ST44", "UB40"]
       },
       "wood": {
         "yin": ["SP1", "LV3"],
-        "yang": ["SI43", "GB34"]
+        "yang": ["ST43", "GB34"]
       }
     },
 
@@ -77,7 +77,7 @@
       },
       "earth": {
         "yin": ["SP9", "KD3"],
-        "yang": ["SI44", "UB40"]
+        "yang": ["ST44", "UB40"]
       },
       "air": {
         "yin": ["LU5", "KD7"],
@@ -100,7 +100,7 @@
       },
       "earth": {
         "yin": ["SP1", "LV3"],
-        "yang": ["SI43", "GB34"]
+        "yang": ["ST43", "GB34"]
       },
       "air": {
         "yin": ["LU11", "LV4"],
