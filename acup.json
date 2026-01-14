@@ -35,15 +35,15 @@
       },
       "air": {
         "yin": ["SP5", "LU9"],
-        "yang": ["ST45", "LI11"]
+        "yang": ["SI45", "LI11"]
       },
       "water": {
         "yin": ["SP9", "KD3"],
-        "yang": ["ST44", "UB40"]
+        "yang": ["SI44", "UB40"]
       },
       "wood": {
         "yin": ["SP1", "LV3"],
-        "yang": ["ST43", "GB34"]
+        "yang": ["SI43", "GB34"]
       }
     },
 
@@ -54,7 +54,7 @@
       },
       "earth": {
         "yin": ["SP5", "LU9"],
-        "yang": ["ST45", "LI11"]
+        "yang": ["SI45", "LI11"]
       },
       "air": {
         "yin": ["LU8"],
@@ -77,7 +77,7 @@
       },
       "earth": {
         "yin": ["SP9", "KD3"],
-        "yang": ["ST44", "UB40"]
+        "yang": ["SI44", "UB40"]
       },
       "air": {
         "yin": ["LU5", "KD7"],
@@ -100,7 +100,7 @@
       },
       "earth": {
         "yin": ["SP1", "LV3"],
-        "yang": ["ST43", "GB34"]
+        "yang": ["SI43", "GB34"]
       },
       "air": {
         "yin": ["LU11", "LV4"],
