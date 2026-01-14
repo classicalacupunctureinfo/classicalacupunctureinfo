@@ -1,119 +1,569 @@
-{
-  "elements": ["fire", "earth", "air", "water", "wood"],
-  "pairs": {
-    "fire": {
-      "fire": {
-        "yin": ["HT8", "PC8"],
-        "yang": ["SI5", "TW6"]
-      },
-      "earth": {
-        "yin": ["HT7", "PC7", "SP2"],
-        "yang": ["SI8", "TW10", "ST41"]
-      },
-      "air": {
-        "yin": ["HT4", "PC5", "LU10"],
-        "yang": ["SI1", "TW1", "LI5"]
-      },
-      "water": {
-        "yin": ["HT3", "PC3", "KD2"],
-        "yang": ["SI2", "TW2", "UB60"]
-      },
-      "wood": {
-        "yin": ["HT9", "PC9", "LV2"],
-        "yang": ["SI3", "TW3", "GB38"]
-      }
-    },
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Elements - Connecting Points</title>
 
-    "earth": {
-      "fire": {
-        "yin": ["HT7", "PC7", "SP2"],
-        "yang": ["SI8", "TW10", "ST41"]
-      },
-      "earth": {
-        "yin": ["SP3"],
-        "yang": ["ST36"]
-      },
-      "air": {
-        "yin": ["SP5", "LU9"],
-        "yang": ["SI45", "LI11"]
-      },
-      "water": {
-        "yin": ["SP9", "KD3"],
-        "yang": ["SI44", "UB40"]
-      },
-      "wood": {
-        "yin": ["SP1", "LV3"],
-        "yang": ["SI43", "GB34"]
-      }
-    },
+  <style>
+    :root{
+      --bg1:#f7fbff;
+      --bg2:#fbfffe;
+      --card:#ffffff;
+      --text:#17322d;
+      --muted:#5b746e;
+      --accent:#54cdb8;
+      --accent2:#37b69f;
+      --border:#e2f2ee;
+      --shadow: 0 10px 26px rgba(0,0,0,0.08);
+      --radius: 18px;
+    }
 
-    "air": {
-      "fire": {
-        "yin": ["HT4", "PC5", "LU10"],
-        "yang": ["SI1", "TW1", "LI5"]
-      },
-      "earth": {
-        "yin": ["SP5", "LU9"],
-        "yang": ["SI45", "LI11"]
-      },
-      "air": {
-        "yin": ["LU8"],
-        "yang": ["LI1"]
-      },
-      "water": {
-        "yin": ["LU5", "KD7"],
-        "yang": ["LI2", "UB67"]
-      },
-      "wood": {
-        "yin": ["LU11", "LV4"],
-        "yang": ["LI3", "GB44"]
-      }
-    },
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: linear-gradient(180deg, var(--bg1), var(--bg2));
+      color: var(--text);
+      min-height: 100vh;
+      padding: 14px;
+    }
 
-    "water": {
-      "fire": {
-        "yin": ["HT3", "PC3", "KD2"],
-        "yang": ["SI2", "TW2", "UB60"]
-      },
-      "earth": {
-        "yin": ["SP9", "KD3"],
-        "yang": ["SI44", "UB40"]
-      },
-      "air": {
-        "yin": ["LU5", "KD7"],
-        "yang": ["LI2", "UB67"]
-      },
-      "water": {
-        "yin": ["KD10"],
-        "yang": ["UB66"]
-      },
-      "wood": {
-        "yin": ["KD1", "LV8"],
-        "yang": ["UB65", "GB43"]
-      }
-    },
+    .wrap{
+      max-width: 560px;
+      margin: 0 auto;
+      min-height: calc(100vh - 28px);
+      display:flex;
+      flex-direction:column;
+      gap: 14px;
+    }
 
-    "wood": {
-      "fire": {
-        "yin": ["HT9", "PC9", "LV2"],
-        "yang": ["SI3", "TW3", "GB38"]
-      },
-      "earth": {
-        "yin": ["SP1", "LV3"],
-        "yang": ["SI43", "GB34"]
-      },
-      "air": {
-        "yin": ["LU11", "LV4"],
-        "yang": ["LI3", "GB44"]
-      },
-      "water": {
-        "yin": ["KD1", "LV8"],
-        "yang": ["UB65", "GB43"]
-      },
-      "wood": {
-        "yin": ["LV1"],
-        "yang": ["GB41"]
+    /* Controls Card */
+    .controlsCard{
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 14px;
+      display:flex;
+      flex-direction:column;
+      gap: 12px;
+      transition: all 0.35s ease;
+    }
+
+    /* Centered initial state */
+    .wrap.centerMode{
+      justify-content:center;
+      align-items:stretch;
+    }
+    .wrap.centerMode .controlsCard{
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    /* After Find */
+    .wrap.activeMode{
+      justify-content:flex-start;
+    }
+
+    .row{
+      display:grid;
+      grid-template-columns: 1fr 1fr auto;
+      gap: 10px;
+      align-items:center;
+    }
+
+    select{
+      width: 100%;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      outline: none;
+      font-size: 1rem;
+      background: #ffffff;
+      color: var(--text);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.03) inset;
+    }
+
+    select:focus{
+      border-color: var(--accent2);
+      box-shadow: 0 0 0 3px rgba(55,182,159,0.16);
+    }
+
+    button{
+      border: none;
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-weight: 900;
+      font-size: 1rem;
+      cursor:pointer;
+      white-space:nowrap;
+    }
+
+    .findBtn{
+      background: linear-gradient(180deg, var(--accent), var(--accent2));
+      color: white;
+      min-width: 90px;
+    }
+
+    .resetBtn{
+      background: #f1fffb;
+      border: 1px solid var(--border);
+      color: #1f7c6d;
+      padding: 10px 12px;
+      border-radius: 14px;
+      font-weight: 900;
+      font-size: 0.95rem;
+      cursor:pointer;
+    }
+
+    .statusLine{
+      color: var(--muted);
+      font-weight: 800;
+      font-size: 0.93rem;
+      padding: 2px 2px;
+    }
+
+    /* Content appears after Find */
+    .content{
+      display:none;
+      flex-direction:column;
+      gap: 12px;
+    }
+    .wrap.activeMode .content{
+      display:flex;
+      animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn{
+      from{ opacity:0; transform: translateY(6px); }
+      to{ opacity:1; transform: translateY(0); }
+    }
+
+    /* Compact Connecting Points */
+    .panel{
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 12px;
+    }
+
+    .panelHead{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .panelTitle{
+      font-weight: 900;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .badge{
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #f5fffd;
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    /* Compact: smaller height + tighter padding */
+    .compactBox{
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: #fbffff;
+      padding: 10px;
+      max-height: 140px;
+      overflow:auto;
+    }
+
+    .group{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .group:last-child{ margin-bottom: 0; }
+
+    .pill{
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-weight: 900;
+      font-size: 0.82rem;
+      border: 1px solid var(--border);
+      flex:0 0 auto;
+    }
+    .yin{ background:#f0fffb; color:#1c7264; }
+    .yang{ background:#fff8f0; color:#7a4b16; }
+
+    .chipsRow{
+      display:flex;
+      flex-wrap:wrap;
+      gap: 6px;
+      width: 100%;
+      justify-content:flex-end;
+    }
+
+    .chip{
+      padding: 6px 9px;
+      border-radius: 999px;
+      background: #f2fffb;
+      border: 1px solid var(--border);
+      font-weight: 900;
+      font-size: 0.88rem;
+      color: var(--text);
+      cursor:pointer;
+      user-select:none;
+    }
+
+    .chip.selected{
+      background: #e6fffa;
+      border-color: rgba(55,182,159,0.5);
+      box-shadow: 0 8px 18px rgba(55,182,159,0.15);
+    }
+
+    .emptyState{
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.35;
+    }
+
+    /* Image + Description */
+    .imgBox, .descBox{
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 12px;
+    }
+
+    .imgPlaceholder{
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #e8fbff, #f7ffe9);
+      border: 1px solid var(--border);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight: 900;
+      color: rgba(23,50,45,0.55);
+      font-size: 1.05rem;
+      text-align:center;
+      padding: 10px;
+    }
+
+    .imgActual{
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      display:none;
+      background:#fff;
+    }
+
+    .descTitle{
+      margin: 0 0 8px;
+      font-weight: 900;
+      font-size: 0.98rem;
+      color: var(--muted);
+    }
+
+    .descText{
+      margin:0;
+      color: var(--text);
+      line-height: 1.45;
+      font-size: 0.95rem;
+      white-space: pre-wrap;
+    }
+
+    /* Mobile tweak */
+    @media (max-width: 420px){
+      .row{
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto;
+      }
+      .row button{
+        grid-column: 1 / -1;
       }
     }
-  }
-}
+  </style>
+</head>
+
+<body>
+  <div class="wrap centerMode" id="wrap">
+    <!-- Controls -->
+    <div class="controlsCard">
+      <div class="row">
+        <select id="el1" disabled>
+          <option value="" selected disabled>Loading...</option>
+        </select>
+
+        <select id="el2" disabled>
+          <option value="" selected disabled>Loading...</option>
+        </select>
+
+        <button class="findBtn" id="btnFind" disabled>Find</button>
+      </div>
+
+      <button class="resetBtn" id="btnReset" disabled>Reset</button>
+      <div class="statusLine" id="statusLine">Loading data from JSON...</div>
+    </div>
+
+    <!-- Content -->
+    <div class="content" id="content">
+      <!-- Compact connecting points -->
+      <div class="panel">
+        <div class="panelHead">
+          <div class="panelTitle">Connecting Points</div>
+          <div class="badge" id="pairBadge">—</div>
+        </div>
+
+        <div class="compactBox" id="pointsBox">
+          <div class="emptyState">Select elements and tap <b>Find</b>.</div>
+        </div>
+      </div>
+
+      <!-- Image -->
+      <div class="imgBox">
+        <div class="imgPlaceholder" id="imgHolder">Image Placeholder</div>
+        <img id="imgActual" class="imgActual" alt="Point Image"/>
+      </div>
+
+      <!-- Description -->
+      <div class="descBox">
+        <div class="descTitle" id="descTitle">Description</div>
+        <p class="descText" id="descText">
+Select two elements and tap Find.
+Then tap a point chip to load:
+pics/&lt;POINT&gt;.jpg (or .png)
+desc/&lt;POINT&gt;.txt
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Optimized for acup.json format:
+    // { elements: [...], pairs: { element1: { element2: {yin:[], yang:[]} } } }
+    let db = null;
+
+    const wrap = document.getElementById("wrap");
+    const el1 = document.getElementById("el1");
+    const el2 = document.getElementById("el2");
+    const btnFind = document.getElementById("btnFind");
+    const btnReset = document.getElementById("btnReset");
+
+    const statusLine = document.getElementById("statusLine");
+    const pairBadge = document.getElementById("pairBadge");
+    const pointsBox = document.getElementById("pointsBox");
+
+    const imgHolder = document.getElementById("imgHolder");
+    const imgActual = document.getElementById("imgActual");
+
+    const descTitle = document.getElementById("descTitle");
+    const descText = document.getElementById("descText");
+
+    let selectedPointCode = null;
+
+    function setActiveMode(active){
+      if(active){
+        wrap.classList.remove("centerMode");
+        wrap.classList.add("activeMode");
+      }else{
+        wrap.classList.remove("activeMode");
+        wrap.classList.add("centerMode");
+      }
+    }
+
+    function toTitleCase(s){
+      return (s || "").slice(0,1).toUpperCase() + (s || "").slice(1);
+    }
+
+    // ✅ GitHub Pages safe URL builder
+    function assetUrl(relativePath){
+      return new URL(relativePath, window.location.href).toString();
+    }
+
+    function fillDropdown(selectEl, elements){
+      selectEl.innerHTML = `
+        <option value="" selected disabled>Select</option>
+        ${elements.map(e => `<option value="${e}">${toTitleCase(e)}</option>`).join("")}
+      `;
+    }
+
+    function resetPointUI(){
+      selectedPointCode = null;
+
+      imgActual.style.display = "none";
+      imgActual.src = "";
+      imgHolder.style.display = "flex";
+      imgHolder.textContent = "Image Placeholder";
+
+      descTitle.textContent = "Description";
+      descText.textContent =
+        "Tap a point chip to load:\n" +
+        "pics/<POINT>.jpg (or .png)\n" +
+        "desc/<POINT>.txt";
+    }
+
+    function setSelectedChip(pointCode){
+      selectedPointCode = pointCode;
+      document.querySelectorAll(".chip").forEach(ch => ch.classList.remove("selected"));
+      const active = document.querySelector(`.chip[data-code="${CSS.escape(pointCode)}"]`);
+      if(active) active.classList.add("selected");
+    }
+
+    async function showPointDetails(pointCode){
+      const code = (pointCode || "").trim();
+      if(!code) return;
+
+      setSelectedChip(code);
+
+      // IMAGE: pics/<CODE>.jpg then pics/<CODE>.png
+      const jpgUrl = assetUrl(`pics/${code}.jpg`);
+      const pngUrl = assetUrl(`pics/${code}.png`);
+
+      imgHolder.style.display = "none";
+      imgActual.style.display = "block";
+
+      imgActual.onerror = () => {
+        imgActual.onerror = () => {
+          imgActual.style.display = "none";
+          imgActual.src = "";
+          imgHolder.style.display = "flex";
+          imgHolder.textContent = `No Image: pics/${code}.jpg / .png`;
+        };
+        imgActual.src = pngUrl;
+      };
+      imgActual.src = jpgUrl;
+
+      // DESCRIPTION: desc/<CODE>.txt
+      const descUrl = assetUrl(`desc/${code}.txt`);
+      try{
+        const res = await fetch(descUrl, { cache: "no-store" });
+        if(!res.ok) throw new Error("missing");
+        const text = await res.text();
+
+        descTitle.textContent = code;
+        descText.textContent = (text || "").trim() || "Description file is empty.";
+      }catch(err){
+        descTitle.textContent = code;
+        descText.textContent = `No description found: desc/${code}.txt`;
+      }
+    }
+
+    function renderCompactPoints(yinList, yangList){
+      const renderLine = (labelClass, labelText, list) => {
+        if(!list || list.length === 0){
+          return `
+            <div class="group">
+              <span class="pill ${labelClass}">${labelText}</span>
+              <div class="chipsRow">
+                <span class="emptyState">—</span>
+              </div>
+            </div>
+          `;
+        }
+
+        return `
+          <div class="group">
+            <span class="pill ${labelClass}">${labelText}</span>
+            <div class="chipsRow">
+              ${list.map(code => `<span class="chip" data-code="${code}">${code}</span>`).join("")}
+            </div>
+          </div>
+        `;
+      };
+
+      pointsBox.innerHTML = `
+        ${renderLine("yin", "YIN", yinList)}
+        ${renderLine("yang", "YANG", yangList)}
+      `;
+
+      document.querySelectorAll(".chip").forEach(ch => {
+        ch.addEventListener("click", () => showPointDetails(ch.dataset.code));
+      });
+    }
+
+    function renderPair(a, b){
+      const cell = db?.pairs?.[a]?.[b];
+
+      pairBadge.textContent = `${toTitleCase(a)} × ${toTitleCase(b)}`;
+      resetPointUI();
+
+      if(!cell){
+        pointsBox.innerHTML = `<div class="emptyState">No mapping found for this pair.</div>`;
+        return;
+      }
+
+      renderCompactPoints(cell.yin, cell.yang);
+    }
+
+    async function loadJson(){
+      try{
+        statusLine.textContent = "Loading data from JSON...";
+        const res = await fetch(assetUrl("acup.json"), { cache: "no-store" });
+        if(!res.ok) throw new Error("Could not load acup.json");
+
+        db = await res.json();
+
+        if(!db?.elements || !db?.pairs){
+          throw new Error("Invalid JSON format. Missing elements/pairs.");
+        }
+
+        fillDropdown(el1, db.elements);
+        fillDropdown(el2, db.elements);
+
+        el1.disabled = false;
+        el2.disabled = false;
+        btnFind.disabled = false;
+        btnReset.disabled = false;
+
+        statusLine.textContent = "Ready ✅ Select elements and tap Find.";
+      }catch(err){
+        console.error(err);
+        statusLine.textContent = "Error ❌ Could not load JSON.";
+        alert("Failed to load acup.json. Ensure it's in the repo root and GitHub Pages is updated.");
+      }
+    }
+
+    btnFind.addEventListener("click", () => {
+      const a = el1.value;
+      const b = el2.value;
+
+      if(!a || !b){
+        alert("Please select both Element-1 and Element-2.");
+        return;
+      }
+
+      setActiveMode(true);
+      renderPair(a, b);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    btnReset.addEventListener("click", () => {
+      el1.value = "";
+      el2.value = "";
+
+      setActiveMode(false);
+      pairBadge.textContent = "—";
+
+      pointsBox.innerHTML = `<div class="emptyState">Select elements and tap <b>Find</b>.</div>`;
+      resetPointUI();
+    });
+
+    // Start
+    setActiveMode(false);
+    loadJson();
+  </script>
+</body>
+</html>
