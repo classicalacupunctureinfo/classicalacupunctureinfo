@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meridian Explorer</title>
+    <style>
+        :root {
+            --primary-bg: #f8f9fa;
+            --btn-bg: #ffffff;
+            --btn-accent: #2c3e50;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--primary-bg);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 { color: var(--btn-accent); font-size: 1.5rem; }
+
+        /* Button Grid Layout */
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 30px;
+        }
+
+        button {
+            padding: 15px 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: var(--btn-bg);
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+            box-shadow: var(--shadow);
+            color: var(--btn-accent);
+        }
+
+        button:active { transform: scale(0.95); background: #e9ecef; }
+
+        /* Content Display Area */
+        #display-area {
+            width: 100%;
+            max-width: 600px;
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            display: none; /* Hidden until a button is clicked */
+            box-sizing: border-box;
+        }
+
+        #display-area img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        #meridian-desc {
+            line-height: 1.6;
+            color: #444;
+            white-space: pre-wrap; /* Maintains text file formatting */
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Meridian Pathways</h1>
+
+    <div class="button-grid">
+        <button onclick="loadData('HTM', 'Heart')">Heart</button>
+        <button onclick="loadData('PCM', 'Pericardium')">Pericardium</button>
+        <button onclick="loadData('SIM', 'Small Intestine')">Small Intestine</button>
+        <button onclick="loadData('TWM', 'Triple Warmer')">Triple Warmer</button>
+        <button onclick="loadData('SPM', 'Spleen')">Spleen</button>
+        <button onclick="loadData('STM', 'Stomach')">Stomach</button>
+        <button onclick="loadData('LUM', 'Lung')">Lung</button>
+        <button onclick="loadData('LIM', 'Large Intestine')">Large Intestine</button>
+        <button onclick="loadData('KDM', 'Kidney')">Kidney</button>
+        <button onclick="loadData('UBM', 'Urinary Bladder')">Urinary Bladder</button>
+        <button onclick="loadData('LVM', 'Liver')">Liver</button>
+        <button onclick="loadData('GBM', 'Gall Bladder')">Gall Bladder</button>
+    </div>
+
+    <div id="display-area">
+        <h2 id="meridian-title"></h2>
+        <img id="meridian-img" src="" alt="Meridian Image">
+        <div id="meridian-desc">Select a meridian to see details.</div>
+    </div>
+
+    <script>
+        async function loadData(code, name) {
+            const displayArea = document.getElementById('display-area');
+            const imgElement = document.getElementById('meridian-img');
+            const descElement = document.getElementById('meridian-desc');
+            const titleElement = document.getElementById('meridian-title');
+
+            // Set Title and Image
+            titleElement.innerText = name;
+            imgElement.src = `meridian_img/${code}.jpg`;
+
+            // Fetch Text Description
+            try {
+                const response = await fetch(`meridian_txt/${code}.txt`);
+                if (response.ok) {
+                    const text = await response.text();
+                    descElement.innerText = text;
+                } else {
+                    descElement.innerText = "Description file not found.";
+                }
+            } catch (error) {
+                descElement.innerText = "Error loading description.";
+            }
+
+            // Show the display area and scroll to it
+            displayArea.style.display = 'block';
+            displayArea.scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
