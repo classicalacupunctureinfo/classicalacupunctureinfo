@@ -171,12 +171,17 @@
       overflow:hidden;
       border: 1px solid rgba(57,213,213,.18);
       background: rgba(0,0,0,.25);
+      position:relative;
     }
 
     img{
       width:100%;
       height:auto;
       display:block;
+    }
+
+    .clickable{
+      cursor: zoom-in;
     }
 
     .desc{
@@ -221,6 +226,41 @@
       border-color: rgba(255,120,120,.25);
       background: rgba(255,120,120,.10);
     }
+
+    /* Fullscreen image modal */
+    .img-modal{
+      position:fixed;
+      inset:0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      background: rgba(0,0,0,0.85);
+      z-index: 9999;
+      padding: 20px;
+    }
+
+    .img-modal.open{ display:flex; }
+
+    .img-modal img{
+      max-width: 100%;
+      max-height: 100%;
+      border-radius: 6px;
+      box-shadow: 0 10px 40px rgba(0,0,0,.6);
+      cursor: zoom-out;
+    }
+
+    .img-modal .close{
+      position:absolute;
+      top:18px;
+      right:18px;
+      background: rgba(0,0,0,0.45);
+      border: 0;
+      color: #fff;
+      font-size: 22px;
+      padding: 6px 10px;
+      border-radius: 8px;
+      cursor:pointer;
+    }
   </style>
 </head>
 
@@ -263,6 +303,12 @@
     </section>
   </div>
 
+  <!-- Fullscreen image modal -->
+  <div id="imgModal" class="img-modal" aria-hidden="true">
+    <button class="close" id="imgModalClose" aria-label="Close image">×</button>
+    <img id="imgModalImg" alt="" />
+  </div>
+
   <script>
     const MERIDIANS = [
       { name: "Heart", code: "HTM" },
@@ -286,6 +332,10 @@
     const imgName = document.getElementById("imgName");
     const txtName = document.getElementById("txtName");
     const clearBtn = document.getElementById("clearBtn");
+
+    const imgModal = document.getElementById('imgModal');
+    const imgModalImg = document.getElementById('imgModalImg');
+    const imgModalClose = document.getElementById('imgModalClose');
 
     let activeCode = null;
 
@@ -315,6 +365,38 @@
         btn.classList.toggle("active", btn.dataset.code === code);
       });
     }
+
+    function openImageFullscreen(src, alt){
+      imgModalImg.src = src;
+      imgModalImg.alt = alt || ''; 
+      imgModal.classList.add('open');
+      imgModal.setAttribute('aria-hidden', 'false');
+      // prevent background scroll
+      document.documentElement.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeImageFullscreen(){
+      imgModal.classList.remove('open');
+      imgModal.setAttribute('aria-hidden', 'true');
+      imgModalImg.src = '';
+      imgModalImg.alt = '';
+      // restore scroll
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
+    }
+
+    imgModalClose.addEventListener('click', closeImageFullscreen);
+    imgModal.addEventListener('click', (e) => {
+      // clicking outside the image or on the overlay closes
+      if(e.target === imgModal || e.target === imgModalClose) closeImageFullscreen();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if(e.key === 'Escape' && imgModal.classList.contains('open')){
+        closeImageFullscreen();
+      }
+    });
 
     async function openMeridian(item){
       activeCode = item.code;
@@ -352,7 +434,7 @@
 
       viewerContent.innerHTML = `
         <div class="imgWrap">
-          <img src="${img}" alt="${item.name} (${item.code})"
+          <img id="meridianImg" class="clickable" src="${img}" alt="${item.name} (${item.code})"
                onerror="this.onerror=null; this.closest('.imgWrap').insertAdjacentHTML('beforeend',
                '<div class=\\'placeholder\\'><div class=\\'statusRow\\'><span class=\\'pill error\\'>Image not found: ${item.code}.jpg</span></div></div>'); this.style.display='none';" />
         </div>
@@ -365,6 +447,17 @@
           <span class="${txtPillClass}">${txtOk ? "Text loaded" : "Text missing"}</span>
         </div>
       `;
+
+      // Attach click handler to image to open fullscreen (if image loaded)
+      const imgEl = document.getElementById('meridianImg');
+      if(imgEl){
+        imgEl.addEventListener('click', () => {
+          // only open if image is visible
+          if(imgEl.complete && imgEl.naturalWidth !== 0){
+            openImageFullscreen(imgEl.src, imgEl.alt);
+          }
+        });
+      }
 
       // Smooth scroll to viewer on mobile
       document.getElementById("viewer").scrollIntoView({ behavior: "smooth", block: "start" });
