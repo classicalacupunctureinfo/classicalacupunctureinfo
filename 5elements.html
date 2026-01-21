@@ -1,321 +1,301 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Five Elements Dashboard</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Five Elements — Select to view</title>
   <style>
     :root{
-      --bg:#0b1220;
-      --card:#0f1b33;
-      --muted:#9fb0cc;
-      --text:#e8eefc;
-      --line:rgba(255,255,255,.08);
-      --accent:#5eead4;
-      --shadow: 0 18px 40px rgba(0,0,0,.35);
-      --radius:18px;
+      --bg: #f6f8fb;
+      --card: #ffffff;
+      --muted: #6b7280;
+      --text: #0f172a;
+      --accent: #0ea5a3;
+      --line: rgba(15,23,42,0.06);
+      --radius: 12px;
+      --shadow: 0 8px 24px rgba(2,6,23,0.06);
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Courier New", monospace;
     }
     *{box-sizing:border-box}
     body{
       margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue", sans-serif;
-      background: radial-gradient(1200px 600px at 20% -10%, rgba(94,234,212,.18), transparent 60%),
-                  radial-gradient(900px 500px at 100% 10%, rgba(96,165,250,.15), transparent 55%),
-                  var(--bg);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: linear-gradient(180deg, #fbfdfe, #f2f7fb 60%);
       color:var(--text);
       min-height:100vh;
+      padding:28px;
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
     }
-    .wrap{max-width:1100px;margin:0 auto;padding:22px}
-    header{
-      display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;justify-content:space-between;
-      margin-bottom:18px
+    .container{
+      width:100%;
+      max-width:880px;
+    }
+    .lead{
+      display:flex;
+      gap:16px;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:18px;
+      flex-wrap:wrap;
     }
     .title{
-      display:flex;flex-direction:column;gap:4px
+      line-height:1;
     }
-    h1{margin:0;font-size:22px;letter-spacing:.2px}
-    .sub{margin:0;color:var(--muted);font-size:13px}
-    .controls{
-      display:flex;gap:10px;align-items:center;flex-wrap:wrap;
-      background:rgba(255,255,255,.03);
-      border:1px solid var(--line);
-      padding:12px;border-radius:var(--radius);
-      box-shadow: var(--shadow);
+    h1{font-size:20px;margin:0}
+    p.sub{margin:0;color:var(--muted);font-size:13px}
+    .selectorWrap{
+      display:flex;
+      gap:12px;
+      align-items:center;
     }
-    label{font-size:12px;color:var(--muted)}
+    label{font-size:13px;color:var(--muted)}
     select{
-      appearance:none;
-      background:rgba(255,255,255,.05);
-      border:1px solid var(--line);
-      color:var(--text);
+      min-width:240px;
       padding:10px 12px;
-      border-radius:14px;
+      border-radius:10px;
+      border:1px solid var(--line);
+      background:var(--card);
+      color:var(--text);
       font-size:14px;
-      min-width:220px;
       outline:none;
+      box-shadow:var(--shadow);
+      appearance:none;
     }
-    .hint{
+    button{
+      background:transparent;
+      border:1px solid var(--line);
+      padding:9px 12px;
+      border-radius:10px;
+      cursor:pointer;
       color:var(--muted);
-      font-size:12px;
-      padding:2px 0 0 0;
+      font-size:13px;
     }
-
-    .grid{
-      display:grid;
-      grid-template-columns: 1.1fr 2fr;
-      gap:16px;
-      align-items:start;
-    }
-    @media (max-width: 900px){
-      .grid{grid-template-columns:1fr}
-      select{min-width: 240px;}
-    }
-
     .card{
-      background:rgba(255,255,255,.03);
+      background:var(--card);
       border:1px solid var(--line);
       border-radius:var(--radius);
-      box-shadow: var(--shadow);
+      box-shadow:var(--shadow);
       overflow:hidden;
     }
     .cardHead{
-      padding:14px 16px;
-      display:flex;align-items:center;justify-content:space-between;
+      padding:16px;
       border-bottom:1px solid var(--line);
-      background: linear-gradient(180deg, rgba(255,255,255,.03), transparent);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
     }
-    .cardHead h2{
-      margin:0;font-size:14px;font-weight:650;letter-spacing:.2px
+    .cardBody{
+      padding:18px;
     }
-    .pill{
-      font-size:12px;
-      padding:6px 10px;
-      border-radius:999px;
-      border:1px solid var(--line);
-      background:rgba(94,234,212,.08);
-      color:var(--accent);
-      white-space:nowrap;
-    }
-    .cardBody{padding:14px 16px}
-
-    .emptyState{
+    .placeholder{
       color:var(--muted);
-      line-height:1.4;
-      font-size:13px;
-      border:1px dashed rgba(255,255,255,.15);
-      border-radius:16px;
-      padding:14px;
+      font-size:14px;
     }
 
+    /* KV grid */
     .kv{
       display:grid;
-      grid-template-columns: 140px 1fr;
-      gap:10px 14px;
-      padding:14px 16px;
+      grid-template-columns:200px 1fr;
+      gap:12px 18px;
+      align-items:start;
     }
-    @media (max-width: 520px){
-      .kv{grid-template-columns: 1fr}
+    @media (max-width:620px){
+      .kv{grid-template-columns:1fr}
+      select{min-width:160px}
     }
     .k{
       color:var(--muted);
       font-size:12px;
-      letter-spacing:.2px;
       text-transform:uppercase;
+      letter-spacing:.6px;
     }
     .v{
-      font-size:14px;
-      line-height:1.35;
+      font-size:15px;
+      line-height:1.5;
       white-space:pre-wrap;
     }
-    .rowSep{border-top:1px solid var(--line)}
-    .footerNote{
-      margin-top:14px;
-      color:var(--muted);
-      font-size:12px;
-      opacity:.95;
+    .rowSep{border-top:1px solid var(--line);padding-top:14px;margin-top:14px}
+    .pill{
+      font-size:13px;
+      padding:6px 10px;
+      border-radius:999px;
+      background:rgba(14,165,163,0.08);
+      color:var(--accent);
+      border:1px solid rgba(14,165,163,0.12);
+    }
+    .small{
+      font-size:12px;color:var(--muted)
+    }
+    .copyBtn{
+      background:var(--accent);
+      color:white;
+      border:none;
+      padding:8px 10px;
+      border-radius:8px;
+      cursor:pointer;
+      font-size:13px;
     }
   </style>
 </head>
-
 <body>
-  <div class="wrap">
-    <header>
+  <div class="container">
+    <div class="lead">
       <div class="title">
-        <h1>Characteristics of the Five Elements</h1>
-        <p class="sub">Select an element to view its full row of data.</p>
+        <h1>Five Elements</h1>
+        <p class="sub">Choose an element to view the full dataset row.</p>
       </div>
 
-      <div class="controls">
-        <div style="display:flex;flex-direction:column;gap:6px">
-          <label for="elementSelect">Element</label>
-          <select id="elementSelect">
+      <div class="selectorWrap" aria-live="polite">
+        <div>
+          <label for="elementSelect">Element</label><br/>
+          <select id="elementSelect" aria-describedby="statusText">
             <option value="">— Select an element —</option>
           </select>
-          <div class="hint" id="statusHint">No selection</div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end">
+          <span id="statusText" class="small">No selection</span>
+          <div style="display:flex;gap:8px">
+            <button id="resetBtn" title="Clear selection">Reset</button>
+            <button id="copyBtn" class="copyBtn" title="Copy current row to clipboard">Copy</button>
+          </div>
         </div>
       </div>
-    </header>
+    </div>
 
-    <main class="grid">
-      <section class="card">
-        <div class="cardHead">
-          <h2>Selection</h2>
-          <span class="pill" id="selectedPill">None</span>
+    <div class="card" role="region" aria-labelledby="cardTitle">
+      <div class="cardHead">
+        <div>
+          <strong id="cardTitle">Element Data</strong>
+          <div class="small" id="subNote">Full row will display here after choosing an element.</div>
         </div>
-        <div class="cardBody">
-          <div class="emptyState" id="emptyLeft">
-            Choose an element from the dropdown to display its details.
-          </div>
+        <div class="pill" id="elementPill">None</div>
+      </div>
 
-          <div id="selectionSummary" style="display:none">
-            <div class="kv">
-              <div class="k">Colour</div>
-              <div class="v" id="selColour"></div>
-
-              <div class="k">Emotion</div>
-              <div class="v" id="selEmotion"></div>
-
-              <div class="k">Season</div>
-              <div class="v" id="selSeason"></div>
-
-              <div class="k">Taste</div>
-              <div class="v" id="selTaste"></div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="card">
-        <div class="cardHead">
-          <h2>Element Data</h2>
-          <span class="pill" id="rowPill">Waiting…</span>
+      <div class="cardBody">
+        <div id="emptyState" class="placeholder">
+          No element selected. Use the dropdown above to display the element's complete data.
         </div>
 
-        <div class="cardBody">
-          <div class="emptyState" id="emptyRight">
-            No data to show yet. Select an element to load its row.
-          </div>
-
-          <div id="rowDetails" style="display:none"></div>
-
-          <div class="footerNote">
-            Tip: Line breaks and bullet points are preserved for readability.
-          </div>
+        <div id="rowContainer" style="display:none">
+          <!-- Row content injected here -->
         </div>
-      </section>
-    </main>
+      </div>
+    </div>
   </div>
 
   <script>
     const DATA_URL = "./five_elements.json";
-
-    const elSelect = document.getElementById("elementSelect");
-    const selectedPill = document.getElementById("selectedPill");
-    const rowPill = document.getElementById("rowPill");
-    const statusHint = document.getElementById("statusHint");
-
-    const emptyLeft = document.getElementById("emptyLeft");
-    const emptyRight = document.getElementById("emptyRight");
-    const selectionSummary = document.getElementById("selectionSummary");
-    const rowDetails = document.getElementById("rowDetails");
-
-    const selColour = document.getElementById("selColour");
-    const selEmotion = document.getElementById("selEmotion");
-    const selSeason = document.getElementById("selSeason");
-    const selTaste  = document.getElementById("selTaste");
+    const selectEl = document.getElementById("elementSelect");
+    const statusText = document.getElementById("statusText");
+    const elementPill = document.getElementById("elementPill");
+    const emptyState = document.getElementById("emptyState");
+    const rowContainer = document.getElementById("rowContainer");
+    const resetBtn = document.getElementById("resetBtn");
+    const copyBtn = document.getElementById("copyBtn");
 
     let DB = [];
 
     function normalizeText(s){
-      return String(s ?? "")
-        .replace(/\r\n/g, "\n")
-        .replace(/\r/g, "\n")
-        .trim();
-    }
-
-    function clearUI(){
-      selectedPill.textContent = "None";
-      rowPill.textContent = "Waiting…";
-      statusHint.textContent = "No selection";
-
-      emptyLeft.style.display = "";
-      emptyRight.style.display = "";
-
-      selectionSummary.style.display = "none";
-      rowDetails.style.display = "none";
-      rowDetails.innerHTML = "";
+      return String(s ?? "").replace(/\r\n/g,"\n").replace(/\r/g,"\n").trim();
     }
 
     function renderRow(item){
-      // Left summary
-      emptyLeft.style.display = "none";
-      selectionSummary.style.display = "";
+      // show pill and status
+      elementPill.textContent = item.ELEMENT || "—";
+      statusText.textContent = "Selected: " + (item.ELEMENT || "—");
 
-      selectedPill.textContent = item.ELEMENT;
-      statusHint.textContent = "Selected: " + item.ELEMENT;
-
-      selColour.textContent = normalizeText(item["COLOUR"]);
-      selEmotion.textContent = normalizeText(item["EMOTION"]);
-      selSeason.textContent = normalizeText(item["SEASON"]);
-      selTaste.textContent  = normalizeText(item["TASTE"]);
-
-      // Right details
-      emptyRight.style.display = "none";
-      rowDetails.style.display = "";
-      rowPill.textContent = item.ELEMENT + " row";
-
+      // build key-value blocks
       const keys = Object.keys(item);
-
-      rowDetails.innerHTML = keys.map((k, idx) => {
+      rowContainer.innerHTML = keys.map((k, idx) => {
         const v = normalizeText(item[k]);
         return `
           <div class="kv ${idx === 0 ? "" : "rowSep"}">
-            <div class="k">${k}</div>
-            <div class="v">${v || "—"}</div>
+            <div class="k">${escapeHtml(k)}</div>
+            <div class="v">${escapeHtml(v || "—")}</div>
           </div>
         `;
       }).join("");
+
+      emptyState.style.display = "none";
+      rowContainer.style.display = "";
+    }
+
+    function clearSelectionUI(){
+      selectEl.value = "";
+      elementPill.textContent = "None";
+      statusText.textContent = "No selection";
+      emptyState.style.display = "";
+      rowContainer.style.display = "none";
+      rowContainer.innerHTML = "";
+    }
+
+    // simple HTML escaper for injected text
+    function escapeHtml(s){
+      return String(s)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'", "&#39;");
     }
 
     async function init(){
-      clearUI();
+      clearSelectionUI();
       try{
-        const res = await fetch(DATA_URL, { cache: "no-store" });
-        if(!res.ok) throw new Error("Failed to load JSON (" + res.status + ")");
+        const res = await fetch(DATA_URL, {cache: "no-store"});
+        if(!res.ok) throw new Error("Failed to fetch JSON ("+res.status+")");
         DB = await res.json();
 
-        // Fill dropdown
+        // populate select
         DB.forEach(row => {
           const opt = document.createElement("option");
           opt.value = row.ELEMENT;
           opt.textContent = row.ELEMENT;
-          elSelect.appendChild(opt);
+          selectEl.appendChild(opt);
         });
-
       }catch(err){
-        statusHint.textContent = "Error loading data";
-        rowPill.textContent = "Load failed";
-        emptyRight.textContent =
-          "Could not load five_elements.json. If you are using GitHub Pages, make sure the JSON file is in the same folder as index.html.";
+        statusText.textContent = "Error loading data";
+        emptyState.textContent = "Could not load five_elements.json. Ensure the JSON file is present alongside this HTML file.";
         console.error(err);
       }
     }
 
-    elSelect.addEventListener("change", () => {
-      const value = elSelect.value;
-      if(!value){
-        clearUI();
+    selectEl.addEventListener("change", () => {
+      const val = selectEl.value;
+      if(!val){
+        clearSelectionUI();
         return;
       }
-      const item = DB.find(x => x.ELEMENT === value);
+      const item = DB.find(r => r.ELEMENT === val);
       if(!item){
-        clearUI();
-        statusHint.textContent = "No matching element found";
+        statusText.textContent = "No matching element found";
         return;
       }
       renderRow(item);
     });
 
+    resetBtn.addEventListener("click", () => {
+      clearSelectionUI();
+    });
+
+    copyBtn.addEventListener("click", async () => {
+      if(rowContainer.style.display === "none" || !rowContainer.innerText.trim()){
+        return;
+      }
+      try{
+        await navigator.clipboard.writeText(rowContainer.innerText.trim());
+        copyBtn.textContent = "Copied";
+        setTimeout(()=> copyBtn.textContent = "Copy", 1400);
+      }catch(e){
+        console.error("Copy failed", e);
+      }
+    });
+
+    // init on load
     init();
   </script>
 </body>
