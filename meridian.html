@@ -1,132 +1,443 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meridian Explorer</title>
-    <style>
-        :root {
-            --primary-bg: #f8f9fa;
-            --btn-bg: #ffffff;
-            --btn-accent: #2c3e50;
-            --shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Meridians Viewer</title>
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: var(--primary-bg);
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+  <style>
+    :root{
+      --bg:#061f22;
+      --card:#0b2e31;
+      --card2:#083034;
+      --text:#e9ffff;
+      --muted:#b7e7ea;
+      --accent:#39d5d5;
+      --accent2:#17aeb3;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 18px;
+    }
 
-        h1 { color: var(--btn-accent); font-size: 1.5rem; }
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 800px at 50% -10%, rgba(57,213,213,.18), transparent 60%),
+                  linear-gradient(180deg, #041719, var(--bg));
+      color:var(--text);
+      min-height:100vh;
+    }
 
-        /* Button Grid Layout */
-        .button-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 12px;
-            width: 100%;
-            max-width: 600px;
-            margin-bottom: 30px;
-        }
+    .app{
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 14px;
+      padding-bottom: 30px;
+    }
 
-        button {
-            padding: 15px 10px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            background: var(--btn-bg);
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.2s;
-            box-shadow: var(--shadow);
-            color: var(--btn-accent);
-        }
+    header{
+      background: linear-gradient(135deg, rgba(57,213,213,.18), rgba(23,174,179,.10));
+      border: 1px solid rgba(57,213,213,.22);
+      border-radius: var(--radius);
+      padding: 14px 14px;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 10px;
+      z-index: 5;
+      backdrop-filter: blur(8px);
+    }
 
-        button:active { transform: scale(0.95); background: #e9ecef; }
+    .title{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+    }
 
-        /* Content Display Area */
-        #display-area {
-            width: 100%;
-            max-width: 600px;
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: var(--shadow);
-            display: none; /* Hidden until a button is clicked */
-            box-sizing: border-box;
-        }
+    h1{
+      margin:0;
+      font-size: 18px;
+      letter-spacing: .2px;
+      line-height: 1.2;
+    }
 
-        #display-area img {
-            width: 100%;
-            height: auto;
-            border-radius: 8px;
-            margin-bottom: 15px;
-        }
+    .sub{
+      margin-top:6px;
+      font-size: 12.5px;
+      color: var(--muted);
+      line-height: 1.35;
+    }
 
-        #meridian-desc {
-            line-height: 1.6;
-            color: #444;
-            white-space: pre-wrap; /* Maintains text file formatting */
-        }
-    </style>
+    .searchRow{
+      margin-top: 12px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+
+    input[type="search"]{
+      flex:1;
+      min-width: 180px;
+      border-radius: 14px;
+      border: 1px solid rgba(57,213,213,.25);
+      background: rgba(7,35,38,.55);
+      color: var(--text);
+      padding: 12px 12px;
+      outline: none;
+      font-size: 14px;
+    }
+
+    input[type="search"]::placeholder{
+      color: rgba(183,231,234,.7);
+    }
+
+    .grid{
+      margin-top: 14px;
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 10px;
+    }
+
+    @media (min-width: 520px){
+      .grid{ grid-template-columns: repeat(3, minmax(0,1fr)); }
+    }
+    @media (min-width: 860px){
+      .grid{ grid-template-columns: repeat(4, minmax(0,1fr)); }
+    }
+
+    .btn{
+      border: 1px solid rgba(57,213,213,.22);
+      background: linear-gradient(180deg, rgba(11,46,49,.85), rgba(8,48,52,.7));
+      color: var(--text);
+      border-radius: 16px;
+      padding: 12px 10px;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: .15px;
+      box-shadow: 0 8px 22px rgba(0,0,0,.28);
+      cursor:pointer;
+      transition: transform .08s ease, border-color .12s ease, box-shadow .12s ease;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      min-height: 52px;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .btn:active{
+      transform: scale(0.98);
+    }
+
+    .btn:hover{
+      border-color: rgba(57,213,213,.45);
+      box-shadow: 0 10px 26px rgba(0,0,0,.32);
+    }
+
+    .btn.active{
+      border-color: rgba(57,213,213,.75);
+      box-shadow: 0 10px 28px rgba(57,213,213,.12), 0 10px 26px rgba(0,0,0,.35);
+      outline: 2px solid rgba(57,213,213,.22);
+    }
+
+    .viewer{
+      margin-top: 14px;
+      background: rgba(7,35,38,.55);
+      border: 1px solid rgba(57,213,213,.22);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+
+    .viewerTop{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding: 12px 12px;
+      border-bottom: 1px solid rgba(57,213,213,.18);
+      background: linear-gradient(135deg, rgba(57,213,213,.10), transparent);
+    }
+
+    .viewerTitle{
+      font-weight: 800;
+      font-size: 14.5px;
+      letter-spacing: .2px;
+    }
+
+    .mini{
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .clearBtn{
+      border: 1px solid rgba(57,213,213,.22);
+      background: rgba(3,22,24,.55);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 8px 10px;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor:pointer;
+    }
+
+    .content{
+      padding: 12px;
+      display:grid;
+      gap: 12px;
+    }
+
+    .imgWrap{
+      width: 100%;
+      border-radius: 16px;
+      overflow:hidden;
+      border: 1px solid rgba(57,213,213,.18);
+      background: rgba(0,0,0,.25);
+    }
+
+    img{
+      width:100%;
+      height:auto;
+      display:block;
+    }
+
+    .desc{
+      border: 1px solid rgba(57,213,213,.18);
+      border-radius: 16px;
+      padding: 12px;
+      background: rgba(3,22,24,.4);
+      white-space: pre-wrap;
+      line-height: 1.5;
+      font-size: 13.5px;
+      color: rgba(233,255,255,.92);
+    }
+
+    .placeholder{
+      padding: 18px 12px;
+      text-align:center;
+      color: rgba(183,231,234,.9);
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .statusRow{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:center;
+      margin-top: 4px;
+    }
+
+    .pill{
+      font-size: 11.5px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(57,213,213,.18);
+      background: rgba(57,213,213,.08);
+      color: rgba(233,255,255,.92);
+    }
+
+    .error{
+      color:#ffd7d7;
+      border-color: rgba(255,120,120,.25);
+      background: rgba(255,120,120,.10);
+    }
+  </style>
 </head>
+
 <body>
+  <div class="app">
+    <header>
+      <div class="title">
+        <div>
+          <h1>Meridian Viewer</h1>
+          <div class="sub">
+            Tap any button to open the image + description inside the page.
+          </div>
+        </div>
+      </div>
 
-    <h1>Meridian Pathways</h1>
+      <div class="searchRow">
+        <input id="search" type="search" placeholder="Search meridian (ex: Heart, Liver...)" />
+      </div>
+    </header>
 
-    <div class="button-grid">
-        <button onclick="loadData('HTM', 'Heart')">Heart</button>
-        <button onclick="loadData('PCM', 'Pericardium')">Pericardium</button>
-        <button onclick="loadData('SIM', 'Small Intestine')">Small Intestine</button>
-        <button onclick="loadData('TWM', 'Triple Warmer')">Triple Warmer</button>
-        <button onclick="loadData('SPM', 'Spleen')">Spleen</button>
-        <button onclick="loadData('STM', 'Stomach')">Stomach</button>
-        <button onclick="loadData('LUM', 'Lung')">Lung</button>
-        <button onclick="loadData('LIM', 'Large Intestine')">Large Intestine</button>
-        <button onclick="loadData('KDM', 'Kidney')">Kidney</button>
-        <button onclick="loadData('UBM', 'Urinary Bladder')">Urinary Bladder</button>
-        <button onclick="loadData('LVM', 'Liver')">Liver</button>
-        <button onclick="loadData('GBM', 'Gall Bladder')">Gall Bladder</button>
-    </div>
+    <section class="grid" id="btnGrid"></section>
 
-    <div id="display-area">
-        <h2 id="meridian-title"></h2>
-        <img id="meridian-img" src="" alt="Meridian Image">
-        <div id="meridian-desc">Select a meridian to see details.</div>
-    </div>
+    <section class="viewer" id="viewer">
+      <div class="viewerTop">
+        <div>
+          <div class="viewerTitle" id="viewerTitle">Select a meridian</div>
+          <div class="mini" id="viewerMini">Image: <span id="imgName">-</span> • Text: <span id="txtName">-</span></div>
+        </div>
+        <button class="clearBtn" id="clearBtn" type="button">Clear</button>
+      </div>
 
-    <script>
-        async function loadData(code, name) {
-            const displayArea = document.getElementById('display-area');
-            const imgElement = document.getElementById('meridian-img');
-            const descElement = document.getElementById('meridian-desc');
-            const titleElement = document.getElementById('meridian-title');
+      <div class="content" id="viewerContent">
+        <div class="placeholder">
+          No meridian selected.<br/>
+          Choose one from the buttons above.
+          <div class="statusRow">
+            <span class="pill">Images: meridian_img/*.jpg</span>
+            <span class="pill">Descriptions: meridian_txt/*.txt</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
 
-            // Set Title and Image
-            titleElement.innerText = name;
-            imgElement.src = `meridian_img/${code}.jpg`;
+  <script>
+    const MERIDIANS = [
+      { name: "Heart", code: "HTM" },
+      { name: "Pericardium", code: "PCM" },
+      { name: "Small intestine", code: "SIM" },
+      { name: "Triple warmer", code: "TWM" },
+      { name: "Spleen", code: "SPM" },
+      { name: "Stomach", code: "STM" },
+      { name: "Lung", code: "LUM" },
+      { name: "Large intestine", code: "LIM" },
+      { name: "Kidney", code: "KDM" },
+      { name: "Urinary bladder", code: "UBM" },
+      { name: "Liver", code: "LVM" },
+      { name: "Gall bladder", code: "GBM" },
+    ];
 
-            // Fetch Text Description
-            try {
-                const response = await fetch(`meridian_txt/${code}.txt`);
-                if (response.ok) {
-                    const text = await response.text();
-                    descElement.innerText = text;
-                } else {
-                    descElement.innerText = "Description file not found.";
-                }
-            } catch (error) {
-                descElement.innerText = "Error loading description.";
-            }
+    const btnGrid = document.getElementById("btnGrid");
+    const viewerTitle = document.getElementById("viewerTitle");
+    const viewerMini = document.getElementById("viewerMini");
+    const viewerContent = document.getElementById("viewerContent");
+    const imgName = document.getElementById("imgName");
+    const txtName = document.getElementById("txtName");
+    const search = document.getElementById("search");
+    const clearBtn = document.getElementById("clearBtn");
 
-            // Show the display area and scroll to it
-            displayArea.style.display = 'block';
-            displayArea.scrollIntoView({ behavior: 'smooth' });
-        }
-    </script>
+    let activeCode = null;
+
+    function filePaths(code){
+      return {
+        img: `meridian_img/${code}.jpg`,
+        txt: `meridian_txt/${code}.txt`
+      };
+    }
+
+    function createButtons(list){
+      btnGrid.innerHTML = "";
+      list.forEach(item => {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "btn";
+        b.textContent = item.name;
+        b.dataset.code = item.code;
+
+        b.addEventListener("click", () => openMeridian(item));
+        btnGrid.appendChild(b);
+      });
+    }
+
+    function setActiveButton(code){
+      [...btnGrid.querySelectorAll(".btn")].forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.code === code);
+      });
+    }
+
+    async function openMeridian(item){
+      activeCode = item.code;
+      setActiveButton(activeCode);
+
+      const { img, txt } = filePaths(item.code);
+
+      viewerTitle.textContent = item.name;
+      imgName.textContent = `${item.code}.jpg`;
+      txtName.textContent = `${item.code}.txt`;
+
+      viewerContent.innerHTML = `
+        <div class="placeholder">
+          Loading...
+          <div class="statusRow">
+            <span class="pill">Please wait</span>
+          </div>
+        </div>
+      `;
+
+      // Fetch description
+      let description = "";
+      let txtOk = true;
+      try{
+        const res = await fetch(txt, { cache: "no-store" });
+        if(!res.ok) throw new Error("Text not found");
+        description = await res.text();
+      }catch(e){
+        txtOk = false;
+        description = "Description file not found.\n\nMake sure this exists:\n" + txt;
+      }
+
+      // Build viewer
+      const txtPillClass = txtOk ? "pill" : "pill error";
+
+      viewerContent.innerHTML = `
+        <div class="imgWrap">
+          <img src="${img}" alt="${item.name} (${item.code})"
+               onerror="this.onerror=null; this.closest('.imgWrap').insertAdjacentHTML('beforeend',
+               '<div class=\\'placeholder\\'><div class=\\'statusRow\\'><span class=\\'pill error\\'>Image not found: ${item.code}.jpg</span></div></div>'); this.style.display='none';" />
+        </div>
+
+        <div class="desc">${escapeHtml(description)}</div>
+
+        <div class="statusRow">
+          <span class="pill">Selected: ${item.name}</span>
+          <span class="pill">Code: ${item.code}</span>
+          <span class="${txtPillClass}">${txtOk ? "Text loaded" : "Text missing"}</span>
+        </div>
+      `;
+
+      // Smooth scroll to viewer on mobile
+      document.getElementById("viewer").scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function escapeHtml(str){
+      return (str ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;");
+    }
+
+    function clearViewer(){
+      activeCode = null;
+      setActiveButton(null);
+      viewerTitle.textContent = "Select a meridian";
+      imgName.textContent = "-";
+      txtName.textContent = "-";
+      viewerContent.innerHTML = `
+        <div class="placeholder">
+          No meridian selected.<br/>
+          Choose one from the buttons above.
+          <div class="statusRow">
+            <span class="pill">Images: meridian_img/*.jpg</span>
+            <span class="pill">Descriptions: meridian_txt/*.txt</span>
+          </div>
+        </div>
+      `;
+    }
+
+    search.addEventListener("input", () => {
+      const q = search.value.trim().toLowerCase();
+      const filtered = MERIDIANS.filter(m => m.name.toLowerCase().includes(q));
+      createButtons(filtered);
+
+      // keep active highlight if still visible
+      if(activeCode){
+        setActiveButton(activeCode);
+      }
+    });
+
+    clearBtn.addEventListener("click", clearViewer);
+
+    // Init
+    createButtons(MERIDIANS);
+  </script>
 </body>
-</html>
+    </html>
+    
