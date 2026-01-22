@@ -1,8 +1,8 @@
 The heart channel begins at the centre of the armpit and runs along the inner lower side of the arm, traversing the elbow, the wrist and the palm, finally ending at 0.1 cun above the outer nail base of the little finger. 
-Total points in the meridian -11
+Total points in the meridian -9
 Five element points are 
-LU11 WOOD
-LU10 FIRE
-LU9 EARTH 
-LU8 AIR
-LU5 WATER
+HT9 WOOD
+HT8 FIRE
+HT7 EARTH 
+HT4 AIR
+HT3 WATER
