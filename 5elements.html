@@ -3,177 +3,254 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Five Elements — Select to view</title>
+  <title>Five Elements — Deep Teal Edition</title>
   <style>
-    :root{
-      --bg: #f6f8fb;
-      --card: #ffffff;
-      --muted: #6b7280;
-      --text: #0f172a;
-      --accent: #0ea5a3;
-      --line: rgba(15,23,42,0.06);
-      --radius: 12px;
-      --shadow: 0 8px 24px rgba(2,6,23,0.06);
-      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Courier New", monospace;
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      background: linear-gradient(180deg, #fbfdfe, #f2f7fb 60%);
-      color:var(--text);
-      min-height:100vh;
-      padding:28px;
-      display:flex;
-      align-items:flex-start;
-      justify-content:center;
-    }
-    .container{
-      width:100%;
-      max-width:880px;
-    }
-    .lead{
-      display:flex;
-      gap:16px;
-      align-items:center;
-      justify-content:space-between;
-      margin-bottom:18px;
-      flex-wrap:wrap;
-    }
-    .title{
-      line-height:1;
-    }
-    h1{font-size:20px;margin:0}
-    p.sub{margin:0;color:var(--muted);font-size:13px}
-    .selectorWrap{
-      display:flex;
-      gap:12px;
-      align-items:center;
-    }
-    label{font-size:13px;color:var(--muted)}
-    select{
-      min-width:240px;
-      padding:10px 12px;
-      border-radius:10px;
-      border:1px solid var(--line);
-      background:var(--card);
-      color:var(--text);
-      font-size:14px;
-      outline:none;
-      box-shadow:var(--shadow);
-      appearance:none;
-    }
-    button{
-      background:transparent;
-      border:1px solid var(--line);
-      padding:9px 12px;
-      border-radius:10px;
-      cursor:pointer;
-      color:var(--muted);
-      font-size:13px;
-    }
-    .card{
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      overflow:hidden;
-    }
-    .cardHead{
-      padding:16px;
-      border-bottom:1px solid var(--line);
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:12px;
-    }
-    .cardBody{
-      padding:18px;
-    }
-    .placeholder{
-      color:var(--muted);
-      font-size:14px;
+    :root {
+      /* Refined Dark Teal Palette */
+      --bg: #041c1c;
+      --surface: #0a2e2e;
+      --card-bg: rgba(13, 54, 54, 0.7);
+      --border: rgba(20, 184, 166, 0.2);
+      --text-main: #e2f1f1;
+      --text-muted: #94b2b2;
+      --accent: #2dd4bf; /* Bright Teal */
+      --accent-glow: rgba(45, 212, 191, 0.3);
+      --radius: 16px;
+      --shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
     }
 
-    /* KV grid */
-    .kv{
-      display:grid;
-      grid-template-columns:200px 1fr;
-      gap:12px 18px;
-      align-items:start;
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      /* Subtle radial gradient for depth */
+      background: radial-gradient(circle at top center, #083333, #041c1c);
+      color: var(--text-main);
+      min-height: 100vh;
+      padding: 40px 20px;
+      display: flex;
+      justify-content: center;
+      line-height: 1.6;
     }
-    @media (max-width:620px){
-      .kv{grid-template-columns:1fr}
-      select{min-width:160px}
+
+    .container {
+      width: 100%;
+      max-width: 900px;
+      animation: fadeIn 0.6s ease-out;
     }
-    .k{
-      color:var(--muted);
-      font-size:12px;
-      text-transform:uppercase;
-      letter-spacing:.6px;
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
-    .v{
-      font-size:15px;
-      line-height:1.5;
-      white-space:pre-wrap;
+
+    /* Header Section */
+    .lead {
+      display: flex;
+      gap: 24px;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
     }
-    .rowSep{border-top:1px solid var(--line);padding-top:14px;margin-top:14px}
-    .pill{
-      font-size:13px;
-      padding:6px 10px;
-      border-radius:999px;
-      background:rgba(14,165,163,0.08);
-      color:var(--accent);
-      border:1px solid rgba(14,165,163,0.12);
+
+    h1 {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin: 0;
+      background: linear-gradient(to right, #ffffff, var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
-    .small{
-      font-size:12px;color:var(--muted)
+
+    p.sub { margin: 4px 0 0; color: var(--text-muted); font-size: 14px; }
+
+    /* Controls */
+    .selectorWrap {
+      display: flex;
+      gap: 16px;
+      align-items: flex-end;
+    }
+
+    label { 
+      font-size: 11px; 
+      text-transform: uppercase; 
+      letter-spacing: 1px; 
+      color: var(--accent); 
+      font-weight: 700;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    select {
+      min-width: 260px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-main);
+      font-size: 15px;
+      outline: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+
+    button {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      padding: 10px 18px;
+      border-radius: 10px;
+      cursor: pointer;
+      color: var(--text-main);
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    button:hover { background: rgba(255,255,255,0.1); border-color: var(--text-muted); }
+
+    .copyBtn {
+      background: var(--accent);
+      color: #041c1c;
+      border: none;
+      font-weight: 700;
+    }
+
+    .copyBtn:hover {
+      background: #5eead4;
+      transform: translateY(-1px);
+    }
+
+    /* Main Card */
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .cardHead {
+      padding: 24px;
+      background: rgba(0, 0, 0, 0.2);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    #cardTitle { font-size: 18px; color: #fff; }
+    .small { font-size: 13px; color: var(--text-muted); }
+
+    .cardBody { padding: 32px; }
+
+    /* Pill */
+    .pill {
+      font-size: 12px;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 20px;
+      background: var(--accent-glow);
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      text-transform: uppercase;
+    }
+
+    /* Key Value Grid */
+    .kv {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 12px 24px;
+      align-items: start;
+    }
+
+    @media (max-width: 620px) {
+      .kv { grid-template-columns: 1fr; gap: 4px; }
+      .cardBody { padding: 20px; }
+      select { min-width: 100%; }
+    }
+
+    .k {
+      color: var(--accent);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      opacity: 0.8;
+      padding-top: 4px;
+    }
+
+    .v {
+      font-size: 16px;
+      color: var(--text-main);
+      white-space: pre-wrap;
+    }
+
+    .rowSep {
+      border-top: 1px solid var(--border);
+      padding-top: 20px;
+      margin-top: 20px;
+    }
+
+    .placeholder {
+      text-align: center;
+      padding: 40px 0;
+      color: var(--text-muted);
+      font-style: italic;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="lead">
+    <header class="lead">
       <div class="title">
         <h1>Five Elements</h1>
-        <p class="sub">Choose an element to view the full dataset row.</p>
+        <p class="sub">Explore the deep properties of the elemental dataset.</p>
       </div>
 
-      <div class="selectorWrap" aria-live="polite">
+      <div class="selectorWrap">
         <div>
-          <label for="elementSelect">Element</label><br/>
-          <select id="elementSelect" aria-describedby="statusText">
+          <label for="elementSelect">Filter by Element</label>
+          <select id="elementSelect">
             <option value="">— Select an element —</option>
           </select>
         </div>
 
-        <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end">
-          <span id="statusText" class="small">No selection</span>
-          <div style="display:flex;gap:8px">
-            <button id="resetBtn" title="Clear selection">Reset</button>
+        <div style="display:flex;flex-direction:column;gap:10px;align-items:flex-end">
+          <span id="statusText" class="small">System Ready</span>
+          <div style="display:flex;gap:10px">
+            <button id="resetBtn">Reset</button>
+            <button id="copyBtn" class="copyBtn">Copy Row</button>
           </div>
         </div>
       </div>
-    </div>
+    </header>
 
-    <div class="card" role="region" aria-labelledby="cardTitle">
+    <main class="card">
       <div class="cardHead">
         <div>
-          <strong id="cardTitle">Element Data</strong>
-          <div class="small" id="subNote">Full row will display here after choosing an element.</div>
+          <strong id="cardTitle">Data Inspector</strong>
+          <div class="small" id="subNote">Awaiting selection...</div>
         </div>
-        <div class="pill" id="elementPill">None</div>
+        <div class="pill" id="elementPill">Standby</div>
       </div>
 
       <div class="cardBody">
         <div id="emptyState" class="placeholder">
-          No element selected. Use the dropdown above to display the element's complete data.
+          Please select an entry from the dropdown to inspect its properties.
         </div>
 
         <div id="rowContainer" style="display:none">
           </div>
       </div>
-    </div>
+    </main>
   </div>
 
   <script>
@@ -184,6 +261,8 @@
     const emptyState = document.getElementById("emptyState");
     const rowContainer = document.getElementById("rowContainer");
     const resetBtn = document.getElementById("resetBtn");
+    const copyBtn = document.getElementById("copyBtn");
+    const subNote = document.getElementById("subNote");
 
     let DB = [];
 
@@ -192,11 +271,10 @@
     }
 
     function renderRow(item){
-      // show pill and status
       elementPill.textContent = item.ELEMENT || "—";
-      statusText.textContent = "Selected: " + (item.ELEMENT || "—");
+      statusText.textContent = "Viewing: " + (item.ELEMENT || "—");
+      subNote.textContent = "Complete record for " + item.ELEMENT;
 
-      // build key-value blocks
       const keys = Object.keys(item);
       rowContainer.innerHTML = keys.map((k, idx) => {
         const v = normalizeText(item[k]);
@@ -210,18 +288,19 @@
 
       emptyState.style.display = "none";
       rowContainer.style.display = "";
+      rowContainer.style.animation = "fadeIn 0.4s ease-out";
     }
 
     function clearSelectionUI(){
       selectEl.value = "";
-      elementPill.textContent = "None";
-      statusText.textContent = "No selection";
+      elementPill.textContent = "Standby";
+      statusText.textContent = "System Ready";
+      subNote.textContent = "Awaiting selection...";
       emptyState.style.display = "";
       rowContainer.style.display = "none";
       rowContainer.innerHTML = "";
     }
 
-    // simple HTML escaper for injected text
     function escapeHtml(s){
       return String(s)
         .replaceAll("&","&amp;")
@@ -238,7 +317,6 @@
         if(!res.ok) throw new Error("Failed to fetch JSON ("+res.status+")");
         DB = await res.json();
 
-        // populate select
         DB.forEach(row => {
           const opt = document.createElement("option");
           opt.value = row.ELEMENT;
@@ -246,8 +324,8 @@
           selectEl.appendChild(opt);
         });
       }catch(err){
-        statusText.textContent = "Error loading data";
-        emptyState.textContent = "Could not load five_elements.json. Ensure the JSON file is present alongside this HTML file.";
+        statusText.textContent = "Connection Error";
+        emptyState.textContent = "Could not synchronize with five_elements.json.";
         console.error(err);
       }
     }
@@ -259,18 +337,24 @@
         return;
       }
       const item = DB.find(r => r.ELEMENT === val);
-      if(!item){
-        statusText.textContent = "No matching element found";
-        return;
-      }
+      if(!item) return;
       renderRow(item);
     });
 
-    resetBtn.addEventListener("click", () => {
-      clearSelectionUI();
+    resetBtn.addEventListener("click", clearSelectionUI);
+
+    copyBtn.addEventListener("click", async () => {
+      if(rowContainer.style.display === "none") return;
+      try{
+        await navigator.clipboard.writeText(rowContainer.innerText.trim());
+        const originalText = copyBtn.textContent;
+        copyBtn.textContent = "Copied!";
+        setTimeout(()=> copyBtn.textContent = originalText, 1400);
+      }catch(e){
+        console.error("Copy failed", e);
+      }
     });
 
-    // init on load
     init();
   </script>
 </body>
