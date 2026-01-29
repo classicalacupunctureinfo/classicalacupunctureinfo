@@ -1,1 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Classical Acupuncture - Study Page</title>
 
+  <style>
+    :root{
+      --bg1:#071c1f;
+      --bg2:#0b2b2f;
+      --card:#0f3a3f;
+      --card2:#0b3035;
+      --text:#e9fbff;
+      --muted:#a7d3dc;
+      --accent:#36c2c9;
+      --accent2:#2aaab1;
+      --shadow: 0 18px 50px rgba(0,0,0,.35);
+      --border: rgba(255,255,255,.10);
+      --radius: 18px;
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--text);
+      background: radial-gradient(1200px 650px at 20% 0%, rgba(54,194,201,.20), transparent 55%),
+                  radial-gradient(900px 520px at 85% 18%, rgba(54,194,201,.12), transparent 50%),
+                  linear-gradient(180deg, var(--bg1), var(--bg2));
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+    }
+
+    header{
+      padding:18px 14px 10px;
+      position:sticky;
+      top:0;
+      z-index:10;
+      backdrop-filter: blur(10px);
+      background: rgba(7, 28, 31, .55);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .topbar{
+      max-width:1100px;
+      margin:0 auto;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+    }
+
+    .brand{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+      min-width:240px;
+    }
+    .brand h1{
+      margin:0;
+      font-size:18px;
+      letter-spacing:.2px;
+      line-height:1.1;
+    }
+    .brand p{
+      margin:0;
+      font-size:12px;
+      color:var(--muted);
+      opacity:.92;
+    }
+
+    .searchBox{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      width:min(520px, 100%);
+      flex: 1 1 320px;
+      background: rgba(15,58,63,.65);
+      border:1px solid var(--border);
+      border-radius: 999px;
+      padding:8px 12px;
+      box-shadow: 0 10px 24px rgba(0,0,0,.18);
+    }
+
+    .searchBox input{
+      width:100%;
+      border:none;
+      outline:none;
+      background:transparent;
+      color:var(--text);
+      font-size:14px;
+    }
+    .searchBox input::placeholder{ color: rgba(167,211,220,.8); }
+
+    .chip{
+      border:1px solid var(--border);
+      background: rgba(15,58,63,.65);
+      color: var(--muted);
+      padding:8px 12px;
+      border-radius: 999px;
+      font-size:12px;
+      cursor:pointer;
+      transition:.15s ease;
+      user-select:none;
+      white-space:nowrap;
+    }
+    .chip:hover{
+      color: var(--text);
+      border-color: rgba(54,194,201,.5);
+      transform: translateY(-1px);
+    }
+
+    main{
+      width:100%;
+      max-width:1100px;
+      margin:0 auto;
+      padding:14px;
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:12px;
+      flex:1;
+    }
+
+    .layout{
+      display:grid;
+      grid-template-columns: 360px 1fr;
+      gap:12px;
+      align-items:start;
+    }
+
+    @media (max-width: 900px){
+      .layout{
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .panel{
+      background: rgba(15,58,63,.55);
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+
+    .panelHeader{
+      padding:14px 14px 10px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(15,58,63,.65), rgba(11,48,53,.35));
+    }
+
+    .panelHeader h2{
+      margin:0;
+      font-size:14px;
+      letter-spacing:.3px;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .btnGrid{
+      padding:12px;
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:10px;
+    }
+
+    .topicBtn{
+      width:100%;
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      text-align:left;
+      padding:12px 12px;
+      border-radius: 16px;
+      background: rgba(11,48,53,.55);
+      border: 1px solid rgba(255,255,255,.10);
+      cursor:pointer;
+      transition:.15s ease;
+      position:relative;
+    }
+
+    .topicBtn:hover{
+      transform: translateY(-1px);
+      border-color: rgba(54,194,201,.45);
+      box-shadow: 0 14px 28px rgba(0,0,0,.22);
+    }
+
+    .topicBtn.active{
+      border-color: rgba(54,194,201,.8);
+      background: rgba(54,194,201,.12);
+    }
+
+    .badge{
+      font-size:11px;
+      padding:4px 10px;
+      border-radius:999px;
+      border:1px solid rgba(54,194,201,.55);
+      color: var(--accent);
+      background: rgba(54,194,201,.10);
+      margin-left:auto;
+      white-space:nowrap;
+      align-self:center;
+    }
+
+    .titleWrap{
+      display:flex;
+      flex-direction:column;
+      gap:3px;
+      min-width: 0;
+    }
+
+    .topicTitle{
+      font-weight:700;
+      font-size:14px;
+      line-height:1.25;
+      margin:0;
+      color: var(--text);
+      word-break: break-word;
+    }
+
+    .topicSub{
+      margin:0;
+      font-size:12px;
+      color: rgba(167,211,220,.9);
+      line-height:1.2;
+      opacity:.95;
+    }
+
+    .contentWrap{
+      padding:14px;
+    }
+
+    .contentCard{
+      background: rgba(11,48,53,.55);
+      border:1px solid var(--border);
+      border-radius: 18px;
+      overflow:hidden;
+    }
+
+    .contentTop{
+      padding:14px;
+      border-bottom:1px solid var(--border);
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+
+    .contentTop h3{
+      margin:0;
+      font-size:18px;
+      line-height:1.15;
+    }
+    .contentTop .metaRow{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      align-items:center;
+      color: var(--muted);
+      font-size:12px;
+    }
+
+    .pill{
+      padding:6px 10px;
+      border-radius:999px;
+      background: rgba(15,58,63,.6);
+      border:1px solid var(--border);
+      color: var(--muted);
+      font-size:12px;
+    }
+
+    .contentBody{
+      padding:14px;
+    }
+
+    .docBox{
+      width:100%;
+      height: 62vh;
+      min-height: 360px;
+      border:none;
+      border-radius: 14px;
+      background: rgba(7,28,31,.35);
+      border: 1px solid rgba(255,255,255,.10);
+      overflow:hidden;
+    }
+
+    .textBlock{
+      font-size:14px;
+      line-height:1.6;
+      color: rgba(233,251,255,.95);
+      white-space:pre-wrap;
+    }
+
+    .imgWrap{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .imgBox{
+      width:100%;
+      border-radius: 16px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(7,28,31,.25);
+    }
+
+    .imgBox img{
+      width:100%;
+      height:auto;
+      display:block;
+      object-fit:cover;
+    }
+
+    .descBox{
+      padding:12px 12px;
+      border-radius: 16px;
+      background: rgba(15,58,63,.45);
+      border:1px solid rgba(255,255,255,.10);
+      color: rgba(233,251,255,.93);
+      font-size:14px;
+      line-height:1.55;
+      white-space:pre-wrap;
+    }
+
+    .mutedSmall{
+      font-size:12px;
+      color: rgba(167,211,220,.9);
+      margin-top:8px;
+    }
+
+    footer{
+      padding:10px 14px 18px;
+      text-align:center;
+      color: rgba(167,211,220,.8);
+      font-size:12px;
+    }
+
+    .rowActions{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      padding:12px 12px 14px;
+      border-top:1px solid var(--border);
+      background: rgba(15,58,63,.35);
+    }
+
+    .actionBtn{
+      padding:10px 12px;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(11,48,53,.55);
+      color: var(--text);
+      cursor:pointer;
+      transition:.15s ease;
+      font-size:13px;
+    }
+
+    .actionBtn:hover{
+      transform: translateY(-1px);
+      border-color: rgba(54,194,201,.45);
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="topbar">
+      <div class="brand">
+        <h1>Classical Acupuncture</h1>
+        <p>Tap a button to view docs, rules, images & notes</p>
+      </div>
+
+      <div class="searchBox" title="Search topics">
+        <span style="opacity:.9;color:var(--muted);font-size:13px;">🔎</span>
+        <input id="searchInput" placeholder="Search (example: meridian, clock, diagnosing, five element...)" />
+      </div>
+
+      <button class="chip" id="resetBtn">Reset</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="layout">
+
+      <!-- LEFT: TOPICS -->
+      <section class="panel">
+        <div class="panelHeader">
+          <h2>Topics</h2>
+          <span class="pill" id="countPill">10 items</span>
+        </div>
+
+        <div class="btnGrid" id="btnGrid">
+          <!-- Buttons injected by JS -->
+        </div>
+      </section>
+
+      <!-- RIGHT: CONTENT -->
+      <section class="panel">
+        <div class="panelHeader">
+          <h2>Viewer</h2>
+          <span class="pill" id="typePill">—</span>
+        </div>
+
+        <div class="contentWrap">
+          <div class="contentCard">
+            <div class="contentTop">
+              <h3 id="contentTitle">Select a topic</h3>
+              <div class="metaRow">
+                <span class="pill" id="contentTag">—</span>
+                <span class="pill" id="contentHint">Ready</span>
+              </div>
+            </div>
+
+            <div class="contentBody" id="contentBody">
+              <div class="textBlock">
+                ✅ Your content will appear here.
+                <br/><br/>
+                Use the buttons on the left.
+                <br/>
+                This works perfectly on mobile too.
+              </div>
+            </div>
+
+            <div class="rowActions">
+              <button class="actionBtn" id="openFileBtn" title="Open the file/image in a new tab (when available)">Open in new tab</button>
+              <button class="actionBtn" id="copyTitleBtn">Copy topic title</button>
+              <button class="actionBtn" id="copyTextBtn">Copy text/description</button>
+            </div>
+          </div>
+
+          <div class="mutedSmall">
+            ✅ Place your docs in <b>docs/</b> and images in <b>img/</b> folder (instructions inside code).
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <footer>
+    Made for quick study • Dark teal theme • Mobile friendly
+  </footer>
+
+  <script>
+    /*
+    ✅ HOW TO USE (VERY IMPORTANT)
+      ------------------------------------------------------------
+      1) Keep this file as: index.html
+
+      2) Create folders in the same location:
+         /docs
+         /img
+
+      3) Put your files like this:
+
+         docs/
+           classical_acupuncture_introduction.pdf
+           classical_acupuncture_theories.pdf
+           energy_distribution.pdf
+           diagnosing_methods.pdf
+
+         img/
+           byol_meridian.jpg
+           warm_cold_organs.jpg
+           five_element_cycles.jpg
+           body_measurements.jpg
+           organ_clock.jpg
+
+      4) You can change filenames inside the "topics" list below.
+      ------------------------------------------------------------
+    */
+
+    const topics = [
+      {
+        id: "intro",
+        title: "Classical acupuncture introduction",
+        type: "doc",
+        tag: "DOC",
+        sub: "PDF / Document",
+        src: "docs/classical_acupuncture_introduction.pdf"
+      },
+      {
+        id: "theories",
+        title: "Classical acupuncture theories",
+        type: "doc",
+        tag: "DOC",
+        sub: "PDF / Document",
+        src: "docs/classical_acupuncture_theories.pdf"
+      },
+      {
+        id: "goldenRules",
+        title: "4 golden rules",
+        type: "text",
+        tag: "TEXT",
+        sub: "Readable notes",
+        text:
+`1) Treat the root and the branch
+2) Tonify deficiency, reduce excess
+3) Harmonize Yin and Yang
+4) Treat according to time, season, and constitution
+
+(Replace this text with your exact 4 golden rules.)`
+      },
+      {
+        id: "energy",
+        title: "Energy distribution",
+        type: "doc",
+        tag: "DOC",
+        sub: "PDF / Document",
+        src: "docs/energy_distribution.pdf"
+      },
+      {
+        id: "diagnosing",
+        title: "Diagnosing methods",
+        type: "doc",
+        tag: "DOC",
+        sub: "PDF / Document",
+        src: "docs/diagnosing_methods.pdf"
+      },
+      {
+        id: "byol",
+        title: "Byol meridian",
+        type: "image",
+        tag: "IMAGE",
+        sub: "Diagram",
+        img: "img/byol_meridian.jpg"
+      },
+      {
+        id: "warmCold",
+        title: "Warm and cold organs",
+        type: "image+text",
+        tag: "IMAGE + TEXT",
+        sub: "Diagram + notes",
+        img: "img/warm_cold_organs.jpg",
+        desc:
+`Warm organs (Yang) and Cold organs (Yin) summary goes here.
+
+You can write:
+• Which organs are considered warm/cold
+• Common symptoms
+• Practical points / examples
+(Replace this description with your actual content.)`
+      },
+      {
+        id: "fiveElement",
+        title: "Five element cycles",
+        type: "image+text",
+        tag: "IMAGE + TEXT",
+        sub: "Generating & controlling cycles",
+        img: "img/five_element_cycles.jpg",
+        desc:
+`Five Element Cycles:
+• Generating (Sheng) cycle
+• Controlling (Ke) cycle
+
+Add your notes here:
+- Wood → Fire → Earth → Metal → Water → Wood
+- Wood controls Earth, Earth controls Water, etc.
+(Replace with your exact description.)`
+      },
+      {
+        id: "measurements",
+        title: "Body measurements",
+        type: "image",
+        tag: "IMAGE",
+        sub: "Body proportional units / Cun",
+        img: "img/body_measurements.jpg"
+      },
+      {
+        id: "organClock",
+        title: "Organ clock",
+        type: "image",
+        tag: "IMAGE",
+        sub: "Meridian time cycle",
+        img: "img/organ_clock.jpg"
+      }
+    ];
+
+    const btnGrid = document.getElementById("btnGrid");
+    const contentTitle = document.getElementById("contentTitle");
+    const contentTag = document.getElementById("contentTag");
+    const typePill = document.getElementById("typePill");
+    const contentHint = document.getElementById("contentHint");
+    const contentBody = document.getElementById("contentBody");
+    const countPill = document.getElementById("countPill");
+
+    const openFileBtn = document.getElementById("openFileBtn");
+    const copyTitleBtn = document.getElementById("copyTitleBtn");
+    const copyTextBtn = document.getElementById("copyTextBtn");
+
+    const searchInput = document.getElementById("searchInput");
+    const resetBtn = document.getElementById("resetBtn");
+
+    let currentTopic = null;
+
+    function safeTypeLabel(t){
+      if(t === "doc") return "Document Viewer";
+      if(t === "text") return "Text Notes";
+      if(t === "image") return "Image Viewer";
+      if(t === "image+text") return "Image + Description";
+      return "Viewer";
+    }
+
+    function renderButtons(list){
+      btnGrid.innerHTML = "";
+
+      list.forEach((t, idx) => {
+        const btn = document.createElement("button");
+        btn.className = "topicBtn";
+        btn.setAttribute("data-id", t.id);
+
+        btn.innerHTML = `
+          <div class="titleWrap">
+            <p class="topicTitle">${t.title}</p>
+            <p class="topicSub">${t.sub || ""}</p>
+          </div>
+          <span class="badge">${t.tag || "ITEM"}</span>
+        `;
+
+        btn.addEventListener("click", () => openTopic(t.id));
+        btnGrid.appendChild(btn);
+      });
+
+      countPill.textContent = `${list.length} item${list.length === 1 ? "" : "s"}`;
+    }
+
+    function setActiveButton(id){
+      document.querySelectorAll(".topicBtn").forEach(b => b.classList.remove("active"));
+      const active = document.querySelector(`.topicBtn[data-id="${id}"]`);
+      if(active) active.classList.add("active");
+    }
+
+    function openTopic(id){
+      const t = topics.find(x => x.id === id);
+      if(!t) return;
+
+      currentTopic = t;
+
+      setActiveButton(id);
+
+      contentTitle.textContent = t.title;
+      contentTag.textContent = t.tag || "—";
+      typePill.textContent = safeTypeLabel(t.type);
+      contentHint.textContent = (t.type || "—").toUpperCase();
+
+      // Render content
+      contentBody.innerHTML = "";
+
+      if(t.type === "doc"){
+        const iframe = document.createElement("iframe");
+        iframe.className = "docBox";
+        iframe.src = t.src;
+        iframe.title = t.title;
+        contentBody.appendChild(iframe);
+      }
+
+      if(t.type === "text"){
+        const div = document.createElement("div");
+        div.className = "textBlock";
+        div.textContent = t.text || "No text added.";
+        contentBody.appendChild(div);
+      }
+
+      if(t.type === "image"){
+        const wrap = document.createElement("div");
+        wrap.className = "imgWrap";
+
+        const imgBox = document.createElement("div");
+        imgBox.className = "imgBox";
+
+        const img = document.createElement("img");
+        img.src = t.img;
+        img.alt = t.title;
+
+        imgBox.appendChild(img);
+        wrap.appendChild(imgBox);
+
+        contentBody.appendChild(wrap);
+      }
+
+      if(t.type === "image+text"){
+        const wrap = document.createElement("div");
+        wrap.className = "imgWrap";
+
+        const imgBox = document.createElement("div");
+        imgBox.className = "imgBox";
+
+        const img = document.createElement("img");
+        img.src = t.img;
+        img.alt = t.title;
+
+        imgBox.appendChild(img);
+
+        const desc = document.createElement("div");
+        desc.className = "descBox";
+        desc.textContent = t.desc || "No description added.";
+
+        wrap.appendChild(imgBox);
+        wrap.appendChild(desc);
+
+        contentBody.appendChild(wrap);
+      }
+    }
+
+    // ACTIONS
+    openFileBtn.addEventListener("click", () => {
+      if(!currentTopic){
+        alert("Select a topic first.");
+        return;
+      }
+
+      let url = null;
+      if(currentTopic.type === "doc") url = currentTopic.src;
+      if(currentTopic.type === "image" || currentTopic.type === "image+text") url = currentTopic.img;
+
+      if(!url){
+        alert("This topic has no file to open.");
+        return;
+      }
+
+      window.open(url, "_blank");
+    });
+
+    copyTitleBtn.addEventListener("click", async () => {
+      if(!currentTopic){
+        alert("Select a topic first.");
+        return;
+      }
+      await navigator.clipboard.writeText(currentTopic.title);
+      alert("Topic title copied!");
+    });
+
+    copyTextBtn.addEventListener("click", async () => {
+      if(!currentTopic){
+        alert("Select a topic first.");
+        return;
+      }
+
+      let text = "";
+      if(currentTopic.type === "text") text = currentTopic.text || "";
+      if(currentTopic.type === "image+text") text = currentTopic.desc || "";
+
+      if(!text.trim()){
+        alert("No text available to copy for this topic.");
+        return;
+      }
+
+      await navigator.clipboard.writeText(text);
+      alert("Text copied!");
+    });
+
+    // SEARCH
+    function applySearch(){
+      const q = (searchInput.value || "").trim().toLowerCase();
+
+      if(!q){
+        renderButtons(topics);
+        return;
+      }
+
+      const filtered = topics.filter(t => {
+        const a = (t.title || "").toLowerCase();
+        const b = (t.sub || "").toLowerCase();
+        const c = (t.tag || "").toLowerCase();
+        return a.includes(q) || b.includes(q) || c.includes(q);
+      });
+
+      renderButtons(filtered);
+
+      // If current topic is not in the filtered list, unselect
+      if(currentTopic && !filtered.some(x => x.id === currentTopic.id)){
+        currentTopic = null;
+        contentTitle.textContent = "Select a topic";
+        contentTag.textContent = "—";
+        typePill.textContent = "—";
+        contentHint.textContent = "Ready";
+        contentBody.innerHTML = `
+          <div class="textBlock">
+            🔎 No topic selected in current search.
+            <br/><br/>
+            Choose from the filtered buttons.
+          </div>
+        `;
+      }
+    }
+
+    searchInput.addEventListener("input", applySearch);
+
+    resetBtn.addEventListener("click", () => {
+      searchInput.value = "";
+      renderButtons(topics);
+      currentTopic = null;
+      document.querySelectorAll(".topicBtn").forEach(b => b.classList.remove("active"));
+
+      contentTitle.textContent = "Select a topic";
+      contentTag.textContent = "—";
+      typePill.textContent = "—";
+      contentHint.textContent = "Ready";
+      contentBody.innerHTML = `
+        <div class="textBlock">
+          ✅ Reset done.
+          <br/><br/>
+          Tap a topic button to open the document/image/text.
+        </div>
+      `;
+    });
+
+    // INIT
+    renderButtons(topics);
+    // Auto-open first item (optional)
+    // openTopic(topics[0].id);
+  </script>
+</body>
+</html>
