@@ -1,1 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Classical Acupuncture - Study Page</title>
 
+  <style>
+    :root{
+      --bg1:#071c1f;
+      --bg2:#0b2b2f;
+      --card:#0f3a3f;
+      --card2:#0b3035;
+      --text:#e9fbff;
+      --muted:#a7d3dc;
+      --accent:#36c2c9;
+      --accent2:#2aaab1;
+      --shadow: 0 18px 50px rgba(0,0,0,.35);
+      --border: rgba(255,255,255,.10);
+      --radius: 18px;
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--text);
+      background: radial-gradient(1200px 650px at 20% 0%, rgba(54,194,201,.20), transparent 55%),
+                  radial-gradient(900px 520px at 85% 18%, rgba(54,194,201,.12), transparent 50%),
+                  linear-gradient(180deg, var(--bg1), var(--bg2));
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+    }
+
+    header{
+      padding:18px 14px 10px;
+      position:sticky;
+      top:0;
+      z-index:10;
+      backdrop-filter: blur(10px);
+      background: rgba(7, 28, 31, .55);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .topbar{
+      max-width:800px;
+      margin:0 auto;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+    }
+
+    .brand h1{ margin:0; font-size:18px; letter-spacing:.2px; }
+    .brand p{ margin:0; font-size:12px; color:var(--muted); opacity:.92; }
+
+    .searchBox{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      width:100%;
+      background: rgba(15,58,63,.65);
+      border:1px solid var(--border);
+      border-radius: 999px;
+      padding:8px 12px;
+      margin-top: 10px;
+    }
+
+    .searchBox input{
+      width:100%;
+      border:none;
+      outline:none;
+      background:transparent;
+      color:var(--text);
+      font-size:14px;
+    }
+
+    main{
+      width:100%;
+      max-width:800px;
+      margin:0 auto;
+      padding:14px;
+      flex:1;
+    }
+
+    .panel{
+      background: rgba(15,58,63,.55);
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .panelHeader{
+      padding:14px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(15,58,63,.65), rgba(11,48,53,.35));
+    }
+
+    .btnGrid{ padding:12px; display:grid; gap:10px; }
+
+    .topicBtn{
+      width:100%;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      padding:16px;
+      border-radius: 16px;
+      background: rgba(11,48,53,.55);
+      border: 1px solid rgba(255,255,255,.10);
+      cursor:pointer;
+      transition: .2s;
+    }
+
+    .topicBtn:hover{ background: rgba(54,194,201,.1); border-color: var(--accent); }
+
+    .badge{ font-size:10px; padding:4px 8px; border-radius:999px; border:1px solid var(--accent); color: var(--accent); margin-left:auto; }
+
+    /* CONTENT STYLES */
+    .hidden { display: none !important; }
+
+    .backBtn {
+      background: var(--accent);
+      color: var(--bg1);
+      border: none;
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .docBox{ width:100%; height: 70vh; border:none; border-radius: 12px; background: #fff; }
+    .textBlock, .descBox{ font-size:15px; line-height:1.6; white-space:pre-wrap; padding: 10px; }
+    .imgBox img{ width:100%; border-radius: 12px; }
+
+    .rowActions{
+      display:flex;
+      gap:8px;
+      padding:15px;
+      border-top:1px solid var(--border);
+    }
+
+    .actionBtn{
+      flex: 1;
+      padding:12px;
+      border-radius: 12px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.05);
+      color: var(--text);
+      cursor:pointer;
+      font-size:12px;
+    }
+
+    footer{ padding:20px; text-align:center; color: var(--muted); font-size:12px; opacity: 0.7; }
+  </style>
+</head>
+
+<body>
+  <header id="mainHeader">
+    <div class="topbar">
+      <div class="brand">
+        <h1>Classical Acupuncture</h1>
+        <p>Study Guide & Resources</p>
+      </div>
+      <button class="actionBtn" style="max-width: 80px;" id="resetBtn">Reset</button>
+      
+      <div class="searchBox">
+        <span>🔎</span>
+        <input id="searchInput" placeholder="Search topics..." />
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="listView" class="panel">
+      <div class="panelHeader">
+        <h2 style="font-size:14px; margin:0; color:var(--muted)">TOPICS</h2>
+        <span id="countPill" class="badge">0 items</span>
+      </div>
+      <div class="btnGrid" id="btnGrid"></div>
+    </section>
+
+    <section id="detailView" class="panel hidden">
+      <div class="panelHeader">
+        <button class="backBtn" id="backToList">← Return</button>
+        <span id="contentTag" class="badge">DOC</span>
+      </div>
+      
+      <div style="padding: 20px 20px 5px 20px;">
+        <h2 id="contentTitle" style="margin:0; font-size:22px;">Topic Title</h2>
+      </div>
+
+      <div id="contentBody" style="padding:15px;">
+        </div>
+
+      <div class="rowActions">
+        <button class="actionBtn" id="openFileBtn">Open Full File</button>
+        <button class="actionBtn" id="copyTextBtn">Copy Text</button>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Interactive Study Module • v2.0
+  </footer>
+
+  <script>
+    const topics = [
+      { id: "intro", title: "Classical acupuncture introduction", type: "doc", tag: "DOC", src: "docs/classical_acupuncture_introduction.pdf" },
+      { id: "theories", title: "Classical acupuncture theories", type: "doc", tag: "DOC", src: "docs/classical_acupuncture_theories.pdf" },
+      { id: "goldenRules", title: "4 golden rules", type: "text", tag: "NOTES", text: "1) Treat the root and the branch\n2) Tonify deficiency, reduce excess\n3) Harmonize Yin and Yang\n4) Treat according to time and season." },
+      { id: "organClock", title: "Organ clock", type: "image", tag: "IMAGE", img: "img/organ_clock.jpg" },
+      { id: "fiveElement", title: "Five element cycles", type: "image+text", tag: "DIAGRAM", img: "img/five_element_cycles.jpg", desc: "Wood generates Fire, Fire generates Earth..." }
+      // Add more as needed...
+    ];
+
+    const listView = document.getElementById("listView");
+    const detailView = document.getElementById("detailView");
+    const mainHeader = document.getElementById("mainHeader");
+    const btnGrid = document.getElementById("btnGrid");
+    const contentBody = document.getElementById("contentBody");
+    const contentTitle = document.getElementById("contentTitle");
+    const contentTag = document.getElementById("contentTag");
+    
+    let currentTopic = null;
+
+    function renderButtons(list) {
+      btnGrid.innerHTML = "";
+      list.forEach(t => {
+        const btn = document.createElement("button");
+        btn.className = "topicBtn";
+        btn.innerHTML = `<div><strong>${t.title}</strong></div><span class="badge">${t.tag}</span>`;
+        btn.onclick = () => openTopic(t.id);
+        btnGrid.appendChild(btn);
+      });
+      document.getElementById("countPill").textContent = `${list.length} items`;
+    }
+
+    function openTopic(id) {
+      const t = topics.find(x => x.id === id);
+      if(!t) return;
+      currentTopic = t;
+
+      // Switch Views
+      listView.classList.add("hidden");
+      mainHeader.classList.add("hidden");
+      detailView.classList.remove("hidden");
+
+      // Set Content
+      contentTitle.textContent = t.title;
+      contentTag.textContent = t.tag;
+      contentBody.innerHTML = "";
+
+      if(t.type === "doc") {
+        contentBody.innerHTML = `<iframe class="docBox" src="${t.src}"></iframe>`;
+      } else if(t.type === "text") {
+        contentBody.innerHTML = `<div class="textBlock">${t.text}</div>`;
+      } else if(t.type === "image" || t.type === "image+text") {
+        contentBody.innerHTML = `<div class="imgBox"><img src="${t.img}"></div>`;
+        if(t.desc) contentBody.innerHTML += `<div class="descBox">${t.desc}</div>`;
+      }
+      window.scrollTo(0,0);
+    }
+
+    function closeTopic() {
+      detailView.classList.add("hidden");
+      listView.classList.remove("hidden");
+      mainHeader.classList.remove("hidden");
+    }
+
+    // Event Listeners
+    document.getElementById("backToList").onclick = closeTopic;
+    
+    document.getElementById("searchInput").oninput = (e) => {
+      const q = e.target.value.toLowerCase();
+      const filtered = topics.filter(t => t.title.toLowerCase().includes(q));
+      renderButtons(filtered);
+    };
+
+    document.getElementById("resetBtn").onclick = () => {
+      document.getElementById("searchInput").value = "";
+      renderButtons(topics);
+    };
+
+    document.getElementById("copyTextBtn").onclick = () => {
+      const text = currentTopic.text || currentTopic.desc || currentTopic.title;
+      navigator.clipboard.writeText(text);
+      alert("Copied to clipboard!");
+    };
+
+    document.getElementById("openFileBtn").onclick = () => {
+      const url = currentTopic.src || currentTopic.img;
+      if(url) window.open(url, "_blank");
+      else alert("No external file for this item.");
+    };
+
+    // Init
+    renderButtons(topics);
+  </script>
+</body>
+</html>
