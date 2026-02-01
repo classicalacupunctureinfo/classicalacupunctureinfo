@@ -20,7 +20,6 @@
       --shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
     }
 
-    /* Light Mode Overrides */
     [data-theme="light"] {
       --bg: #f0f7f7;
       --bg-gradient: radial-gradient(circle at top center, #ffffff, #e6eeee);
@@ -61,7 +60,6 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Header Section */
     .lead {
       display: flex;
       gap: 24px;
@@ -83,7 +81,6 @@
 
     p.sub { margin: 4px 0 0; color: var(--text-muted); font-size: 14px; }
 
-    /* Controls */
     .selectorWrap {
       display: flex;
       gap: 16px;
@@ -130,8 +127,13 @@
     }
 
     button:hover { border-color: var(--accent); background: var(--accent-glow); }
+    
+    /* Specific styling for the primary action (Refresh) */
+    #refreshBtn {
+        background: var(--accent-glow);
+        border-color: var(--accent);
+    }
 
-    /* Theme Toggle Switch */
     .theme-toggle {
       width: 44px; height: 24px; background: var(--surface); border: 1px solid var(--border);
       border-radius: 20px; position: relative; cursor: pointer; display: flex; align-items: center;
@@ -143,7 +145,6 @@
     }
     [data-theme="light"] .theme-toggle::after { content: '☀️'; left: 24px; }
 
-    /* Main Card */
     .card {
       background: var(--card-bg);
       backdrop-filter: blur(12px);
@@ -261,8 +262,9 @@
 
       <div style="display:flex; flex: 1; justify-content: flex-end; align-items: flex-end; gap: 10px;">
         <div style="text-align: right;">
-          <span id="statusText" class="small">System Ready</span>
+          <span id="statusText" class="small">Initializing...</span>
           <div style="display:flex; gap:10px; margin-top: 8px;">
+            <button id="refreshBtn">Refresh Data</button>
             <button id="resetBtn">Reset</button>
           </div>
         </div>
@@ -282,7 +284,6 @@
         <div id="emptyState" class="placeholder">
           Please select an entry from the dropdown to inspect its properties.
         </div>
-
         <div id="rowContainer" style="display:none"></div>
       </div>
     </main>
@@ -297,6 +298,7 @@
     const emptyState = document.getElementById("emptyState");
     const rowContainer = document.getElementById("rowContainer");
     const resetBtn = document.getElementById("resetBtn");
+    const refreshBtn = document.getElementById("refreshBtn");
     const subNote = document.getElementById("subNote");
     const themeToggle = document.getElementById("themeToggle");
 
@@ -328,8 +330,6 @@
       const keys = Object.keys(item);
       
       let html = "";
-      
-      // Render standard keys
       const mainKeys = keys.filter(k => !groupKeys.includes(k));
       mainKeys.forEach((k, idx) => {
         const v = normalizeText(item[k]);
@@ -341,10 +341,8 @@
         `;
       });
 
-      // Group Heading
       html += `<div class="section-heading">When the element malfunctions</div>`;
 
-      // Grouped keys
       groupKeys.forEach((k, idx) => {
         const v = normalizeText(item[k]);
         html += `
@@ -380,29 +378,42 @@
         .replaceAll("'", "&#39;");
     }
 
-    async function init(){
-      initTheme();
-      clearSelectionUI();
-      try{
+    async function fetchData() {
+      statusText.textContent = "Syncing...";
+      try {
         const url = new URL(DATA_PATH, window.location.href).href;
         const res = await fetch(url, {cache: "no-store"});
         
         if(!res.ok) throw new Error("Failed to fetch JSON ("+res.status+")");
         DB = await res.json();
 
+        // Clear and rebuild options
+        selectEl.innerHTML = '<option value="">— Select an element —</option>';
         DB.forEach(row => {
           const opt = document.createElement("option");
           opt.value = row.ELEMENT;
           opt.textContent = row.ELEMENT;
           selectEl.appendChild(opt);
         });
-      }catch(err){
+
+        statusText.textContent = "Update Successful";
+        setTimeout(() => {
+          if (!selectEl.value) statusText.textContent = "System Ready";
+        }, 2000);
+
+      } catch(err) {
         statusText.textContent = "Connection Error";
         emptyState.textContent = "Could not synchronize with the dataset. Please ensure five_elements.json is present in the same directory.";
         console.error("Fetch Error:", err);
       }
     }
 
+    // Initialize
+    initTheme();
+    clearSelectionUI();
+    fetchData(); // Initial load
+
+    // Event Listeners
     selectEl.addEventListener("change", () => {
       const val = selectEl.value;
       if(!val){
@@ -419,7 +430,10 @@
       clearSelectionUI();
     });
 
-    init();
+    refreshBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      fetchData();
+    });
   </script>
 </body>
 </html>
