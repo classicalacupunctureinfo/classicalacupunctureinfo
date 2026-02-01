@@ -14,7 +14,7 @@
       --border: rgba(20, 184, 166, 0.2);
       --text-main: #e2f1f1;
       --text-muted: #94b2b2;
-      --accent: #2dd4bf; /* Bright Teal */
+      --accent: #2dd4bf; 
       --accent-glow: rgba(45, 212, 191, 0.3);
       --radius: 16px;
       --shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
@@ -49,54 +49,15 @@
       transition: background 0.4s ease, color 0.4s ease;
     }
 
-    .container {
-      width: 100%;
-      max-width: 900px;
-      animation: fadeIn 0.6s ease-out;
-    }
+    .container { width: 100%; max-width: 900px; animation: fadeIn 0.6s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .lead {
-      display: flex;
-      gap: 24px;
-      align-items: flex-start;
-      justify-content: space-between;
-      margin-bottom: 32px;
-      flex-wrap: wrap;
-    }
-
-    h1 {
-      font-size: 28px;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      margin: 0;
-      background: linear-gradient(to right, var(--text-main), var(--accent));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
+    .lead { display: flex; gap: 24px; align-items: flex-start; justify-content: space-between; margin-bottom: 32px; flex-wrap: wrap; }
+    h1 { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; margin: 0; background: linear-gradient(to right, var(--text-main), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     p.sub { margin: 4px 0 0; color: var(--text-muted); font-size: 14px; }
 
-    .selectorWrap {
-      display: flex;
-      gap: 16px;
-      align-items: flex-end;
-      flex-wrap: wrap;
-    }
-
-    label { 
-      font-size: 11px; 
-      text-transform: uppercase; 
-      letter-spacing: 1px; 
-      color: var(--accent); 
-      font-weight: 700;
-      margin-bottom: 6px;
-      display: block;
-    }
+    .selectorWrap { display: flex; gap: 16px; align-items: flex-end; flex-wrap: wrap; }
+    label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--accent); font-weight: 700; margin-bottom: 6px; display: block; }
 
     select {
       min-width: 260px;
@@ -109,10 +70,7 @@
       outline: none;
       cursor: pointer;
       transition: all 0.2s;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     }
-
-    select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
 
     button {
       background: var(--surface);
@@ -127,115 +85,22 @@
     }
 
     button:hover { border-color: var(--accent); background: var(--accent-glow); }
-    
-    /* Specific styling for the primary action (Refresh) */
-    #refreshBtn {
-        background: var(--accent-glow);
-        border-color: var(--accent);
-    }
+    #refreshBtn { background: var(--accent-glow); border-color: var(--accent); }
 
-    .theme-toggle {
-      width: 44px; height: 24px; background: var(--surface); border: 1px solid var(--border);
-      border-radius: 20px; position: relative; cursor: pointer; display: flex; align-items: center;
-      transition: 0.3s;
-    }
-    .theme-toggle::after {
-      content: '🌙'; position: absolute; left: 4px; font-size: 12px;
-      transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
+    .theme-toggle { width: 44px; height: 24px; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; position: relative; cursor: pointer; display: flex; align-items: center; }
+    .theme-toggle::after { content: '🌙'; position: absolute; left: 4px; font-size: 12px; transition: 0.3s; }
     [data-theme="light"] .theme-toggle::after { content: '☀️'; left: 24px; }
 
-    .card {
-      background: var(--card-bg);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-      transition: background 0.4s ease;
-    }
-
-    .cardHead {
-      padding: 24px;
-      background: rgba(0, 0, 0, 0.05);
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    #cardTitle { font-size: 18px; color: var(--text-main); }
-    .small { font-size: 13px; color: var(--text-muted); }
-
+    .card { background: var(--card-bg); backdrop-filter: blur(12px); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+    .cardHead { padding: 24px; background: rgba(0, 0, 0, 0.05); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
     .cardBody { padding: 32px; }
-
-    .pill {
-      font-size: 12px;
-      font-weight: 700;
-      padding: 6px 14px;
-      border-radius: 20px;
-      background: var(--accent-glow);
-      color: var(--accent);
-      border: 1px solid var(--accent);
-      text-transform: uppercase;
-    }
-
-    .section-heading {
-      font-size: 14px;
-      font-weight: 800;
-      color: var(--accent);
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      margin: 32px 0 16px;
-      padding-bottom: 8px;
-      border-bottom: 2px solid var(--border);
-      display: block;
-    }
-
-    .kv {
-      display: grid;
-      grid-template-columns: 180px 1fr;
-      gap: 12px 24px;
-      align-items: start;
-    }
-
-    @media (max-width: 620px) {
-      .kv { grid-template-columns: 1fr; gap: 4px; }
-      .cardBody { padding: 20px; }
-      select { min-width: 100%; }
-      .lead { flex-direction: column; align-items: stretch; }
-      .selectorWrap { justify-content: space-between; }
-    }
-
-    .k {
-      color: var(--accent);
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      opacity: 0.8;
-      padding-top: 4px;
-    }
-
-    .v {
-      font-size: 16px;
-      color: var(--text-main);
-      white-space: pre-wrap;
-    }
-
-    .rowSep {
-      border-top: 1px solid var(--border);
-      padding-top: 20px;
-      margin-top: 20px;
-    }
-
-    .placeholder {
-      text-align: center;
-      padding: 40px 0;
-      color: var(--text-muted);
-      font-style: italic;
-    }
+    .pill { font-size: 12px; font-weight: 700; padding: 6px 14px; border-radius: 20px; background: var(--accent-glow); color: var(--accent); border: 1px solid var(--accent); text-transform: uppercase; }
+    .section-heading { font-size: 14px; font-weight: 800; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin: 32px 0 16px; padding-bottom: 8px; border-bottom: 2px solid var(--border); display: block; }
+    .kv { display: grid; grid-template-columns: 180px 1fr; gap: 12px 24px; align-items: start; }
+    .k { color: var(--accent); font-size: 11px; font-weight: 700; text-transform: uppercase; opacity: 0.8; }
+    .v { font-size: 16px; color: var(--text-main); white-space: pre-wrap; }
+    .rowSep { border-top: 1px solid var(--border); padding-top: 20px; margin-top: 20px; }
+    .placeholder { text-align: center; padding: 40px 0; color: var(--text-muted); font-style: italic; }
   </style>
 </head>
 <body>
@@ -245,18 +110,14 @@
         <h1>Five Elements</h1>
         <p class="sub">Explore the deep properties of the elemental dataset.</p>
       </div>
-
-      <div style="display: flex; gap: 15px; align-items: center;">
-        <span class="small">Appearance</span>
-        <div class="theme-toggle" id="themeToggle" title="Toggle Mode" role="button" tabindex="0"></div>
-      </div>
+      <div class="theme-toggle" id="themeToggle" title="Toggle Mode"></div>
     </header>
 
     <div class="selectorWrap" style="margin-bottom: 32px;">
       <div>
         <label for="elementSelect">Filter by Element</label>
-        <select id="elementSelect">
-          <option value="">— Select an element —</option>
+        <select id="elementSelect" disabled>
+          <option value="" selected disabled>Loading...</option>
         </select>
       </div>
 
@@ -264,7 +125,7 @@
         <div style="text-align: right;">
           <span id="statusText" class="small">Initializing...</span>
           <div style="display:flex; gap:10px; margin-top: 8px;">
-            <button id="refreshBtn">Refresh Data</button>
+            <button id="refreshBtn">Refresh</button>
             <button id="resetBtn">Reset</button>
           </div>
         </div>
@@ -273,25 +134,17 @@
 
     <main class="card">
       <div class="cardHead">
-        <div>
-          <strong id="cardTitle">Data Inspector</strong>
-          <div class="small" id="subNote">Awaiting selection...</div>
-        </div>
+        <div><strong id="cardTitle">Data Inspector</strong><div class="small" id="subNote">Awaiting selection...</div></div>
         <div class="pill" id="elementPill">Standby</div>
       </div>
-
       <div class="cardBody">
-        <div id="emptyState" class="placeholder">
-          Please select an entry from the dropdown to inspect its properties.
-        </div>
+        <div id="emptyState" class="placeholder">Select an element to inspect.</div>
         <div id="rowContainer" style="display:none"></div>
       </div>
     </main>
   </div>
 
   <script>
-    const DATA_PATH = "five_elements.json";
-    
     const selectEl = document.getElementById("elementSelect");
     const statusText = document.getElementById("statusText");
     const elementPill = document.getElementById("elementPill");
@@ -309,131 +162,78 @@
       document.documentElement.setAttribute("data-theme", saved);
     }
 
-    themeToggle.onclick = (e) => {
-      e.preventDefault();
+    themeToggle.onclick = () => {
       const current = document.documentElement.getAttribute("data-theme");
       const target = current === "light" ? "dark" : "light";
       document.documentElement.setAttribute("data-theme", target);
       localStorage.setItem("five_elements_theme", target);
     };
 
-    function normalizeText(s){
-      return String(s ?? "").replace(/\r\n/g,"\n").replace(/\r/g,"\n").trim();
+    function escapeHtml(s) {
+      return String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
     }
 
-    function renderRow(item){
+    function renderRow(item) {
       elementPill.textContent = item.ELEMENT || "—";
-      statusText.textContent = "Viewing: " + (item.ELEMENT || "—");
       subNote.textContent = "Complete record for " + item.ELEMENT;
-
       const groupKeys = ["EMOTION", "COLOUR", "TASTE"];
-      const keys = Object.keys(item);
-      
       let html = "";
-      const mainKeys = keys.filter(k => !groupKeys.includes(k));
-      mainKeys.forEach((k, idx) => {
-        const v = normalizeText(item[k]);
-        html += `
-          <div class="kv ${idx === 0 ? "" : "rowSep"}">
-            <div class="k">${escapeHtml(k)}</div>
-            <div class="v">${escapeHtml(v || "—")}</div>
-          </div>
-        `;
+      
+      Object.keys(item).filter(k => !groupKeys.includes(k)).forEach((k, idx) => {
+        html += `<div class="kv ${idx === 0 ? "" : "rowSep"}"><div class="k">${escapeHtml(k)}</div><div class="v">${escapeHtml(item[k] || "—")}</div></div>`;
       });
-
       html += `<div class="section-heading">When the element malfunctions</div>`;
-
       groupKeys.forEach((k, idx) => {
-        const v = normalizeText(item[k]);
-        html += `
-          <div class="kv ${idx === 0 ? "" : "rowSep"}">
-            <div class="k">${escapeHtml(k)}</div>
-            <div class="v">${escapeHtml(v || "—")}</div>
-          </div>
-        `;
+        html += `<div class="kv ${idx === 0 ? "" : "rowSep"}"><div class="k">${escapeHtml(k)}</div><div class="v">${escapeHtml(item[k] || "—")}</div></div>`;
       });
 
       rowContainer.innerHTML = html;
       emptyState.style.display = "none";
       rowContainer.style.display = "";
-      rowContainer.style.animation = "fadeIn 0.4s ease-out";
     }
 
-    function clearSelectionUI(){
-      selectEl.value = "";
-      elementPill.textContent = "Standby";
-      statusText.textContent = "System Ready";
-      subNote.textContent = "Awaiting selection...";
-      emptyState.style.display = "";
-      rowContainer.style.display = "none";
-      rowContainer.innerHTML = "";
-    }
-
-    function escapeHtml(s){
-      return String(s)
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'", "&#39;");
-    }
-
-    async function fetchData() {
+    async function loadData() {
       statusText.textContent = "Syncing...";
+      selectEl.disabled = true;
       try {
-        const url = new URL(DATA_PATH, window.location.href).href;
-        const res = await fetch(url, {cache: "no-store"});
+        const assetUrl = new URL("five_elements.json", window.location.href).href;
+        const res = await fetch(assetUrl, { cache: "no-store" });
+        if (!res.ok) throw new Error("Fetch failed");
         
-        if(!res.ok) throw new Error("Failed to fetch JSON ("+res.status+")");
         DB = await res.json();
-
-        // Clear and rebuild options
-        selectEl.innerHTML = '<option value="">— Select an element —</option>';
+        selectEl.innerHTML = '<option value="" selected disabled>— Select an element —</option>';
         DB.forEach(row => {
           const opt = document.createElement("option");
           opt.value = row.ELEMENT;
           opt.textContent = row.ELEMENT;
           selectEl.appendChild(opt);
         });
-
-        statusText.textContent = "Update Successful";
-        setTimeout(() => {
-          if (!selectEl.value) statusText.textContent = "System Ready";
-        }, 2000);
-
-      } catch(err) {
-        statusText.textContent = "Connection Error";
-        emptyState.textContent = "Could not synchronize with the dataset. Please ensure five_elements.json is present in the same directory.";
-        console.error("Fetch Error:", err);
+        
+        selectEl.disabled = false;
+        statusText.textContent = "System Ready ✅";
+      } catch (err) {
+        statusText.textContent = "Error ❌";
+        emptyState.textContent = "Could not load five_elements.json.";
       }
     }
 
-    // Initialize
+    selectEl.onchange = () => {
+      const item = DB.find(r => r.ELEMENT === selectEl.value);
+      if (item) renderRow(item);
+    };
+
+    resetBtn.onclick = () => {
+      selectEl.value = "";
+      rowContainer.style.display = "none";
+      emptyState.style.display = "";
+      elementPill.textContent = "Standby";
+      subNote.textContent = "Awaiting selection...";
+    };
+
+    refreshBtn.onclick = loadData;
+
     initTheme();
-    clearSelectionUI();
-    fetchData(); // Initial load
-
-    // Event Listeners
-    selectEl.addEventListener("change", () => {
-      const val = selectEl.value;
-      if(!val){
-        clearSelectionUI();
-        return;
-      }
-      const item = DB.find(r => r.ELEMENT === val);
-      if(!item) return;
-      renderRow(item);
-    });
-
-    resetBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      clearSelectionUI();
-    });
-
-    refreshBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      fetchData();
-    });
+    loadData();
   </script>
 </body>
 </html>
