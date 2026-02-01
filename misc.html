@@ -119,15 +119,15 @@
     .imgBox img { width: 100%; border-radius: 12px; border: 1px solid var(--border); display: block; margin-bottom: 15px; cursor: zoom-in; }
 
     .digitalClockOverlay {
-      position: absolute; top: 20px; right: 20px;
-      background: var(--bg1); padding: 12px 20px;
+      position: absolute; bottom: 30px; right: 20px;
+      background: var(--bg1); padding: 10px 16px;
       border-radius: 12px; border: 1px solid var(--accent);
-      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-      backdrop-filter: blur(4px); text-align: center;
-      min-width: 120px; z-index: 5; opacity: 0.9;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+      backdrop-filter: blur(8px); text-align: center;
+      min-width: 110px; z-index: 5; opacity: 0.95;
     }
-    .digitalClockOverlay .time { display: block; font-size: 24px; font-weight: bold; color: var(--accent); font-family: monospace; letter-spacing: 1px; }
-    .digitalClockOverlay .label { display: block; font-size: 10px; color: var(--muted); text-transform: uppercase; margin-bottom: 2px; }
+    .digitalClockOverlay .time { display: block; font-size: 20px; font-weight: bold; color: var(--accent); font-family: monospace; letter-spacing: 1px; }
+    .digitalClockOverlay .label { display: block; font-size: 9px; color: var(--muted); text-transform: uppercase; margin-bottom: 2px; }
 
     .organGrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-bottom: 15px; }
     .organGrid img { width: 100%; border-radius: 8px; border: 1px solid var(--border); cursor: zoom-in; transition: transform 0.2s; }
@@ -155,6 +155,15 @@
     }
     #imageModal.active { display: flex; animation: fadeIn 0.2s ease; }
     #modalImg { max-width: 95%; max-height: 90%; border-radius: 8px; object-fit: contain; }
+
+    .modalClose {
+      position: absolute; top: 20px; right: 20px;
+      width: 44px; height: 44px; border-radius: 50%;
+      background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+      color: #fff; font-size: 24px; display: flex; align-items: center;
+      justify-content: center; cursor: pointer; transition: 0.2s; z-index: 2100;
+    }
+    .modalClose:hover { background: var(--accent); border-color: var(--accent); }
 
     footer { padding: 30px; text-align: center; color: var(--muted); font-size: 12px; opacity: 0.6; }
   </style>
@@ -197,6 +206,7 @@
   </main>
 
   <div id="imageModal">
+    <button class="modalClose" id="closeModalBtn" aria-label="Close image">&times;</button>
     <img id="modalImg" src="" alt="Expanded view">
   </div>
 
@@ -226,6 +236,7 @@
           contentTag = document.getElementById("contentTag"),
           imageModal = document.getElementById("imageModal"),
           modalImg = document.getElementById("modalImg"),
+          closeModalBtn = document.getElementById("closeModalBtn"),
           themeToggle = document.getElementById("themeToggle");
 
     let clockInterval = null;
@@ -263,7 +274,17 @@
       imageModal.classList.add("active");
     }
 
-    imageModal.onclick = () => imageModal.classList.remove("active");
+    function closeFullscreen() {
+      imageModal.classList.remove("active");
+    }
+
+    imageModal.onclick = (e) => {
+        if (e.target !== modalImg) closeFullscreen();
+    };
+    closeModalBtn.onclick = (e) => {
+        e.stopPropagation();
+        closeFullscreen();
+    };
 
     async function openTopic(id) {
       const t = topics.find(x => x.id === id);
