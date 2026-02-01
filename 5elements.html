@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0" />
-  <title>Five Elements — Mobile Optimized</title>
+  <title>Five Elements — Legacy Support</title>
   <style>
     :root {
       --bg: #041c1c;
@@ -36,17 +36,15 @@
     body {
       margin: 0;
       font-family: system-ui, -apple-system, sans-serif;
-      background: var(--bg-gradient);
       background-color: var(--bg);
+      background-image: var(--bg-gradient);
       color: var(--text-main);
       min-height: 100vh;
       padding: 20px 15px;
-      display: flex;
-      justify-content: center;
-      transition: background 0.3s ease;
+      display: block; /* Safer for older flex engines */
     }
 
-    .container { width: 100%; max-width: 600px; }
+    .container { width: 100%; max-width: 600px; margin: 0 auto; }
 
     .lead {
       display: flex;
@@ -64,12 +62,9 @@
       border-radius: var(--radius);
       border: 1px solid var(--border);
       margin-bottom: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
     }
 
-    label { font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--accent); }
+    label { font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--accent); display: block; margin-bottom: 8px;}
 
     select {
       width: 100%;
@@ -78,10 +73,11 @@
       border: 1px solid var(--border);
       background: var(--bg);
       color: var(--text-main);
-      font-size: 16px; /* Prevents iOS zoom on focus */
+      font-size: 16px;
+      margin-bottom: 12px;
     }
 
-    .btn-row { display: flex; justify-content: flex-end; gap: 10px; }
+    .btn-row { text-align: right; }
     
     button {
       padding: 8px 16px;
@@ -95,8 +91,6 @@
 
     .card {
       background: var(--card-bg);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
       border: 1px solid var(--border);
       border-radius: var(--radius);
       overflow: hidden;
@@ -133,7 +127,7 @@
       border-radius: 20px; position: relative; cursor: pointer;
     }
     .theme-toggle::after {
-      content: '🌙'; position: absolute; left: 3px; top: 1px; font-size: 11px; transition: 0.2s;
+      content: '🌙'; position: absolute; left: 3px; top: 1px; font-size: 11px;
     }
     [data-theme="light"] .theme-toggle::after { content: '☀️'; left: 22px; }
 
@@ -149,15 +143,15 @@
     <header class="lead">
       <div>
         <h1>Five Elements</h1>
-        <div class="sub" id="statusText">Loading...</div>
+        <div class="sub" id="statusText">System Ready</div>
       </div>
       <div class="theme-toggle" id="themeToggle"></div>
     </header>
 
     <div class="selectorWrap">
       <label for="elementSelect">Select Element</label>
-      <select id="elementSelect" disabled>
-        <option value="">Loading data...</option>
+      <select id="elementSelect">
+        <option value="">— Choose —</option>
       </select>
       <div class="btn-row">
         <button id="resetBtn">Reset</button>
@@ -179,82 +173,92 @@
   </div>
 
   <script>
-    const selectEl = document.getElementById("elementSelect");
-    const statusText = document.getElementById("statusText");
-    const rowContainer = document.getElementById("rowContainer");
-    const emptyState = document.getElementById("emptyState");
-    const elementPill = document.getElementById("elementPill");
+    // Embedded Data to ensure it works without a server/fetch
+    var DB = [
+      { "ELEMENT": "Wood", "ORGAN": "Liver", "SEASON": "Spring", "DIRECTION": "East", "EMOTION": "Anger", "COLOUR": "Green", "TASTE": "Sour" },
+      { "ELEMENT": "Fire", "ORGAN": "Heart", "SEASON": "Summer", "DIRECTION": "South", "EMOTION": "Joy", "COLOUR": "Red", "TASTE": "Bitter" },
+      { "ELEMENT": "Earth", "ORGAN": "Spleen", "SEASON": "Late Summer", "DIRECTION": "Center", "EMOTION": "Worry", "COLOUR": "Yellow", "TASTE": "Sweet" },
+      { "ELEMENT": "Metal", "ORGAN": "Lungs", "SEASON": "Autumn", "DIRECTION": "West", "EMOTION": "Grief", "COLOUR": "White", "TASTE": "Pungent" },
+      { "ELEMENT": "Water", "ORGAN": "Kidneys", "SEASON": "Winter", "DIRECTION": "North", "EMOTION": "Fear", "COLOUR": "Blue/Black", "TASTE": "Salty" }
+    ];
 
-    let DB = [];
+    var selectEl = document.getElementById("elementSelect");
+    var rowContainer = document.getElementById("rowContainer");
+    var emptyState = document.getElementById("emptyState");
+    var elementPill = document.getElementById("elementPill");
 
-    // Faster URL resolution for local/web environments
-    function getAssetUrl(file) {
-      return new URL(file, window.location.href).href;
-    }
-
-    async function loadData() {
-      try {
-        const res = await fetch(getAssetUrl("five_elements.json"), { cache: "no-store" });
-        if (!res.ok) throw new Error();
-        DB = await res.json();
-
-        selectEl.innerHTML = '<option value="">— Choose —</option>';
-        DB.forEach(row => {
-          const opt = document.createElement("option");
-          opt.value = row.ELEMENT;
-          opt.textContent = row.ELEMENT;
-          selectEl.appendChild(opt);
-        });
-        
-        selectEl.disabled = false;
-        statusText.textContent = "Database Ready";
-      } catch (e) {
-        statusText.textContent = "Error Loading JSON";
+    // Populate Select using standard for-loop (Old Android compatible)
+    function init() {
+      for (var i = 0; i < DB.length; i++) {
+        var opt = document.createElement("option");
+        opt.value = DB[i].ELEMENT;
+        opt.textContent = DB[i].ELEMENT;
+        selectEl.appendChild(opt);
       }
     }
 
     function render(item) {
-      const groupKeys = ["EMOTION", "COLOUR", "TASTE"];
-      elementPill.textContent = item.ELEMENT;
+      var groupKeys = ["EMOTION", "COLOUR", "TASTE"];
+      elementPill.innerHTML = item.ELEMENT;
       
-      let html = "";
-      Object.keys(item).forEach(k => {
-        if(groupKeys.includes(k)) return;
-        html += `<div class="kv"><div class="k">${k}</div><div class="v">${item[k] || "—"}</div></div>`;
-      });
+      var html = "";
+      // Use for-in or manual keys for legacy support
+      var keys = ["ORGAN", "SEASON", "DIRECTION"]; 
+      
+      for (var j = 0; j < keys.length; j++) {
+        var k = keys[j];
+        html += '<div class="kv"><div class="k">' + k + '</div><div class="v">' + (item[k] || "—") + '</div></div>';
+      }
 
-      html += `<div class="section-heading">Malfunctions</div>`;
-      groupKeys.forEach(k => {
-        html += `<div class="kv"><div class="k">${k}</div><div class="v">${item[k] || "—"}</div></div>`;
-      });
+      html += '<div class="section-heading">Malfunctions</div>';
+      for (var l = 0; l < groupKeys.length; l++) {
+        var gk = groupKeys[l];
+        html += '<div class="kv"><div class="k">' + gk + '</div><div class="v">' + (item[gk] || "—") + '</div></div>';
+      }
 
       rowContainer.innerHTML = html;
       emptyState.style.display = "none";
       rowContainer.style.display = "block";
     }
 
-    selectEl.onchange = () => {
-      const item = DB.find(r => r.ELEMENT === selectEl.value);
-      if(item) render(item);
+    selectEl.onchange = function() {
+      var val = selectEl.value;
+      if (!val) return;
+      
+      var found = null;
+      for (var i = 0; i < DB.length; i++) {
+        if (DB[i].ELEMENT === val) {
+          found = DB[i];
+          break;
+        }
+      }
+      if (found) render(found);
     };
 
-    document.getElementById("resetBtn").onclick = () => {
+    document.getElementById("resetBtn").onclick = function() {
       selectEl.value = "";
       rowContainer.style.display = "none";
       emptyState.style.display = "block";
-      elementPill.textContent = "Standby";
+      elementPill.innerHTML = "Standby";
     };
 
-    document.getElementById("themeToggle").onclick = () => {
-      const isLight = document.documentElement.getAttribute("data-theme") === "light";
-      document.documentElement.setAttribute("data-theme", isLight ? "dark" : "light");
-      localStorage.setItem("five_elements_theme", isLight ? "dark" : "light");
+    document.getElementById("themeToggle").onclick = function() {
+      var isLight = document.documentElement.getAttribute("data-theme") === "light";
+      var target = isLight ? "dark" : "light";
+      document.documentElement.setAttribute("data-theme", target);
+      if (window.localStorage) {
+        localStorage.setItem("five_elements_theme", target);
+      }
     };
 
-    // Load theme and data immediately
-    const savedTheme = localStorage.getItem("five_elements_theme") || "dark";
+    // Load theme
+    var savedTheme = "dark";
+    if (window.localStorage) {
+      savedTheme = localStorage.getItem("five_elements_theme") || "dark";
+    }
     document.documentElement.setAttribute("data-theme", savedTheme);
-    loadData();
+
+    init();
   </script>
 </body>
 </html>
