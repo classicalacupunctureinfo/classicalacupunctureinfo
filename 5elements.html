@@ -2,11 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Five Elements — Deep Teal Edition</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0" />
+  <title>Five Elements — Mobile Optimized</title>
   <style>
     :root {
-      /* Refined Dark Teal Palette (Default) */
       --bg: #041c1c;
       --bg-gradient: radial-gradient(circle at top center, #083333, #041c1c);
       --surface: #0a2e2e;
@@ -29,7 +28,6 @@
       --text-main: #132a2a;
       --text-muted: #5a7a7a;
       --accent: #0d9488;
-      --accent-glow: rgba(13, 148, 136, 0.1);
       --shadow: 0 12px 40px rgba(0, 50, 50, 0.1);
     }
 
@@ -37,108 +35,144 @@
 
     body {
       margin: 0;
-      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      font-family: system-ui, -apple-system, sans-serif;
       background: var(--bg-gradient);
       background-color: var(--bg);
       color: var(--text-main);
       min-height: 100vh;
-      padding: 40px 20px;
+      padding: 20px 15px;
       display: flex;
       justify-content: center;
-      line-height: 1.6;
-      transition: background 0.4s ease, color 0.4s ease;
+      transition: background 0.3s ease;
     }
 
-    .container { width: 100%; max-width: 900px; animation: fadeIn 0.6s ease-out; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .container { width: 100%; max-width: 600px; }
 
-    .lead { display: flex; gap: 24px; align-items: flex-start; justify-content: space-between; margin-bottom: 32px; flex-wrap: wrap; }
-    h1 { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; margin: 0; background: linear-gradient(to right, var(--text-main), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    p.sub { margin: 4px 0 0; color: var(--text-muted); font-size: 14px; }
+    .lead {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+    }
 
-    .selectorWrap { display: flex; gap: 16px; align-items: flex-end; flex-wrap: wrap; }
-    label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--accent); font-weight: 700; margin-bottom: 6px; display: block; }
+    h1 { font-size: 24px; margin: 0; font-weight: 800; color: var(--accent); }
+    .sub { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+
+    .selectorWrap {
+      background: var(--surface);
+      padding: 15px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    label { font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--accent); }
 
     select {
-      min-width: 260px;
-      padding: 12px 16px;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      background: var(--surface);
-      color: var(--text-main);
-      font-size: 15px;
-      outline: none;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    button {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      padding: 10px 18px;
+      width: 100%;
+      padding: 12px;
       border-radius: 10px;
-      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--bg);
       color: var(--text-main);
-      font-size: 13px;
-      font-weight: 600;
-      transition: all 0.2s;
+      font-size: 16px; /* Prevents iOS zoom on focus */
     }
 
-    button:hover { border-color: var(--accent); background: var(--accent-glow); }
-    #refreshBtn { background: var(--accent-glow); border-color: var(--accent); }
+    .btn-row { display: flex; justify-content: flex-end; gap: 10px; }
+    
+    button {
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-main);
+      font-weight: 600;
+      font-size: 13px;
+    }
 
-    .theme-toggle { width: 44px; height: 24px; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; position: relative; cursor: pointer; display: flex; align-items: center; }
-    .theme-toggle::after { content: '🌙'; position: absolute; left: 4px; font-size: 12px; transition: 0.3s; }
-    [data-theme="light"] .theme-toggle::after { content: '☀️'; left: 24px; }
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
 
-    .card { background: var(--card-bg); backdrop-filter: blur(12px); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
-    .cardHead { padding: 24px; background: rgba(0, 0, 0, 0.05); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-    .cardBody { padding: 32px; }
-    .pill { font-size: 12px; font-weight: 700; padding: 6px 14px; border-radius: 20px; background: var(--accent-glow); color: var(--accent); border: 1px solid var(--accent); text-transform: uppercase; }
-    .section-heading { font-size: 14px; font-weight: 800; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin: 32px 0 16px; padding-bottom: 8px; border-bottom: 2px solid var(--border); display: block; }
-    .kv { display: grid; grid-template-columns: 180px 1fr; gap: 12px 24px; align-items: start; }
-    .k { color: var(--accent); font-size: 11px; font-weight: 700; text-transform: uppercase; opacity: 0.8; }
-    .v { font-size: 16px; color: var(--text-main); white-space: pre-wrap; }
-    .rowSep { border-top: 1px solid var(--border); padding-top: 20px; margin-top: 20px; }
-    .placeholder { text-align: center; padding: 40px 0; color: var(--text-muted); font-style: italic; }
+    .cardHead {
+      padding: 16px 20px;
+      background: rgba(0, 0, 0, 0.1);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .cardBody { padding: 20px; }
+
+    .section-heading {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin: 25px 0 15px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 5px;
+    }
+
+    .kv { margin-bottom: 15px; }
+    .k { font-size: 10px; text-transform: uppercase; color: var(--text-muted); font-weight: 700; }
+    .v { font-size: 15px; margin-top: 2px; }
+
+    .theme-toggle {
+      width: 40px; height: 20px; background: var(--surface); border: 1px solid var(--border);
+      border-radius: 20px; position: relative; cursor: pointer;
+    }
+    .theme-toggle::after {
+      content: '🌙'; position: absolute; left: 3px; top: 1px; font-size: 11px; transition: 0.2s;
+    }
+    [data-theme="light"] .theme-toggle::after { content: '☀️'; left: 22px; }
+
+    @media (max-width: 480px) {
+      body { padding: 15px 10px; }
+      h1 { font-size: 20px; }
+      .cardBody { padding: 15px; }
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <header class="lead">
-      <div class="title">
+      <div>
         <h1>Five Elements</h1>
-        <p class="sub">Explore the deep properties of the elemental dataset.</p>
+        <div class="sub" id="statusText">Loading...</div>
       </div>
-      <div class="theme-toggle" id="themeToggle" title="Toggle Mode"></div>
+      <div class="theme-toggle" id="themeToggle"></div>
     </header>
 
-    <div class="selectorWrap" style="margin-bottom: 32px;">
-      <div>
-        <label for="elementSelect">Filter by Element</label>
-        <select id="elementSelect" disabled>
-          <option value="" selected disabled>Loading...</option>
-        </select>
-      </div>
-
-      <div style="display:flex; flex: 1; justify-content: flex-end; align-items: flex-end; gap: 10px;">
-        <div style="text-align: right;">
-          <span id="statusText" class="small">Initializing...</span>
-          <div style="display:flex; gap:10px; margin-top: 8px;">
-            <button id="refreshBtn">Refresh</button>
-            <button id="resetBtn">Reset</button>
-          </div>
-        </div>
+    <div class="selectorWrap">
+      <label for="elementSelect">Select Element</label>
+      <select id="elementSelect" disabled>
+        <option value="">Loading data...</option>
+      </select>
+      <div class="btn-row">
+        <button id="resetBtn">Reset</button>
       </div>
     </div>
 
     <main class="card">
       <div class="cardHead">
-        <div><strong id="cardTitle">Data Inspector</strong><div class="small" id="subNote">Awaiting selection...</div></div>
-        <div class="pill" id="elementPill">Standby</div>
+        <strong id="cardTitle">Properties</strong>
+        <div id="elementPill" style="font-size:12px; font-weight:700; color:var(--accent)">Standby</div>
       </div>
-      <div class="cardBody">
-        <div id="emptyState" class="placeholder">Select an element to inspect.</div>
+      <div class="cardBody" id="cardBody">
+        <div id="emptyState" style="text-align:center; color:var(--text-muted); font-style:italic; padding: 20px 0;">
+          Select an entry to begin.
+        </div>
         <div id="rowContainer" style="display:none"></div>
       </div>
     </main>
@@ -147,61 +181,24 @@
   <script>
     const selectEl = document.getElementById("elementSelect");
     const statusText = document.getElementById("statusText");
-    const elementPill = document.getElementById("elementPill");
-    const emptyState = document.getElementById("emptyState");
     const rowContainer = document.getElementById("rowContainer");
-    const resetBtn = document.getElementById("resetBtn");
-    const refreshBtn = document.getElementById("refreshBtn");
-    const subNote = document.getElementById("subNote");
-    const themeToggle = document.getElementById("themeToggle");
+    const emptyState = document.getElementById("emptyState");
+    const elementPill = document.getElementById("elementPill");
 
     let DB = [];
 
-    function initTheme() {
-      const saved = localStorage.getItem("five_elements_theme") || "dark";
-      document.documentElement.setAttribute("data-theme", saved);
-    }
-
-    themeToggle.onclick = () => {
-      const current = document.documentElement.getAttribute("data-theme");
-      const target = current === "light" ? "dark" : "light";
-      document.documentElement.setAttribute("data-theme", target);
-      localStorage.setItem("five_elements_theme", target);
-    };
-
-    function escapeHtml(s) {
-      return String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
-    }
-
-    function renderRow(item) {
-      elementPill.textContent = item.ELEMENT || "—";
-      subNote.textContent = "Complete record for " + item.ELEMENT;
-      const groupKeys = ["EMOTION", "COLOUR", "TASTE"];
-      let html = "";
-      
-      Object.keys(item).filter(k => !groupKeys.includes(k)).forEach((k, idx) => {
-        html += `<div class="kv ${idx === 0 ? "" : "rowSep"}"><div class="k">${escapeHtml(k)}</div><div class="v">${escapeHtml(item[k] || "—")}</div></div>`;
-      });
-      html += `<div class="section-heading">When the element malfunctions</div>`;
-      groupKeys.forEach((k, idx) => {
-        html += `<div class="kv ${idx === 0 ? "" : "rowSep"}"><div class="k">${escapeHtml(k)}</div><div class="v">${escapeHtml(item[k] || "—")}</div></div>`;
-      });
-
-      rowContainer.innerHTML = html;
-      emptyState.style.display = "none";
-      rowContainer.style.display = "";
+    // Faster URL resolution for local/web environments
+    function getAssetUrl(file) {
+      return new URL(file, window.location.href).href;
     }
 
     async function loadData() {
-      statusText.textContent = "Syncing...";
-      selectEl.disabled = true;
       try {
-        const assetUrl = new URL("five_elements.json", window.location.href).href;
-        const res = await fetch(assetUrl, { cache: "no-store" });
-        if (!res.ok) throw new Error("Fetch failed");
-        
+        const res = await fetch(getAssetUrl("five_elements.json"), { cache: "no-store" });
+        if (!res.ok) throw new Error();
         DB = await res.json();
-        selectEl.innerHTML = '<option value="" selected disabled>— Select an element —</option>';
+
+        selectEl.innerHTML = '<option value="">— Choose —</option>';
         DB.forEach(row => {
           const opt = document.createElement("option");
           opt.value = row.ELEMENT;
@@ -210,29 +207,53 @@
         });
         
         selectEl.disabled = false;
-        statusText.textContent = "System Ready ✅";
-      } catch (err) {
-        statusText.textContent = "Error ❌";
-        emptyState.textContent = "Could not load five_elements.json.";
+        statusText.textContent = "Database Ready";
+      } catch (e) {
+        statusText.textContent = "Error Loading JSON";
       }
+    }
+
+    function render(item) {
+      const groupKeys = ["EMOTION", "COLOUR", "TASTE"];
+      elementPill.textContent = item.ELEMENT;
+      
+      let html = "";
+      Object.keys(item).forEach(k => {
+        if(groupKeys.includes(k)) return;
+        html += `<div class="kv"><div class="k">${k}</div><div class="v">${item[k] || "—"}</div></div>`;
+      });
+
+      html += `<div class="section-heading">Malfunctions</div>`;
+      groupKeys.forEach(k => {
+        html += `<div class="kv"><div class="k">${k}</div><div class="v">${item[k] || "—"}</div></div>`;
+      });
+
+      rowContainer.innerHTML = html;
+      emptyState.style.display = "none";
+      rowContainer.style.display = "block";
     }
 
     selectEl.onchange = () => {
       const item = DB.find(r => r.ELEMENT === selectEl.value);
-      if (item) renderRow(item);
+      if(item) render(item);
     };
 
-    resetBtn.onclick = () => {
+    document.getElementById("resetBtn").onclick = () => {
       selectEl.value = "";
       rowContainer.style.display = "none";
-      emptyState.style.display = "";
+      emptyState.style.display = "block";
       elementPill.textContent = "Standby";
-      subNote.textContent = "Awaiting selection...";
     };
 
-    refreshBtn.onclick = loadData;
+    document.getElementById("themeToggle").onclick = () => {
+      const isLight = document.documentElement.getAttribute("data-theme") === "light";
+      document.documentElement.setAttribute("data-theme", isLight ? "dark" : "light");
+      localStorage.setItem("five_elements_theme", isLight ? "dark" : "light");
+    };
 
-    initTheme();
+    // Load theme and data immediately
+    const savedTheme = localStorage.getItem("five_elements_theme") || "dark";
+    document.documentElement.setAttribute("data-theme", savedTheme);
     loadData();
   </script>
 </body>
