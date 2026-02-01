@@ -14,9 +14,7 @@
       --text-main: #e2f1f1;
       --text-muted: #94b2b2;
       --accent: #2dd4bf; 
-      --accent-glow: rgba(45, 212, 191, 0.3);
       --radius: 16px;
-      --shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
     }
 
     [data-theme="light"] {
@@ -28,7 +26,6 @@
       --text-main: #132a2a;
       --text-muted: #5a7a7a;
       --accent: #0d9488;
-      --shadow: 0 12px 40px rgba(0, 50, 50, 0.1);
     }
 
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -41,7 +38,6 @@
       color: var(--text-main);
       min-height: 100vh;
       padding: 20px 15px;
-      display: block; /* Safer for older flex engines */
     }
 
     .container { width: 100%; max-width: 600px; margin: 0 auto; }
@@ -108,7 +104,7 @@
     .cardBody { padding: 20px; }
 
     .section-heading {
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 800;
       color: var(--accent);
       text-transform: uppercase;
@@ -134,7 +130,6 @@
     @media (max-width: 480px) {
       body { padding: 15px 10px; }
       h1 { font-size: 20px; }
-      .cardBody { padding: 15px; }
     }
   </style>
 </head>
@@ -143,7 +138,7 @@
     <header class="lead">
       <div>
         <h1>Five Elements</h1>
-        <div class="sub" id="statusText">System Ready</div>
+        <div class="sub">System Ready</div>
       </div>
       <div class="theme-toggle" id="themeToggle"></div>
     </header>
@@ -160,7 +155,7 @@
 
     <main class="card">
       <div class="cardHead">
-        <strong id="cardTitle">Properties</strong>
+        <strong>Properties</strong>
         <div id="elementPill" style="font-size:12px; font-weight:700; color:var(--accent)">Standby</div>
       </div>
       <div class="cardBody" id="cardBody">
@@ -173,7 +168,7 @@
   </div>
 
   <script>
-    // Embedded Data to ensure it works without a server/fetch
+    // Full dataset to ensure no missing values
     var DB = [
       { "ELEMENT": "Wood", "ORGAN": "Liver", "SEASON": "Spring", "DIRECTION": "East", "EMOTION": "Anger", "COLOUR": "Green", "TASTE": "Sour" },
       { "ELEMENT": "Fire", "ORGAN": "Heart", "SEASON": "Summer", "DIRECTION": "South", "EMOTION": "Joy", "COLOUR": "Red", "TASTE": "Bitter" },
@@ -187,7 +182,6 @@
     var emptyState = document.getElementById("emptyState");
     var elementPill = document.getElementById("elementPill");
 
-    // Populate Select using standard for-loop (Old Android compatible)
     function init() {
       for (var i = 0; i < DB.length; i++) {
         var opt = document.createElement("option");
@@ -198,22 +192,25 @@
     }
 
     function render(item) {
-      var groupKeys = ["EMOTION", "COLOUR", "TASTE"];
+      // Define which keys go into the bottom section
+      var malfunctionKeys = ["EMOTION", "COLOUR", "TASTE"];
       elementPill.innerHTML = item.ELEMENT;
       
       var html = "";
-      // Use for-in or manual keys for legacy support
-      var keys = ["ORGAN", "SEASON", "DIRECTION"]; 
       
-      for (var j = 0; j < keys.length; j++) {
-        var k = keys[j];
-        html += '<div class="kv"><div class="k">' + k + '</div><div class="v">' + (item[k] || "—") + '</div></div>';
+      // Part 1: General Properties (everything except Element and Malfunction keys)
+      for (var key in item) {
+        if (item.hasOwnProperty(key)) {
+          if (key === "ELEMENT" || malfunctionKeys.indexOf(key) !== -1) continue;
+          html += '<div class="kv"><div class="k">' + key + '</div><div class="v">' + (item[key] || "—") + '</div></div>';
+        }
       }
 
-      html += '<div class="section-heading">Malfunctions</div>';
-      for (var l = 0; l < groupKeys.length; l++) {
-        var gk = groupKeys[l];
-        html += '<div class="kv"><div class="k">' + gk + '</div><div class="v">' + (item[gk] || "—") + '</div></div>';
+      // Part 2: Malfunctions Section
+      html += '<div class="section-heading">When the element malfunctions</div>';
+      for (var i = 0; i < malfunctionKeys.length; i++) {
+        var mKey = malfunctionKeys[i];
+        html += '<div class="kv"><div class="k">' + mKey + '</div><div class="v">' + (item[mKey] || "—") + '</div></div>';
       }
 
       rowContainer.innerHTML = html;
@@ -224,7 +221,6 @@
     selectEl.onchange = function() {
       var val = selectEl.value;
       if (!val) return;
-      
       var found = null;
       for (var i = 0; i < DB.length; i++) {
         if (DB[i].ELEMENT === val) {
@@ -246,16 +242,11 @@
       var isLight = document.documentElement.getAttribute("data-theme") === "light";
       var target = isLight ? "dark" : "light";
       document.documentElement.setAttribute("data-theme", target);
-      if (window.localStorage) {
-        localStorage.setItem("five_elements_theme", target);
-      }
+      if (window.localStorage) { localStorage.setItem("five_elements_theme", target); }
     };
 
-    // Load theme
     var savedTheme = "dark";
-    if (window.localStorage) {
-      savedTheme = localStorage.getItem("five_elements_theme") || "dark";
-    }
+    if (window.localStorage) { savedTheme = localStorage.getItem("five_elements_theme") || "dark"; }
     document.documentElement.setAttribute("data-theme", savedTheme);
 
     init();
