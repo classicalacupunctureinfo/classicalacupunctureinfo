@@ -6,16 +6,37 @@
   <title>Classical Acupuncture - Study Portal</title>
 
   <style>
+    /* Default Dark Mode (Midnight Teal) */
     :root {
       --bg1: #071c1f;
       --bg2: #0b2b2f;
-      --card: #0f3a3f;
+      --panel-bg: rgba(15, 58, 63, 0.55);
+      --header-bg: rgba(7, 28, 31, 0.8);
+      --card: #0b3035;
       --text: #ffffff;
       --muted: #a7d3dc;
       --accent: #36c2c9;
       --shadow: 0 18px 50px rgba(0,0,0,.35);
       --border: rgba(255,255,255,.10);
       --radius: 18px;
+      --input-bg: rgba(15, 58, 63, 0.65);
+      --gradient: radial-gradient(1200px 650px at 20% 0%, rgba(54,194,201,.20), transparent 55%);
+    }
+
+    /* Light Mode */
+    [data-theme="light"] {
+      --bg1: #f0f4f5;
+      --bg2: #e0e7e8;
+      --panel-bg: rgba(255, 255, 255, 0.7);
+      --header-bg: rgba(240, 244, 245, 0.85);
+      --card: #ffffff;
+      --text: #1a2e31;
+      --muted: #5a7a7e;
+      --accent: #1e8e94;
+      --shadow: 0 10px 30px rgba(0,0,0,0.1);
+      --border: rgba(0,0,0,0.08);
+      --input-bg: rgba(255, 255, 255, 0.9);
+      --gradient: radial-gradient(1200px 650px at 20% 0%, rgba(30,142,148, 0.05), transparent 55%);
     }
 
     * { box-sizing: border-box; }
@@ -23,11 +44,12 @@
       margin: 0;
       font-family: system-ui, -apple-system, sans-serif;
       color: var(--text);
-      background: radial-gradient(1200px 650px at 20% 0%, rgba(54,194,201,.20), transparent 55%),
+      background: var(--gradient),
                   linear-gradient(180deg, var(--bg1), var(--bg2));
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      transition: background 0.3s ease, color 0.3s ease;
     }
 
     header {
@@ -36,27 +58,32 @@
       top: 0;
       z-index: 10;
       backdrop-filter: blur(10px);
-      background: rgba(7, 28, 31, .8);
+      background: var(--header-bg);
       border-bottom: 1px solid var(--border);
     }
 
     .topbar { max-width: 800px; margin: 0 auto; display: flex; gap: 10px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+    .brand { flex: 1; }
     .brand h1 { margin: 0; font-size: 18px; }
     .brand p { margin: 0; font-size: 12px; color: var(--muted); }
 
+    .header-actions { display: flex; gap: 8px; align-items: center; }
+
     .searchBox {
-      display: flex; width: 100%; background: rgba(15,58,63,.65);
+      display: flex; width: 100%; background: var(--input-bg);
       border: 1px solid var(--border); border-radius: 999px;
       padding: 10px 14px; margin-top: 10px;
     }
     .searchBox input { width: 100%; border: none; outline: none; background: transparent; color: var(--text); }
+    .searchBox input::placeholder { color: var(--muted); opacity: 0.7; }
 
     main { width: 100%; max-width: 800px; margin: 0 auto; padding: 14px; flex: 1; }
 
     .panel {
-      background: rgba(15,58,63,.55); border: 1px solid var(--border);
+      background: var(--panel-bg); border: 1px solid var(--border);
       border-radius: var(--radius); box-shadow: var(--shadow);
       overflow: hidden; animation: fadeIn 0.3s ease;
+      backdrop-filter: blur(5px);
     }
 
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; } }
@@ -64,17 +91,17 @@
     .panelHeader {
       padding: 14px; display: flex; align-items: center; justify-content: space-between;
       border-bottom: 1px solid var(--border);
-      background: rgba(15,58,63,.65);
+      background: rgba(0,0,0,0.05);
     }
 
     .btnGrid { padding: 12px; display: grid; gap: 12px; }
 
     .topicBtn {
       width: 100%; display: flex; flex-direction: column; gap: 4px; padding: 16px;
-      border-radius: 16px; background: rgba(11,48,53,.55);
+      border-radius: 16px; background: var(--card);
       border: 1px solid var(--border); cursor: pointer; transition: 0.2s; text-align: left;
     }
-    .topicBtn:hover { background: rgba(54,194,201,.15); border-color: var(--accent); }
+    .topicBtn:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
     .topicBtn strong { color: var(--text); font-size: 15px; }
     .topicBtn span { color: var(--muted); font-size: 12px; }
 
@@ -82,28 +109,54 @@
     .hidden { display: none !important; }
 
     .backBtn {
-      background: var(--accent); color: var(--bg1); border: none;
+      background: var(--accent); color: #fff; border: none;
       padding: 8px 16px; border-radius: 999px; font-weight: bold; cursor: pointer;
     }
 
-    .textBlock { font-size: 16px; line-height: 1.7; white-space: pre-wrap; color: var(--text); background: rgba(0,0,0,0.2); padding: 20px; border-radius: 12px; margin-top: 15px; }
+    .textBlock { font-size: 16px; line-height: 1.7; white-space: pre-wrap; color: var(--text); background: rgba(0,0,0,0.05); padding: 20px; border-radius: 12px; margin-top: 15px; }
     
-    .imgBox img { width: 100%; border-radius: 12px; border: 1px solid var(--border); display: block; margin-bottom: 15px; }
+    .imgBox { position: relative; width: 100%; }
+    .imgBox img { width: 100%; border-radius: 12px; border: 1px solid var(--border); display: block; margin-bottom: 15px; cursor: zoom-in; }
 
-    /* Grid for the 12 Organ Images */
-    .organGrid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-      gap: 10px;
-      margin-bottom: 15px;
+    .digitalClockOverlay {
+      position: absolute; top: 20px; right: 20px;
+      background: var(--bg1); padding: 12px 20px;
+      border-radius: 12px; border: 1px solid var(--accent);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      backdrop-filter: blur(4px); text-align: center;
+      min-width: 120px; z-index: 5; opacity: 0.9;
     }
-    .organGrid img { width: 100%; border-radius: 8px; border: 1px solid var(--border); }
+    .digitalClockOverlay .time { display: block; font-size: 24px; font-weight: bold; color: var(--accent); font-family: monospace; letter-spacing: 1px; }
+    .digitalClockOverlay .label { display: block; font-size: 10px; color: var(--muted); text-transform: uppercase; margin-bottom: 2px; }
 
-    .rowActions { display: flex; gap: 10px; padding: 15px; border-top: 1px solid var(--border); }
-    .actionBtn { flex: 1; padding: 12px; border-radius: 12px; border: 1px solid var(--border); background: rgba(255,255,255,.08); color: var(--text); cursor: pointer; }
+    .organGrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-bottom: 15px; }
+    .organGrid img { width: 100%; border-radius: 8px; border: 1px solid var(--border); cursor: zoom-in; transition: transform 0.2s; }
+    .organGrid img:hover { border-color: var(--accent); }
+
+    .actionBtn { padding: 10px 14px; border-radius: 12px; border: 1px solid var(--border); background: var(--card); color: var(--text); cursor: pointer; transition: 0.2s; font-size: 13px; }
+    .actionBtn:hover { background: var(--accent); color: #fff; }
+
+    /* Theme Toggle Switch */
+    .theme-toggle {
+      width: 44px; height: 24px; background: var(--card); border: 1px solid var(--border);
+      border-radius: 20px; position: relative; cursor: pointer;
+    }
+    .theme-toggle::after {
+      content: '🌙'; position: absolute; left: 4px; top: 2px; font-size: 12px;
+      transition: 0.3s;
+    }
+    [data-theme="light"] .theme-toggle::after { content: '☀️'; left: 24px; }
+
+    /* Fullscreen Modal */
+    #imageModal {
+      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(10px); z-index: 2000;
+      align-items: center; justify-content: center; cursor: zoom-out;
+    }
+    #imageModal.active { display: flex; animation: fadeIn 0.2s ease; }
+    #modalImg { max-width: 95%; max-height: 90%; border-radius: 8px; object-fit: contain; }
 
     footer { padding: 30px; text-align: center; color: var(--muted); font-size: 12px; opacity: 0.6; }
-    .loading { color: var(--accent); font-style: italic; }
   </style>
 </head>
 
@@ -114,7 +167,10 @@
         <h1>Classical Acupuncture</h1>
         <p>Acupuncture Study Portal</p>
       </div>
-      <button class="actionBtn" style="max-width: 80px;" id="resetBtn">Clear</button>
+      <div class="header-actions">
+        <div class="theme-toggle" id="themeToggle" title="Toggle Light/Dark Mode"></div>
+        <button class="actionBtn" id="resetBtn">Clear</button>
+      </div>
       <div class="searchBox"><input id="searchInput" placeholder="Search topics..." /></div>
     </div>
   </header>
@@ -136,12 +192,13 @@
       <div style="padding: 24px 20px 0 20px;">
         <h2 id="contentTitle" style="margin:0; font-size:24px;">Topic Title</h2>
       </div>
-      <div id="contentBody" style="padding:20px;"></div>
-      <div class="rowActions">
-        <button class="actionBtn" id="copyTextBtn">Copy Text</button>
-      </div>
+      <div id="contentBody" style="padding:20px; padding-bottom: 40px;"></div>
     </section>
   </main>
+
+  <div id="imageModal">
+    <img id="modalImg" src="" alt="Expanded view">
+  </div>
 
   <script>
     const topics = [
@@ -160,10 +217,26 @@
       { id: "sujok", title: "Sujok Therapy", type: "multi-img-text", tag: "2 IMG+TXT", sub: "Correspondence", images: ["img/sujok1.jpg", "img/sujok2.jpg"], src: "docs/sujok.txt" }
     ];
 
-    const listView = document.getElementById("listView"), detailView = document.getElementById("detailView"), 
-          mainHeader = document.getElementById("mainHeader"), btnGrid = document.getElementById("btnGrid"),
-          contentBody = document.getElementById("contentBody"), contentTitle = document.getElementById("contentTitle"), 
-          contentTag = document.getElementById("contentTag");
+    const listView = document.getElementById("listView"), 
+          detailView = document.getElementById("detailView"), 
+          mainHeader = document.getElementById("mainHeader"), 
+          btnGrid = document.getElementById("btnGrid"),
+          contentBody = document.getElementById("contentBody"), 
+          contentTitle = document.getElementById("contentTitle"), 
+          contentTag = document.getElementById("contentTag"),
+          imageModal = document.getElementById("imageModal"),
+          modalImg = document.getElementById("modalImg"),
+          themeToggle = document.getElementById("themeToggle");
+
+    let clockInterval = null;
+
+    // Theme Logic
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute("data-theme");
+      const target = current === "light" ? "dark" : "light";
+      document.documentElement.setAttribute("data-theme", target);
+    }
+    themeToggle.onclick = toggleTheme;
 
     function renderButtons(list) {
       btnGrid.innerHTML = "";
@@ -177,9 +250,25 @@
       document.getElementById("countPill").textContent = `${list.length} ITEMS`;
     }
 
+    function updateDigitalClock() {
+      const clockEl = document.getElementById('liveClockDisplay');
+      if (!clockEl) return;
+      const now = new Date();
+      const timeStr = now.toTimeString().split(' ')[0];
+      clockEl.textContent = timeStr;
+    }
+
+    function openFullscreen(src) {
+      modalImg.src = src;
+      imageModal.classList.add("active");
+    }
+
+    imageModal.onclick = () => imageModal.classList.remove("active");
+
     async function openTopic(id) {
       const t = topics.find(x => x.id === id);
       if(!t) return;
+      if (clockInterval) clearInterval(clockInterval);
 
       listView.classList.add("hidden");
       mainHeader.classList.add("hidden");
@@ -190,34 +279,40 @@
       contentBody.innerHTML = '<p class="loading">Loading content...</p>';
 
       let bodyHTML = '';
-
-      // Render Visuals based on type
       if (t.type === "grid") {
         bodyHTML += `<div class="organGrid">`;
-        t.images.forEach(i => bodyHTML += `<img src="${i}">`);
+        t.images.forEach(i => bodyHTML += `<img src="${i}" onclick="openFullscreen(this.src)" title="Click to enlarge">`);
         bodyHTML += `</div>`;
       } else if (t.images) {
-        t.images.forEach(i => bodyHTML += `<div class="imgBox"><img src="${i}"></div>`);
+        t.images.forEach(i => bodyHTML += `<div class="imgBox"><img src="${i}" onclick="openFullscreen(this.src)" title="Click to enlarge"></div>`);
       } else if (t.img) {
-        bodyHTML += `<div class="imgBox"><img src="${t.img}"></div>`;
+        bodyHTML += `<div class="imgBox">`;
+        if (t.id === "organClock") {
+          bodyHTML += `<div class="digitalClockOverlay"><span class="label">Current Time</span><span class="time" id="liveClockDisplay">00:00:00</span></div>`;
+        }
+        bodyHTML += `<img src="${t.img}" onclick="openFullscreen(this.src)" title="Click to enlarge"></div>`;
       }
 
-      // Render Text Content
       if (t.src) {
         try {
           const resp = await fetch(t.src);
-          const text = await resp.text();
+          const text = resp.ok ? await resp.text() : `[Content "${t.src}" would load here]`;
           bodyHTML += `<div class="textBlock">${text}</div>`;
         } catch (e) {
-          bodyHTML += `<div class="textBlock" style="color:#ff8888;">Error: Please ensure ${t.src} exists in the docs folder.</div>`;
+          bodyHTML += `<div class="textBlock">Text content loading simulation...</div>`;
         }
       }
 
       contentBody.innerHTML = bodyHTML;
       window.scrollTo(0,0);
+      if (t.id === "organClock") {
+        updateDigitalClock();
+        clockInterval = setInterval(updateDigitalClock, 1000);
+      }
     }
 
     document.getElementById("backToList").onclick = () => {
+      if (clockInterval) clearInterval(clockInterval);
       detailView.classList.add("hidden");
       listView.classList.remove("hidden");
       mainHeader.classList.remove("hidden");
@@ -225,17 +320,12 @@
 
     document.getElementById("searchInput").oninput = (e) => {
       const q = e.target.value.toLowerCase();
-      renderButtons(topics.filter(t => t.title.toLowerCase().includes(q)));
+      renderButtons(topics.filter(t => t.title.toLowerCase().includes(q) || t.sub.toLowerCase().includes(q)));
     };
 
     document.getElementById("resetBtn").onclick = () => {
       document.getElementById("searchInput").value = "";
       renderButtons(topics);
-    };
-
-    document.getElementById("copyTextBtn").onclick = () => {
-      navigator.clipboard.writeText(contentBody.innerText);
-      alert("Text copied!");
     };
 
     renderButtons(topics);
