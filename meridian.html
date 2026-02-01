@@ -6,277 +6,201 @@
   <title>Meridians Viewer</title>
 
   <style>
-    :root{
-      --bg:#061f22;
-      --card:#0b2e31;
-      --card2:#083034;
-      --text:#e9ffff;
-      --muted:#b7e7ea;
-      --accent:#39d5d5;
-      --accent2:#17aeb3;
+    :root {
+      --bg: #061f22;
+      --card: #0b2e31;
+      --card2: #083034;
+      --text: #e9ffff;
+      --muted: #b7e7ea;
+      --accent: #39d5d5;
+      --accent2: #17aeb3;
       --shadow: 0 10px 30px rgba(0,0,0,.35);
       --radius: 18px;
+      --border: rgba(57,213,213,.22);
     }
 
-    *{ box-sizing:border-box; }
-    body{
-      margin:0;
+    [data-theme="light"] {
+      --bg: #f0f7f7;
+      --card: #ffffff;
+      --card2: #f9fdfd;
+      --text: #132a2a;
+      --muted: #5a7a7a;
+      --accent: #0d9488;
+      --accent2: #0f766e;
+      --border: rgba(13, 148, 136, 0.15);
+      --shadow: 0 12px 40px rgba(0, 50, 50, 0.1);
+    }
+
+    * { box-sizing: border-box; }
+    
+    body {
+      margin: 0;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background: radial-gradient(1200px 800px at 50% -10%, rgba(57,213,213,.18), transparent 60%),
-                  linear-gradient(180deg, #041719, var(--bg));
-      color:var(--text);
-      min-height:100vh;
+      background: radial-gradient(1200px 800px at 50% -10%, rgba(57,213,213,.12), transparent 60%),
+                  linear-gradient(180deg, var(--bg), var(--bg));
+      color: var(--text);
+      min-height: 100vh;
+      transition: background 0.4s ease, color 0.4s ease;
     }
 
-    .app{
+    .app {
       max-width: 980px;
       margin: 0 auto;
       padding: 14px;
       padding-bottom: 30px;
     }
 
-    header{
-      background: linear-gradient(135deg, rgba(57,213,213,.18), rgba(23,174,179,.10));
-      border: 1px solid rgba(57,213,213,.22);
+    header {
+      background: var(--card);
+      border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 14px 14px;
+      padding: 16px;
       box-shadow: var(--shadow);
       position: sticky;
       top: 10px;
       z-index: 5;
       backdrop-filter: blur(8px);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
-    .title{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:12px;
-    }
-
-    h1{
-      margin:0;
+    .title-group h1 {
+      margin: 0;
       font-size: 18px;
       letter-spacing: .2px;
       line-height: 1.2;
     }
 
-    .sub{
-      margin-top:6px;
-      font-size: 12.5px;
-      color: var(--muted);
-      line-height: 1.35;
-    }
-
-    .grid{
-      margin-top: 14px;
-      display:grid;
-      grid-template-columns: repeat(2, minmax(0,1fr));
-      gap: 10px;
-    }
-
-    @media (min-width: 520px){
-      .grid{ grid-template-columns: repeat(3, minmax(0,1fr)); }
-    }
-    @media (min-width: 860px){
-      .grid{ grid-template-columns: repeat(4, minmax(0,1fr)); }
-    }
-
-    .btn{
-      border: 1px solid rgba(57,213,213,.22);
-      background: linear-gradient(180deg, rgba(11,46,49,.85), rgba(8,48,52,.7));
-      color: var(--text);
-      border-radius: 16px;
-      padding: 12px 10px;
-      font-size: 14px;
-      font-weight: 700;
-      letter-spacing: .15px;
-      box-shadow: 0 8px 22px rgba(0,0,0,.28);
-      cursor:pointer;
-      transition: transform .08s ease, border-color .12s ease, box-shadow .12s ease;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      text-align:center;
-      min-height: 52px;
-      user-select:none;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .btn:active{
-      transform: scale(0.98);
-    }
-
-    .btn:hover{
-      border-color: rgba(57,213,213,.45);
-      box-shadow: 0 10px 26px rgba(0,0,0,.32);
-    }
-
-    .btn.active{
-      border-color: rgba(57,213,213,.75);
-      box-shadow: 0 10px 28px rgba(57,213,213,.12), 0 10px 26px rgba(0,0,0,.35);
-      outline: 2px solid rgba(57,213,213,.22);
-    }
-
-    .viewer{
-      margin-top: 14px;
-      background: rgba(7,35,38,.55);
-      border: 1px solid rgba(57,213,213,.22);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-    }
-
-    .viewerTop{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      padding: 12px 12px;
-      border-bottom: 1px solid rgba(57,213,213,.18);
-      background: linear-gradient(135deg, rgba(57,213,213,.10), transparent);
-    }
-
-    .viewerTitle{
-      font-weight: 800;
-      font-size: 14.5px;
-      letter-spacing: .2px;
-    }
-
-    .mini{
+    .sub {
+      margin-top: 4px;
       font-size: 12px;
       color: var(--muted);
     }
 
-    .clearBtn{
-      border: 1px solid rgba(57,213,213,.22);
-      background: rgba(3,22,24,.55);
+    .grid {
+      margin-top: 14px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    @media (min-width: 520px) { .grid { grid-template-columns: repeat(3, minmax(0,1fr)); } }
+    @media (min-width: 860px) { .grid { grid-template-columns: repeat(4, minmax(0,1fr)); } }
+
+    .btn {
+      border: 1px solid var(--border);
+      background: var(--card);
       color: var(--text);
-      border-radius: 12px;
-      padding: 8px 10px;
-      font-size: 12.5px;
-      font-weight: 700;
-      cursor:pointer;
-    }
-
-    .content{
+      border-radius: 16px;
       padding: 12px;
-      display:grid;
-      gap: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all .2s;
+      min-height: 52px;
     }
 
-    .imgWrap{
+    .btn:hover { border-color: var(--accent); }
+    .btn.active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    .viewer {
+      margin-top: 14px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .viewerTop {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 14px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(0,0,0,0.02);
+    }
+
+    .viewerTitle { font-weight: 800; font-size: 16px; }
+
+    .clearBtn {
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text);
+      border-radius: 10px;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .content { padding: 16px; display: grid; gap: 16px; }
+
+    .imgWrap {
       width: 100%;
       border-radius: 16px;
-      overflow:hidden;
-      border: 1px solid rgba(57,213,213,.18);
-      background: rgba(0,0,0,.25);
-      position:relative;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,0.05);
     }
 
-    img{
-      width:100%;
-      height:auto;
-      display:block;
-    }
+    img { width: 100%; height: auto; display: block; cursor: zoom-in; }
 
-    .clickable{
-      cursor: zoom-in;
-    }
-
-    .desc{
-      border: 1px solid rgba(57,213,213,.18);
+    .desc {
+      border: 1px solid var(--border);
       border-radius: 16px;
-      padding: 12px;
-      background: rgba(3,22,24,.4);
+      padding: 16px;
+      background: rgba(0,0,0,0.02);
       white-space: pre-wrap;
-      line-height: 1.5;
-      font-size: 13.5px;
-      color: rgba(233,255,255,.92);
+      line-height: 1.6;
+      font-size: 14px;
     }
 
-    .placeholder{
-      padding: 18px 12px;
-      text-align:center;
-      color: rgba(183,231,234,.9);
-      font-size: 13px;
-      line-height: 1.4;
+    .pill {
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,0.05);
+      text-transform: uppercase;
+      font-weight: 600;
     }
 
-    .statusRow{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      align-items:center;
-      justify-content:center;
-      margin-top: 4px;
+    /* Theme Toggle */
+    .theme-toggle {
+      width: 44px; height: 24px; background: rgba(0,0,0,0.1); border: 1px solid var(--border);
+      border-radius: 20px; position: relative; cursor: pointer; display: flex; align-items: center;
+      transition: 0.3s;
     }
-
-    .pill{
-      font-size: 11.5px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(57,213,213,.18);
-      background: rgba(57,213,213,.08);
-      color: rgba(233,255,255,.92);
+    .theme-toggle::after {
+      content: '🌙'; position: absolute; left: 4px; font-size: 12px;
+      transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
+    [data-theme="light"] .theme-toggle::after { content: '☀️'; left: 24px; }
 
-    .error{
-      color:#ffd7d7;
-      border-color: rgba(255,120,120,.25);
-      background: rgba(255,120,120,.10);
+    /* Modal */
+    .img-modal {
+      position: fixed; inset: 0; display: none; align-items: center; justify-content: center;
+      background: rgba(0,0,0,0.9); z-index: 9999;
     }
-
-    /* Fullscreen image modal */
-    .img-modal{
-      position:fixed;
-      inset:0;
-      display:none;
-      align-items:center;
-      justify-content:center;
-      background: rgba(0,0,0,0.85);
-      z-index: 9999;
-      padding: 20px;
-    }
-
-    .img-modal.open{ display:flex; }
-
-    .img-modal img{
-      max-width: 100%;
-      max-height: 100%;
-      border-radius: 6px;
-      box-shadow: 0 10px 40px rgba(0,0,0,.6);
-      cursor: zoom-out;
-    }
-
-    .img-modal .close{
-      position:absolute;
-      top:18px;
-      right:18px;
-      background: rgba(0,0,0,0.45);
-      border: 0;
-      color: #fff;
-      font-size: 22px;
-      padding: 6px 10px;
-      border-radius: 8px;
-      cursor:pointer;
-    }
+    .img-modal.open { display: flex; }
+    .img-modal img { max-width: 95%; max-height: 95%; cursor: zoom-out; }
   </style>
 </head>
-
 <body>
   <div class="app">
     <header>
-      <div class="title">
-        <div>
-          <h1>Meridian Viewer</h1>
-          <div class="sub">
-            Tap any button to open the image + description inside the page.
-          </div>
-        </div>
+      <div class="title-group">
+        <h1>Meridian Viewer</h1>
+        <div class="sub">Tap a button to inspect details.</div>
       </div>
-
-      <!-- Search bar removed -->
+      <div class="theme-toggle" id="themeToggle" title="Toggle Appearance"></div>
     </header>
 
     <section class="grid" id="btnGrid"></section>
@@ -285,213 +209,105 @@
       <div class="viewerTop">
         <div>
           <div class="viewerTitle" id="viewerTitle">Select a meridian</div>
-          <div class="mini" id="viewerMini">Image: <span id="imgName">-</span> • Text: <span id="txtName">-</span></div>
+          <div class="sub" id="viewerMini">Status: <span id="imgName">Idle</span></div>
         </div>
-        <button class="clearBtn" id="clearBtn" type="button">Clear</button>
+        <button class="clearBtn" id="clearBtn">Clear</button>
       </div>
 
       <div class="content" id="viewerContent">
-        <div class="placeholder">
-          No meridian selected.<br/>
-          Choose one from the buttons above.
-          <div class="statusRow">
-            <span class="pill">Images: meridian_img/*.jpg</span>
-            <span class="pill">Descriptions: meridian_txt/*.txt</span>
-          </div>
+        <div style="text-align:center; padding: 40px 0; opacity: 0.6;">
+          Please choose a meridian from the grid above.
         </div>
       </div>
     </section>
   </div>
 
-  <!-- Fullscreen image modal -->
-  <div id="imgModal" class="img-modal" aria-hidden="true">
-    <button class="close" id="imgModalClose" aria-label="Close image">×</button>
-    <img id="imgModalImg" alt="" />
+  <div id="imgModal" class="img-modal">
+    <img id="imgModalImg" src="" alt="Fullscreen view" />
   </div>
 
   <script>
     const MERIDIANS = [
-      { name: "Heart", code: "HTM" },
-      { name: "Pericardium", code: "PCM" },
-      { name: "Small intestine", code: "SIM" },
-      { name: "Triple warmer", code: "TWM" },
-      { name: "Spleen", code: "SPM" },
-      { name: "Stomach", code: "STM" },
-      { name: "Lung", code: "LUM" },
-      { name: "Large intestine", code: "LIM" },
-      { name: "Kidney", code: "KDM" },
-      { name: "Urinary bladder", code: "UBM" },
-      { name: "Liver", code: "LVM" },
-      { name: "Gall bladder", code: "GBM" },
+      { name: "Heart", code: "HTM" }, { name: "Pericardium", code: "PCM" },
+      { name: "Small Intestine", code: "SIM" }, { name: "Triple Warmer", code: "TWM" },
+      { name: "Spleen", code: "SPM" }, { name: "Stomach", code: "STM" },
+      { name: "Lung", code: "LUM" }, { name: "Large Intestine", code: "LIM" },
+      { name: "Kidney", code: "KDM" }, { name: "Urinary Bladder", code: "UBM" },
+      { name: "Liver", code: "LVM" }, { name: "Gall Bladder", code: "GBM" }
     ];
 
     const btnGrid = document.getElementById("btnGrid");
     const viewerTitle = document.getElementById("viewerTitle");
-    const viewerMini = document.getElementById("viewerMini");
     const viewerContent = document.getElementById("viewerContent");
-    const imgName = document.getElementById("imgName");
-    const txtName = document.getElementById("txtName");
-    const clearBtn = document.getElementById("clearBtn");
+    const themeToggle = document.getElementById("themeToggle");
+    const imgModal = document.getElementById("imgModal");
+    const imgModalImg = document.getElementById("imgModalImg");
 
-    const imgModal = document.getElementById('imgModal');
-    const imgModalImg = document.getElementById('imgModalImg');
-    const imgModalClose = document.getElementById('imgModalClose');
-
-    let activeCode = null;
-
-    function filePaths(code){
-      return {
-        img: `meridian_img/${code}.jpg`,
-        txt: `meridian_txt/${code}.txt`
-      };
+    function initTheme() {
+      const saved = localStorage.getItem("five_elements_theme") || "dark";
+      document.documentElement.setAttribute("data-theme", saved);
     }
 
-    function createButtons(list){
-      btnGrid.innerHTML = "";
-      list.forEach(item => {
-        const b = document.createElement("button");
-        b.type = "button";
-        b.className = "btn";
-        b.textContent = item.name;
-        b.dataset.code = item.code;
+    themeToggle.onclick = () => {
+      const current = document.documentElement.getAttribute("data-theme");
+      const target = current === "light" ? "dark" : "light";
+      document.documentElement.setAttribute("data-theme", target);
+      localStorage.setItem("five_elements_theme", target);
+    };
 
-        b.addEventListener("click", () => openMeridian(item));
+    function createButtons() {
+      MERIDIANS.forEach(m => {
+        const b = document.createElement("button");
+        b.className = "btn";
+        b.textContent = m.name;
+        b.onclick = () => openMeridian(m, b);
         btnGrid.appendChild(b);
       });
     }
 
-    function setActiveButton(code){
-      [...btnGrid.querySelectorAll(".btn")].forEach(btn => {
-        btn.classList.toggle("active", btn.dataset.code === code);
-      });
-    }
-
-    function openImageFullscreen(src, alt){
-      imgModalImg.src = src;
-      imgModalImg.alt = alt || ''; 
-      imgModal.classList.add('open');
-      imgModal.setAttribute('aria-hidden', 'false');
-      // prevent background scroll
-      document.documentElement.style.overflow = 'hidden';
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeImageFullscreen(){
-      imgModal.classList.remove('open');
-      imgModal.setAttribute('aria-hidden', 'true');
-      imgModalImg.src = '';
-      imgModalImg.alt = '';
-      // restore scroll
-      document.documentElement.style.overflow = '';
-      document.body.style.overflow = '';
-    }
-
-    imgModalClose.addEventListener('click', closeImageFullscreen);
-    imgModal.addEventListener('click', (e) => {
-      // clicking outside the image or on the overlay closes
-      if(e.target === imgModal || e.target === imgModalClose) closeImageFullscreen();
-    });
-
-    document.addEventListener('keydown', (e) => {
-      if(e.key === 'Escape' && imgModal.classList.contains('open')){
-        closeImageFullscreen();
-      }
-    });
-
-    async function openMeridian(item){
-      activeCode = item.code;
-      setActiveButton(activeCode);
-
-      const { img, txt } = filePaths(item.code);
+    async function openMeridian(item, btn) {
+      document.querySelectorAll('.btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
 
       viewerTitle.textContent = item.name;
-      imgName.textContent = `${item.code}.jpg`;
-      txtName.textContent = `${item.code}.txt`;
+      viewerContent.innerHTML = `<div style="text-align:center; padding:20px;">Loading...</div>`;
 
-      viewerContent.innerHTML = `
-        <div class="placeholder">
-          Loading...
-          <div class="statusRow">
-            <span class="pill">Please wait</span>
-          </div>
-        </div>
-      `;
-
-      // Fetch description
-      let description = "";
-      let txtOk = true;
-      try{
-        const res = await fetch(txt, { cache: "no-store" });
-        if(!res.ok) throw new Error("Text not found");
-        description = await res.text();
-      }catch(e){
-        txtOk = false;
-        description = "Description file not found.\n\nMake sure this exists:\n" + txt;
-      }
-
-      // Build viewer
-      const txtPillClass = txtOk ? "pill" : "pill error";
+      let description = "Description file not found.";
+      try {
+        const res = await fetch(`meridian_txt/${item.code}.txt`);
+        if (res.ok) description = await res.text();
+      } catch (e) {}
 
       viewerContent.innerHTML = `
         <div class="imgWrap">
-          <img id="meridianImg" class="clickable" src="${img}" alt="${item.name} (${item.code})"
-               onerror="this.onerror=null; this.closest('.imgWrap').insertAdjacentHTML('beforeend',
-               '<div class=\\'placeholder\\'><div class=\\'statusRow\\'><span class=\\'pill error\\'>Image not found: ${item.code}.jpg</span></div></div>'); this.style.display='none';" />
+          <img src="meridian_img/${item.code}.jpg" alt="${item.name}" 
+               onerror="this.style.display='none'; this.parentNode.innerHTML='<div style=\'padding:40px;text-align:center;opacity:0.5\'>Image: ${item.code}.jpg not found</div>'"
+               onclick="showModal(this.src)">
         </div>
-
-        <div class="desc">${escapeHtml(description)}</div>
-
-        <div class="statusRow">
-          <span class="pill">Selected: ${item.name}</span>
+        <div class="desc">${description}</div>
+        <div style="display:flex; gap:8px;">
           <span class="pill">Code: ${item.code}</span>
-          <span class="${txtPillClass}">${txtOk ? "Text loaded" : "Text missing"}</span>
+          <span class="pill">System: Classical</span>
         </div>
       `;
-
-      // Attach click handler to image to open fullscreen (if image loaded)
-      const imgEl = document.getElementById('meridianImg');
-      if(imgEl){
-        imgEl.addEventListener('click', () => {
-          // only open if image is visible
-          if(imgEl.complete && imgEl.naturalWidth !== 0){
-            openImageFullscreen(imgEl.src, imgEl.alt);
-          }
-        });
-      }
-
-      // Smooth scroll to viewer on mobile
       document.getElementById("viewer").scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
-    function escapeHtml(str){
-      return (str ?? "")
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;");
+    function showModal(src) {
+      imgModalImg.src = src;
+      imgModal.classList.add('open');
     }
 
-    function clearViewer(){
-      activeCode = null;
-      setActiveButton(null);
+    imgModal.onclick = () => imgModal.classList.remove('open');
+
+    document.getElementById("clearBtn").onclick = () => {
+      document.querySelectorAll('.btn').forEach(b => b.classList.remove('active'));
       viewerTitle.textContent = "Select a meridian";
-      imgName.textContent = "-";
-      txtName.textContent = "-";
-      viewerContent.innerHTML = `
-        <div class="placeholder">
-          No meridian selected.<br/>
-          Choose one from the buttons above.
-          <div class="statusRow">
-            <span class="pill">Images: meridian_img/*.jpg</span>
-            <span class="pill">Descriptions: meridian_txt/*.txt</span>
-          </div>
-        </div>
-      `;
-    }
+      viewerContent.innerHTML = `<div style="text-align:center; padding: 40px 0; opacity: 0.6;">Please choose a meridian from the grid above.</div>`;
+    };
 
-    clearBtn.addEventListener("click", clearViewer);
-
-    // Init
-    createButtons(MERIDIANS);
+    initTheme();
+    createButtons();
   </script>
 </body>
-    </html>
+</html>
