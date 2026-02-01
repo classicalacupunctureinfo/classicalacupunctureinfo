@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,175 +6,203 @@
   <title>Menu</title>
 
   <style>
-    :root{
-      --bg1:#071c1f;
-      --bg2:#0b2b2f;
-      --card:#0f3a3f;
-      --card2:#0b3035;
-      --text:#e9fbff;
-      --muted:#a7d3dc;
-      --accent:#36c2c9;
+    :root {
+      /* Dark Theme (Default) */
+      --bg1: #071c1f;
+      --bg2: #0b2b2f;
+      --card: #0f3a3f;
+      --card2: #0b3035;
+      --text: #e9fbff;
+      --muted: #a7d3dc;
+      --accent: #36c2c9;
       --shadow: 0 18px 50px rgba(0,0,0,.35);
       --border: rgba(255,255,255,.10);
       --radius: 18px;
     }
 
-    *{ box-sizing:border-box; }
-    body{
-      margin:0;
-      min-height:100vh;
+    /* Light Theme Overrides */
+    [data-theme="light"] {
+      --bg1: #f0f7f7;
+      --bg2: #e6eeee;
+      --card: #ffffff;
+      --card2: #f9fdfd;
+      --text: #132a2a;
+      --muted: #5a7a7a;
+      --accent: #0d9488;
+      --border: rgba(13, 148, 136, 0.15);
+      --shadow: 0 12px 40px rgba(0, 50, 50, 0.1);
+    }
+
+    * { box-sizing: border-box; }
+    
+    body {
+      margin: 0;
+      min-height: 100vh;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue";
-      color:var(--text);
+      color: var(--text);
       background:
         radial-gradient(900px 500px at 20% 20%, rgba(54,194,201,.18), transparent 55%),
         radial-gradient(900px 500px at 80% 30%, rgba(255,255,255,.08), transparent 60%),
         linear-gradient(160deg, var(--bg1), var(--bg2));
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 22px;
+      transition: background 0.4s ease, color 0.4s ease;
     }
 
-    .wrap{
-      width:min(860px, 100%);
-      display:grid;
-      gap:18px;
+    .wrap {
+      width: min(860px, 100%);
+      display: grid;
+      gap: 18px;
     }
 
-    .header{
-      padding:18px 18px 10px;
+    .header {
+      padding: 18px 18px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
     }
 
-    .title{
-      font-size:1.25rem;
-      font-weight:700;
-      letter-spacing:.2px;
-      margin:0 0 6px;
+    .title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: .2px;
+      margin: 0 0 6px;
     }
 
-    .subtitle{
-      margin:0;
-      color:var(--muted);
-      font-size:.95rem;
-      line-height:1.35;
+    .subtitle {
+      margin: 0;
+      color: var(--muted);
+      font-size: .95rem;
+      line-height: 1.35;
     }
 
-    .panel{
+    .panel {
       background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
       border: 1px solid var(--border);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      overflow:hidden;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
     }
 
-    .grid{
-      display:grid;
+    [data-theme="light"] .panel {
+      background: rgba(255, 255, 255, 0.8);
+    }
+
+    .grid {
+      display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap:14px;
-      padding:18px;
+      gap: 14px;
+      padding: 18px;
       background: linear-gradient(180deg, rgba(0,0,0,.10), rgba(0,0,0,.18));
     }
 
-    .btn{
-      appearance:none;
+    [data-theme="light"] .grid {
+      background: rgba(0, 0, 0, 0.02);
+    }
+
+    .btn {
+      appearance: none;
       border: 1px solid rgba(255,255,255,.12);
       background: linear-gradient(180deg, rgba(15,58,63,.95), rgba(11,48,53,.95));
       color: var(--text);
       border-radius: 16px;
       padding: 16px 16px;
-      text-align:left;
-      cursor:pointer;
-      transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease;
+      text-align: left;
+      cursor: pointer;
+      transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease, background 0.3s;
       box-shadow: 0 10px 24px rgba(0,0,0,.25);
-      position:relative;
-      overflow:hidden;
-      min-height:86px;
+      position: relative;
+      overflow: hidden;
+      min-height: 86px;
     }
 
-    .btn::before{
-      content:"";
-      position:absolute;
-      inset:-2px;
-      background: radial-gradient(220px 120px at 20% 0%, rgba(54,194,201,.20), transparent 60%);
-      opacity:0;
-      transition: opacity .15s ease;
-      pointer-events:none;
+    [data-theme="light"] .btn {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      color: var(--text);
     }
 
-    .btn:hover{
+    .btn:hover {
       transform: translateY(-2px);
       border-color: rgba(54,194,201,.35);
       box-shadow: 0 16px 36px rgba(0,0,0,.35);
     }
-    .btn:hover::before{ opacity:1; }
 
-    .btn:active{
-      transform: translateY(0px);
-      box-shadow: 0 10px 24px rgba(0,0,0,.28);
+    .btn-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 6px;
     }
 
-    .btn-top{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      margin-bottom:6px;
+    .btn-title {
+      font-weight: 700;
+      font-size: 1.02rem;
+      margin: 0;
     }
 
-    .btn-title{
-      font-weight:700;
-      font-size:1.02rem;
-      margin:0;
+    .chip {
+      font-size: .78rem;
+      color: var(--text);
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.1);
+      white-space: nowrap;
     }
 
-    .chip{
-      font-size:.78rem;
-      color: rgba(233,251,255,.9);
-      padding:6px 10px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
-      white-space:nowrap;
-    }
-
-    .btn-desc{
-      margin:0;
+    .btn-desc {
+      margin: 0;
       color: var(--muted);
-      font-size:.92rem;
-      line-height:1.35;
+      font-size: .92rem;
+      line-height: 1.35;
     }
 
-    .footer{
-      padding: 0 18px 16px;
-      color: rgba(167,211,220,.9);
-      font-size:.85rem;
+    /* Theme Toggle Switch */
+    .theme-toggle {
+      width: 44px; height: 24px; background: rgba(0,0,0,0.2); border: 1px solid var(--border);
+      border-radius: 20px; position: relative; cursor: pointer; display: flex; align-items: center;
+      transition: 0.3s; flex-shrink: 0;
+    }
+    .theme-toggle::after {
+      content: '🌙'; position: absolute; left: 4px; font-size: 12px;
+      transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    [data-theme="light"] .theme-toggle::after { content: '☀️'; left: 24px; }
+    [data-theme="light"] .theme-toggle { background: #fff; }
+
+    .footer {
+      padding: 16px 18px;
+      color: var(--muted);
+      font-size: .85rem;
     }
 
-    .divider{
-      height:1px;
-      background: rgba(255,255,255,.08);
-    }
+    .divider { height: 1px; background: var(--border); }
 
-    @media (max-width: 640px){
-      .grid{ grid-template-columns: 1fr; }
-      .header{ padding:16px 16px 8px; }
-      .grid{ padding:16px; }
+    @media (max-width: 640px) {
+      .grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
-
 <body>
   <main class="wrap">
     <section class="panel">
       <div class="header">
-        <h1 class="title">Classical Acupuncture Info</h1>
-        <p class="subtitle">Choose a module to continue.</p>
+        <div>
+          <h1 class="title">Classical Acupuncture Info</h1>
+          <p class="subtitle">Choose a module to continue.</p>
+        </div>
+        <div class="theme-toggle" id="themeToggle" title="Toggle Appearance"></div>
       </div>
 
       <div class="divider"></div>
 
       <div class="grid">
-        <!-- 1) Opens connecting_points.html -->
         <button class="btn" onclick="window.location.href='connecting_points.html'">
           <div class="btn-top">
             <p class="btn-title">Connecting Points</p>
@@ -184,7 +211,6 @@
           <p class="btn-desc">Cross-reference selection and view connection output.</p>
         </button>
 
-        <!-- Opens 5 elements -->
         <button class="btn" onclick="window.location.href='5elements.html'">
           <div class="btn-top">
             <p class="btn-title">Five Element Characteristics</p>
@@ -193,7 +219,6 @@
           <p class="btn-desc">Five elements Dashboard.</p>
         </button>
 
-        <!-- Opens Meridian page -->
         <button class="btn" onclick="window.location.href='meridian.html'">
           <div class="btn-top">
             <p class="btn-title">Acupuncture Meridian</p>
@@ -202,7 +227,6 @@
           <p class="btn-desc">Meridian page.</p>
         </button>
 
-        <!-- Opens Miscellaneous -->
         <button class="btn" onclick="window.location.href='misc.html'">
           <div class="btn-top">
             <p class="btn-title">Miscellaneous</p>
@@ -213,9 +237,27 @@
       </div>
 
       <div class="footer">
-        Tip: You can replace placeholders with real pages later by changing the <b>onclick</b> action.
+        Tip: Explore the visual traits and clinical associations of the systems.
       </div>
     </section>
   </main>
+
+  <script>
+    const themeToggle = document.getElementById("themeToggle");
+
+    function initTheme() {
+      const saved = localStorage.getItem("five_elements_theme") || "dark";
+      document.documentElement.setAttribute("data-theme", saved);
+    }
+
+    themeToggle.onclick = () => {
+      const current = document.documentElement.getAttribute("data-theme");
+      const target = current === "light" ? "dark" : "light";
+      document.documentElement.setAttribute("data-theme", target);
+      localStorage.setItem("five_elements_theme", target);
+    };
+
+    initTheme();
+  </script>
 </body>
 </html>
