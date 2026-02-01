@@ -1,1 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Classical Acupuncture - Study Portal</title>
 
+  <style>
+    :root {
+      --bg1: #071c1f;
+      --bg2: #0b2b2f;
+      --card: #0f3a3f;
+      --text: #ffffff;
+      --muted: #a7d3dc;
+      --accent: #36c2c9;
+      --shadow: 0 18px 50px rgba(0,0,0,.35);
+      --border: rgba(255,255,255,.10);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, sans-serif;
+      color: var(--text);
+      background: radial-gradient(1200px 650px at 20% 0%, rgba(54,194,201,.20), transparent 55%),
+                  linear-gradient(180deg, var(--bg1), var(--bg2));
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      padding: 18px 14px 10px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(10px);
+      background: rgba(7, 28, 31, .8);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .topbar { max-width: 800px; margin: 0 auto; display: flex; gap: 10px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+    .brand h1 { margin: 0; font-size: 18px; }
+    .brand p { margin: 0; font-size: 12px; color: var(--muted); }
+
+    .searchBox {
+      display: flex; width: 100%; background: rgba(15,58,63,.65);
+      border: 1px solid var(--border); border-radius: 999px;
+      padding: 10px 14px; margin-top: 10px;
+    }
+    .searchBox input { width: 100%; border: none; outline: none; background: transparent; color: var(--text); }
+
+    main { width: 100%; max-width: 800px; margin: 0 auto; padding: 14px; flex: 1; }
+
+    .panel {
+      background: rgba(15,58,63,.55); border: 1px solid var(--border);
+      border-radius: var(--radius); box-shadow: var(--shadow);
+      overflow: hidden; animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; } }
+
+    .panelHeader {
+      padding: 14px; display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      background: rgba(15,58,63,.65);
+    }
+
+    .btnGrid { padding: 12px; display: grid; gap: 12px; }
+
+    .topicBtn {
+      width: 100%; display: flex; flex-direction: column; gap: 4px; padding: 16px;
+      border-radius: 16px; background: rgba(11,48,53,.55);
+      border: 1px solid var(--border); cursor: pointer; transition: 0.2s; text-align: left;
+    }
+    .topicBtn:hover { background: rgba(54,194,201,.15); border-color: var(--accent); }
+    .topicBtn strong { color: var(--text); font-size: 15px; }
+    .topicBtn span { color: var(--muted); font-size: 12px; }
+
+    .badge { font-size: 10px; padding: 4px 8px; border-radius: 999px; border: 1px solid var(--accent); color: var(--accent); font-weight: bold; }
+    .hidden { display: none !important; }
+
+    .backBtn {
+      background: var(--accent); color: var(--bg1); border: none;
+      padding: 8px 16px; border-radius: 999px; font-weight: bold; cursor: pointer;
+    }
+
+    .textBlock { font-size: 16px; line-height: 1.7; white-space: pre-wrap; color: var(--text); background: rgba(0,0,0,0.2); padding: 20px; border-radius: 12px; margin-top: 15px; }
+    
+    .imgBox img { width: 100%; border-radius: 12px; border: 1px solid var(--border); display: block; margin-bottom: 15px; }
+
+    /* Grid for the 12 Organ Images */
+    .organGrid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+    .organGrid img { width: 100%; border-radius: 8px; border: 1px solid var(--border); }
+
+    .rowActions { display: flex; gap: 10px; padding: 15px; border-top: 1px solid var(--border); }
+    .actionBtn { flex: 1; padding: 12px; border-radius: 12px; border: 1px solid var(--border); background: rgba(255,255,255,.08); color: var(--text); cursor: pointer; }
+
+    footer { padding: 30px; text-align: center; color: var(--muted); font-size: 12px; opacity: 0.6; }
+    .loading { color: var(--accent); font-style: italic; }
+  </style>
+</head>
+
+<body>
+  <header id="mainHeader">
+    <div class="topbar">
+      <div class="brand">
+        <h1>Classical Acupuncture</h1>
+        <p>Acupuncture Study Portal</p>
+      </div>
+      <button class="actionBtn" style="max-width: 80px;" id="resetBtn">Clear</button>
+      <div class="searchBox"><input id="searchInput" placeholder="Search topics..." /></div>
+    </div>
+  </header>
+
+  <main>
+    <section id="listView" class="panel">
+      <div class="panelHeader">
+        <h2 style="font-size:13px; margin:0; color:var(--muted);">STUDY TOPICS</h2>
+        <span id="countPill" class="badge">0 ITEMS</span>
+      </div>
+      <div class="btnGrid" id="btnGrid"></div>
+    </section>
+
+    <section id="detailView" class="panel hidden">
+      <div class="panelHeader">
+        <button class="backBtn" id="backToList">← Back</button>
+        <span id="contentTag" class="badge">DOC</span>
+      </div>
+      <div style="padding: 24px 20px 0 20px;">
+        <h2 id="contentTitle" style="margin:0; font-size:24px;">Topic Title</h2>
+      </div>
+      <div id="contentBody" style="padding:20px;"></div>
+      <div class="rowActions">
+        <button class="actionBtn" id="copyTextBtn">Copy Text</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const topics = [
+      { id: "intro", title: "Classical Acupuncture Introduction", type: "text", tag: "TEXT", sub: "Foundation", src: "docs/introduction.txt" },
+      { id: "theories", title: "Classical Acupuncture Theories", type: "text", tag: "TEXT", sub: "Core Concepts", src: "docs/theories.txt" },
+      { id: "goldenRules", title: "4 Golden Rules", type: "text", tag: "TEXT", sub: "Essential Laws", src: "docs/golden_rules.txt" },
+      { id: "energy", title: "Energy Distribution", type: "img-text", tag: "IMG+TXT", sub: "Qi Flow", img: "img/energy.jpg", src: "docs/energy_distribution.txt" },
+      { id: "diagnosing", title: "Diagnosing Methods", type: "text", tag: "TEXT", sub: "Observation", src: "docs/diagnosing.txt" },
+      { id: "byol", title: "Byol Meridian", type: "image", tag: "1 IMAGE", sub: "Meridian Map", img: "img/byol_meridian.jpg" },
+      { id: "warmCold", title: "Warm and Cold Organs", type: "grid", tag: "12 IMAGES", sub: "Organ Classification", 
+        images: ["img/wc1.jpg","img/wc2.jpg","img/wc3.jpg","img/wc4.jpg","img/wc5.jpg","img/wc6.jpg","img/wc7.jpg","img/wc8.jpg","img/wc9.jpg","img/wc10.jpg","img/wc11.jpg","img/wc12.jpg"] 
+      },
+      { id: "fiveElement", title: "Five Element Cycles", type: "multi-img", tag: "2 IMAGES", sub: "Sheng & Ke", images: ["img/five_element_1.jpg", "img/five_element_2.jpg"] },
+      { id: "measurements", title: "Body Measurements", type: "multi-img", tag: "2 IMAGES", sub: "Cun Units", images: ["img/measurements_1.jpg", "img/measurements_2.jpg"] },
+      { id: "organClock", title: "Organ Clock", type: "image", tag: "1 IMAGE", sub: "24-Hour Cycle", img: "img/organ_clock.jpg" },
+      { id: "sujok", title: "Sujok Therapy", type: "multi-img-text", tag: "2 IMG+TXT", sub: "Correspondence", images: ["img/sujok1.jpg", "img/sujok2.jpg"], src: "docs/sujok.txt" }
+    ];
+
+    const listView = document.getElementById("listView"), detailView = document.getElementById("detailView"), 
+          mainHeader = document.getElementById("mainHeader"), btnGrid = document.getElementById("btnGrid"),
+          contentBody = document.getElementById("contentBody"), contentTitle = document.getElementById("contentTitle"), 
+          contentTag = document.getElementById("contentTag");
+
+    function renderButtons(list) {
+      btnGrid.innerHTML = "";
+      list.forEach(t => {
+        const btn = document.createElement("button");
+        btn.className = "topicBtn";
+        btn.innerHTML = `<strong>${t.title}</strong><span>${t.sub}</span>`;
+        btn.onclick = () => openTopic(t.id);
+        btnGrid.appendChild(btn);
+      });
+      document.getElementById("countPill").textContent = `${list.length} ITEMS`;
+    }
+
+    async function openTopic(id) {
+      const t = topics.find(x => x.id === id);
+      if(!t) return;
+
+      listView.classList.add("hidden");
+      mainHeader.classList.add("hidden");
+      detailView.classList.remove("hidden");
+
+      contentTitle.textContent = t.title;
+      contentTag.textContent = t.tag;
+      contentBody.innerHTML = '<p class="loading">Loading content...</p>';
+
+      let bodyHTML = '';
+
+      // Render Visuals based on type
+      if (t.type === "grid") {
+        bodyHTML += `<div class="organGrid">`;
+        t.images.forEach(i => bodyHTML += `<img src="${i}">`);
+        bodyHTML += `</div>`;
+      } else if (t.images) {
+        t.images.forEach(i => bodyHTML += `<div class="imgBox"><img src="${i}"></div>`);
+      } else if (t.img) {
+        bodyHTML += `<div class="imgBox"><img src="${t.img}"></div>`;
+      }
+
+      // Render Text Content
+      if (t.src) {
+        try {
+          const resp = await fetch(t.src);
+          const text = await resp.text();
+          bodyHTML += `<div class="textBlock">${text}</div>`;
+        } catch (e) {
+          bodyHTML += `<div class="textBlock" style="color:#ff8888;">Error: Please ensure ${t.src} exists in the docs folder.</div>`;
+        }
+      }
+
+      contentBody.innerHTML = bodyHTML;
+      window.scrollTo(0,0);
+    }
+
+    document.getElementById("backToList").onclick = () => {
+      detailView.classList.add("hidden");
+      listView.classList.remove("hidden");
+      mainHeader.classList.remove("hidden");
+    };
+
+    document.getElementById("searchInput").oninput = (e) => {
+      const q = e.target.value.toLowerCase();
+      renderButtons(topics.filter(t => t.title.toLowerCase().includes(q)));
+    };
+
+    document.getElementById("resetBtn").onclick = () => {
+      document.getElementById("searchInput").value = "";
+      renderButtons(topics);
+    };
+
+    document.getElementById("copyTextBtn").onclick = () => {
+      navigator.clipboard.writeText(contentBody.innerText);
+      alert("Text copied!");
+    };
+
+    renderButtons(topics);
+  </script>
+</body>
+</html>
