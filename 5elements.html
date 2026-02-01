@@ -6,8 +6,9 @@
   <title>Five Elements — Deep Teal Edition</title>
   <style>
     :root {
-      /* Refined Dark Teal Palette */
+      /* Refined Dark Teal Palette (Default) */
       --bg: #041c1c;
+      --bg-gradient: radial-gradient(circle at top center, #083333, #041c1c);
       --surface: #0a2e2e;
       --card-bg: rgba(13, 54, 54, 0.7);
       --border: rgba(20, 184, 166, 0.2);
@@ -19,19 +20,34 @@
       --shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
     }
 
-    * { box-sizing: border-box; }
+    /* Light Mode Overrides */
+    [data-theme="light"] {
+      --bg: #f0f7f7;
+      --bg-gradient: radial-gradient(circle at top center, #ffffff, #e6eeee);
+      --surface: #ffffff;
+      --card-bg: rgba(255, 255, 255, 0.8);
+      --border: rgba(20, 184, 166, 0.15);
+      --text-main: #132a2a;
+      --text-muted: #5a7a7a;
+      --accent: #0d9488;
+      --accent-glow: rgba(13, 148, 136, 0.1);
+      --shadow: 0 12px 40px rgba(0, 50, 50, 0.1);
+    }
+
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
     body {
       margin: 0;
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
-      /* Subtle radial gradient for depth */
-      background: radial-gradient(circle at top center, #083333, #041c1c);
+      background: var(--bg-gradient);
+      background-color: var(--bg);
       color: var(--text-main);
       min-height: 100vh;
       padding: 40px 20px;
       display: flex;
       justify-content: center;
       line-height: 1.6;
+      transition: background 0.4s ease, color 0.4s ease;
     }
 
     .container {
@@ -49,7 +65,7 @@
     .lead {
       display: flex;
       gap: 24px;
-      align-items: flex-end;
+      align-items: flex-start;
       justify-content: space-between;
       margin-bottom: 32px;
       flex-wrap: wrap;
@@ -60,7 +76,7 @@
       font-weight: 800;
       letter-spacing: -0.5px;
       margin: 0;
-      background: linear-gradient(to right, #ffffff, var(--accent));
+      background: linear-gradient(to right, var(--text-main), var(--accent));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
@@ -72,6 +88,7 @@
       display: flex;
       gap: 16px;
       align-items: flex-end;
+      flex-wrap: wrap;
     }
 
     label { 
@@ -95,13 +112,13 @@
       outline: none;
       cursor: pointer;
       transition: all 0.2s;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     }
 
     select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
 
     button {
-      background: rgba(255,255,255,0.05);
+      background: var(--surface);
       border: 1px solid var(--border);
       padding: 10px 18px;
       border-radius: 10px;
@@ -112,19 +129,19 @@
       transition: all 0.2s;
     }
 
-    button:hover { background: rgba(255,255,255,0.1); border-color: var(--text-muted); }
+    button:hover { border-color: var(--accent); background: var(--accent-glow); }
 
-    .copyBtn {
-      background: var(--accent);
-      color: #041c1c;
-      border: none;
-      font-weight: 700;
+    /* Theme Toggle Switch */
+    .theme-toggle {
+      width: 44px; height: 24px; background: var(--surface); border: 1px solid var(--border);
+      border-radius: 20px; position: relative; cursor: pointer; display: flex; align-items: center;
+      transition: 0.3s;
     }
-
-    .copyBtn:hover {
-      background: #5eead4;
-      transform: translateY(-1px);
+    .theme-toggle::after {
+      content: '🌙'; position: absolute; left: 4px; font-size: 12px;
+      transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
+    [data-theme="light"] .theme-toggle::after { content: '☀️'; left: 24px; }
 
     /* Main Card */
     .card {
@@ -135,23 +152,23 @@
       border-radius: var(--radius);
       box-shadow: var(--shadow);
       overflow: hidden;
+      transition: background 0.4s ease;
     }
 
     .cardHead {
       padding: 24px;
-      background: rgba(0, 0, 0, 0.2);
+      background: rgba(0, 0, 0, 0.05);
       border-bottom: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
-    #cardTitle { font-size: 18px; color: #fff; }
+    #cardTitle { font-size: 18px; color: var(--text-main); }
     .small { font-size: 13px; color: var(--text-muted); }
 
     .cardBody { padding: 32px; }
 
-    /* Pill */
     .pill {
       font-size: 12px;
       font-weight: 700;
@@ -163,7 +180,18 @@
       text-transform: uppercase;
     }
 
-    /* Key Value Grid */
+    .section-heading {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin: 32px 0 16px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--border);
+      display: block;
+    }
+
     .kv {
       display: grid;
       grid-template-columns: 180px 1fr;
@@ -175,6 +203,8 @@
       .kv { grid-template-columns: 1fr; gap: 4px; }
       .cardBody { padding: 20px; }
       select { min-width: 100%; }
+      .lead { flex-direction: column; align-items: stretch; }
+      .selectorWrap { justify-content: space-between; }
     }
 
     .k {
@@ -215,23 +245,29 @@
         <p class="sub">Explore the deep properties of the elemental dataset.</p>
       </div>
 
-      <div class="selectorWrap">
-        <div>
-          <label for="elementSelect">Filter by Element</label>
-          <select id="elementSelect">
-            <option value="">— Select an element —</option>
-          </select>
-        </div>
+      <div style="display: flex; gap: 15px; align-items: center;">
+        <span class="small">Appearance</span>
+        <div class="theme-toggle" id="themeToggle" title="Toggle Mode" role="button" tabindex="0"></div>
+      </div>
+    </header>
 
-        <div style="display:flex;flex-direction:column;gap:10px;align-items:flex-end">
+    <div class="selectorWrap" style="margin-bottom: 32px;">
+      <div>
+        <label for="elementSelect">Filter by Element</label>
+        <select id="elementSelect">
+          <option value="">— Select an element —</option>
+        </select>
+      </div>
+
+      <div style="display:flex; flex: 1; justify-content: flex-end; align-items: flex-end; gap: 10px;">
+        <div style="text-align: right;">
           <span id="statusText" class="small">System Ready</span>
-          <div style="display:flex;gap:10px">
+          <div style="display:flex; gap:10px; margin-top: 8px;">
             <button id="resetBtn">Reset</button>
-            <button id="copyBtn" class="copyBtn">Copy Row</button>
           </div>
         </div>
       </div>
-    </header>
+    </div>
 
     <main class="card">
       <div class="cardHead">
@@ -247,24 +283,37 @@
           Please select an entry from the dropdown to inspect its properties.
         </div>
 
-        <div id="rowContainer" style="display:none">
-          </div>
+        <div id="rowContainer" style="display:none"></div>
       </div>
     </main>
   </div>
 
   <script>
-    const DATA_URL = "./five_elements.json";
+    const DATA_PATH = "five_elements.json";
+    
     const selectEl = document.getElementById("elementSelect");
     const statusText = document.getElementById("statusText");
     const elementPill = document.getElementById("elementPill");
     const emptyState = document.getElementById("emptyState");
     const rowContainer = document.getElementById("rowContainer");
     const resetBtn = document.getElementById("resetBtn");
-    const copyBtn = document.getElementById("copyBtn");
     const subNote = document.getElementById("subNote");
+    const themeToggle = document.getElementById("themeToggle");
 
     let DB = [];
+
+    function initTheme() {
+      const saved = localStorage.getItem("five_elements_theme") || "dark";
+      document.documentElement.setAttribute("data-theme", saved);
+    }
+
+    themeToggle.onclick = (e) => {
+      e.preventDefault();
+      const current = document.documentElement.getAttribute("data-theme");
+      const target = current === "light" ? "dark" : "light";
+      document.documentElement.setAttribute("data-theme", target);
+      localStorage.setItem("five_elements_theme", target);
+    };
 
     function normalizeText(s){
       return String(s ?? "").replace(/\r\n/g,"\n").replace(/\r/g,"\n").trim();
@@ -275,17 +324,38 @@
       statusText.textContent = "Viewing: " + (item.ELEMENT || "—");
       subNote.textContent = "Complete record for " + item.ELEMENT;
 
+      const groupKeys = ["EMOTION", "COLOUR", "TASTE"];
       const keys = Object.keys(item);
-      rowContainer.innerHTML = keys.map((k, idx) => {
+      
+      let html = "";
+      
+      // Render standard keys
+      const mainKeys = keys.filter(k => !groupKeys.includes(k));
+      mainKeys.forEach((k, idx) => {
         const v = normalizeText(item[k]);
-        return `
+        html += `
           <div class="kv ${idx === 0 ? "" : "rowSep"}">
             <div class="k">${escapeHtml(k)}</div>
             <div class="v">${escapeHtml(v || "—")}</div>
           </div>
         `;
-      }).join("");
+      });
 
+      // Group Heading
+      html += `<div class="section-heading">When the element malfunctions</div>`;
+
+      // Grouped keys
+      groupKeys.forEach((k, idx) => {
+        const v = normalizeText(item[k]);
+        html += `
+          <div class="kv ${idx === 0 ? "" : "rowSep"}">
+            <div class="k">${escapeHtml(k)}</div>
+            <div class="v">${escapeHtml(v || "—")}</div>
+          </div>
+        `;
+      });
+
+      rowContainer.innerHTML = html;
       emptyState.style.display = "none";
       rowContainer.style.display = "";
       rowContainer.style.animation = "fadeIn 0.4s ease-out";
@@ -311,9 +381,12 @@
     }
 
     async function init(){
+      initTheme();
       clearSelectionUI();
       try{
-        const res = await fetch(DATA_URL, {cache: "no-store"});
+        const url = new URL(DATA_PATH, window.location.href).href;
+        const res = await fetch(url, {cache: "no-store"});
+        
         if(!res.ok) throw new Error("Failed to fetch JSON ("+res.status+")");
         DB = await res.json();
 
@@ -325,8 +398,8 @@
         });
       }catch(err){
         statusText.textContent = "Connection Error";
-        emptyState.textContent = "Could not synchronize with five_elements.json.";
-        console.error(err);
+        emptyState.textContent = "Could not synchronize with the dataset. Please ensure five_elements.json is present in the same directory.";
+        console.error("Fetch Error:", err);
       }
     }
 
@@ -341,18 +414,9 @@
       renderRow(item);
     });
 
-    resetBtn.addEventListener("click", clearSelectionUI);
-
-    copyBtn.addEventListener("click", async () => {
-      if(rowContainer.style.display === "none") return;
-      try{
-        await navigator.clipboard.writeText(rowContainer.innerText.trim());
-        const originalText = copyBtn.textContent;
-        copyBtn.textContent = "Copied!";
-        setTimeout(()=> copyBtn.textContent = originalText, 1400);
-      }catch(e){
-        console.error("Copy failed", e);
-      }
+    resetBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      clearSelectionUI();
     });
 
     init();
