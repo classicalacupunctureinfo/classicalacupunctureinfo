@@ -1,238 +1,220 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Five Elements — Deep Teal Edition</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Five Elements</title>
 
 <style>
-
-/* ================= THEME SYSTEM ================= */
-:root{
-  --bg:#041c1c;
-  --surface:#0a2e2e;
-  --card-bg:rgba(13,54,54,.7);
-  --border:rgba(20,184,166,.2);
-  --text-main:#e2f1f1;
-  --text-muted:#94b2b2;
-  --accent:#2dd4bf;
-  --accent-glow:rgba(45,212,191,.3);
-  --radius:16px;
-  --shadow:0 12px 40px rgba(0,0,0,.4);
-}
-
-[data-theme="dark"]{
-  --bg:#0b0b0f;
-  --surface:#14141a;
-  --card-bg:rgba(20,20,28,.8);
-  --border:rgba(255,255,255,.08);
-  --text-main:#f1f1f1;
-  --text-muted:#a1a1aa;
-  --accent:#7c7cff;
-  --accent-glow:rgba(124,124,255,.35);
-}
-
-*{box-sizing:border-box;}
-
 body{
   margin:0;
-  font-family:Inter,system-ui,-apple-system,sans-serif;
-  background:radial-gradient(circle at top center,var(--surface),var(--bg));
-  color:var(--text-main);
-  min-height:100vh;
-  padding:40px 20px;
-  display:flex;
-  justify-content:center;
-  line-height:1.6;
-  transition:background .5s ease,color .4s ease;
+  font-family:Arial, sans-serif;
+  background:#071c1f;
+  color:#e9fbff;
+}
+header{
+  padding:16px;
+  text-align:center;
+  font-size:18px;
+  font-weight:bold;
+  background:#0b2b2f;
+  border-bottom:1px solid rgba(255,255,255,.08);
 }
 
-.card,select,button{
-  transition:background .4s ease,border .4s ease,color .4s ease,box-shadow .4s ease;
+/* GRID */
+#grid{
+  padding:14px;
+}
+.tile{
+  background:#0f3a3f;
+  border-radius:16px;
+  padding:18px;
+  margin-bottom:14px;
+  text-align:center;
+  font-size:18px;
+  font-weight:bold;
+  letter-spacing:.4px;
+  border-left:6px solid #36c2c9;
+  box-shadow:0 12px 30px rgba(0,0,0,.35);
 }
 
-.container{width:100%;max-width:900px;animation:fadeIn .6s ease-out;}
-@keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
-
-/* ================= HEADER ================= */
-.lead{display:flex;gap:24px;align-items:flex-end;justify-content:space-between;margin-bottom:32px;flex-wrap:wrap;}
-
-h1{
-  font-size:28px;
-  font-weight:800;
-  margin:0;
-  background:linear-gradient(to right,#fff,var(--accent));
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
+/* DETAIL */
+#detail{
+  display:none;
+  padding:14px;
 }
-
-.sub{margin:4px 0 0;color:var(--text-muted);font-size:14px;}
-.sub strong{color:var(--accent);}
-
-.selectorWrap{display:flex;gap:16px;align-items:flex-end;}
-
-label{
-  font-size:11px;
-  text-transform:uppercase;
-  letter-spacing:1px;
-  color:var(--accent);
-  font-weight:700;
-  margin-bottom:6px;
-  display:block;
-}
-
-select{
-  min-width:260px;
-  padding:12px 16px;
+.back{
+  margin-bottom:12px;
+  padding:12px;
+  text-align:center;
+  background:#123c40;
   border-radius:12px;
-  border:1px solid var(--border);
-  background:var(--surface);
-  color:var(--text-main);
-  font-size:15px;
-  cursor:pointer;
-}
-
-button{
-  background:rgba(255,255,255,.05);
-  border:1px solid var(--border);
-  padding:10px 14px;
-  border-radius:10px;
-  cursor:pointer;
-  color:var(--text-main);
   font-size:13px;
-  font-weight:600;
 }
-
-.copyBtn{background:var(--accent);color:#041c1c;border:none;font-weight:700;}
-.copyBtn:hover{background:#5eead4;}
-
-#themeToggle{font-size:16px}
-
-/* ================= CARD ================= */
 .card{
-  background:var(--card-bg);
-  backdrop-filter:blur(12px);
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-  box-shadow:var(--shadow);
-  overflow:hidden;
+  background:#0f3a3f;
+  border-radius:16px;
+  padding:16px;
+  border-left:6px solid #36c2c9;
 }
-
-.cardHead{
-  padding:24px;
-  background:rgba(0,0,0,.2);
-  border-bottom:1px solid var(--border);
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
+.card h2{
+  margin:0 0 6px;
+  font-size:22px;
 }
-
-.small{font-size:13px;color:var(--text-muted);}
-.pill{
+.season{
   font-size:12px;
-  font-weight:700;
-  padding:6px 14px;
-  border-radius:20px;
-  background:var(--accent-glow);
-  color:var(--accent);
-  border:1px solid var(--accent);
+  opacity:.7;
+  margin-bottom:10px;
+}
+.section{
+  margin-bottom:10px;
+}
+.label{
+  font-size:11px;
+  opacity:.6;
   text-transform:uppercase;
 }
+.value{
+  font-size:13px;
+  line-height:1.45;
+}
 
-.cardBody{padding:32px;}
-.placeholder{text-align:center;padding:40px 0;color:var(--text-muted);font-style:italic;}
-
-.kv{display:grid;grid-template-columns:180px 1fr;gap:12px 24px;}
-.k{color:var(--accent);font-size:11px;font-weight:700;text-transform:uppercase;}
-.v{font-size:16px;white-space:pre-wrap;}
-.rowSep{border-top:1px solid var(--border);padding-top:20px;margin-top:20px;}
-
+/* DYSFUNCTION */
+.dys{
+  margin-top:12px;
+  padding:10px;
+  border:1px dashed rgba(255,255,255,.25);
+  border-radius:12px;
+  background:rgba(255,255,255,.04);
+}
+.dys-title{
+  font-size:12px;
+  font-weight:bold;
+  margin-bottom:6px;
+}
+.badge{
+  display:inline-block;
+  padding:4px 10px;
+  margin:4px 6px 0 0;
+  font-size:11px;
+  border-radius:999px;
+  background:rgba(0,0,0,.35);
+  border:1px solid rgba(255,255,255,.18);
+}
 </style>
 </head>
 
 <body>
-<div class="container">
 
-<header class="lead">
-  <div class="title">
-    <h1>Five Elements</h1>
-    <p class="sub">
-      <strong>When Element Is Dysfunctional</strong> — 
-      How Emotion, Color, and Taste Shift When an Element Falls Out of Balance
-    </p>
-  </div>
+<header>Five Elements</header>
 
-  <div class="selectorWrap">
-    <div>
-      <label>Filter by Element</label>
-      <select id="elementSelect"><option value="">— Select —</option></select>
-    </div>
-    <div style="display:flex;flex-direction:column;gap:10px;align-items:flex-end">
-      <span id="statusText" class="small">System Ready</span>
-      <div style="display:flex;gap:10px">
-        <button id="themeToggle">🌙</button>
-        <button id="resetBtn">Reset</button>
-        <button id="copyBtn" class="copyBtn">Copy Row</button>
-      </div>
-    </div>
-  </div>
-</header>
+<!-- GRID -->
+<div id="grid"></div>
 
-<main class="card">
-  <div class="cardHead">
-    <div>
-      <strong id="cardTitle">Data Inspector</strong>
-      <div class="small" id="subNote">Awaiting selection...</div>
-    </div>
-    <div class="pill" id="elementPill">Standby</div>
-  </div>
-  <div class="cardBody">
-    <div id="emptyState" class="placeholder">Select an element to inspect.</div>
-    <div id="rowContainer" style="display:none"></div>
-  </div>
-</main>
-
+<!-- DETAIL -->
+<div id="detail">
+  <div class="back" onclick="showGrid()">← Back to Elements</div>
+  <div id="detailBox"></div>
 </div>
 
 <script>
-const DATA_URL="./five_elements.json";
-const selectEl=document.getElementById("elementSelect");
-const rowContainer=document.getElementById("rowContainer");
-const emptyState=document.getElementById("emptyState");
-const pill=document.getElementById("elementPill");
-const status=document.getElementById("statusText");
-const sub=document.getElementById("subNote");
-const themeToggle=document.getElementById("themeToggle");
+(function(){
 
-function applyTheme(t){
- document.documentElement.setAttribute("data-theme",t);
- themeToggle.textContent=t==="dark"?"🌊":"🌙";
- localStorage.setItem("theme",t);
-}
-applyTheme(localStorage.getItem("theme")||"teal");
-themeToggle.onclick=()=>applyTheme(document.documentElement.getAttribute("data-theme")==="dark"?"teal":"dark");
+  var elements = [];
 
-fetch(DATA_URL).then(r=>r.json()).then(db=>{
- db.forEach(r=>{
-  const o=document.createElement("option");
-  o.textContent=o.value=r.ELEMENT;
-  selectEl.appendChild(o);
- });
- selectEl.onchange=()=>{
-  const i=db.find(x=>x.ELEMENT===selectEl.value);
-  if(!i)return;
-  pill.textContent=i.ELEMENT;
-  status.textContent="Viewing "+i.ELEMENT;
-  sub.textContent="Complete record for "+i.ELEMENT;
-  rowContainer.innerHTML=Object.entries(i).map(([k,v],n)=>`
-   <div class="kv ${n?"rowSep":""}">
-     <div class="k">${k}</div>
-     <div class="v">${v}</div>
-   </div>`).join("");
-  emptyState.style.display="none";
-  rowContainer.style.display="";
- }
-});
+  /* ===== LOAD JSON (OLD ANDROID SAFE) ===== */
+  var xhr = new XMLHttpRequest();
+  xhr.open("GET", "five_elements.json", true);
+  xhr.onreadystatechange = function(){
+    if(xhr.readyState === 4){
+      if(xhr.status === 200){
+        elements = JSON.parse(xhr.responseText);
+        buildGrid();
+      }else{
+        alert("Unable to load five_elements.json");
+      }
+    }
+  };
+  xhr.send(null);
+
+  function buildGrid(){
+    var grid = document.getElementById("grid");
+    grid.innerHTML = "";
+
+    for(var i=0;i<elements.length;i++){
+      (function(i){
+        var e = elements[i];
+        var tile = document.createElement("div");
+        tile.className = "tile";
+        tile.style.borderLeftColor = e.COLOUR.toLowerCase();
+        tile.innerHTML = e.ELEMENT;
+        tile.onclick = function(){
+          showDetail(i);
+        };
+        grid.appendChild(tile);
+      })(i);
+    }
+  }
+
+  window.showDetail = function(i){
+    document.getElementById("grid").style.display = "none";
+    document.getElementById("detail").style.display = "block";
+
+    var e = elements[i];
+    document.getElementById("detailBox").innerHTML =
+      "<div class='card' style='border-left-color:"+e.COLOUR.toLowerCase()+"'>" +
+        "<h2>"+e.ELEMENT+"</h2>" +
+        "<div class='season'>"+e.SEASON+"</div>" +
+        section("Internal Organs", e["INTERNAL  ORGAN"]) +
+        section("External Organ", e["EXTERNAL  ORGAN"]) +
+        section("Provides Energy", e["PROVIDES ENERGY"]) +
+        section("Maintains", e.MAINTAINS) +
+        section("Functions", e["VARIOUS FUNCTIONS"]) +
+        dysfunction(e) +
+      "</div>";
+  };
+
+  window.showGrid = function(){
+    document.getElementById("detail").style.display = "none";
+    document.getElementById("grid").style.display = "block";
+  };
+
+  function section(label, text){
+    return "<div class='section'><div class='label'>"+label+"</div><div class='value'>"+fmt(text)+"</div></div>";
+  }
+
+  function fmt(text){
+    var parts = text.split("\n");
+    var out = [];
+    for(var i=0;i<parts.length;i++){
+      var t = parts[i].replace("•","").trim();
+      if(t){ out.push(t); }
+    }
+    return out.join(", ");
+  }
+
+  function dysfunction(e){
+    var h="<div class='dys'><div class='dys-title'>When Element Is Dysfunctional</div>";
+    h+="<span class='badge'>Colour: "+e.COLOUR+"</span>";
+    h+=badges("Taste",e.TASTE);
+    h+=badges("Emotion",e.EMOTION);
+    h+="</div>";
+    return h;
+  }
+
+  function badges(label, text){
+    var p=text.split("\n"),o="";
+    for(var i=0;i<p.length;i++){
+      var t=p[i].trim();
+      if(t){
+        o+="<span class='badge'>"+label+": "+t+"</span>";
+      }
+    }
+    return o;
+  }
+
+})();
 </script>
+
 </body>
 </html>
