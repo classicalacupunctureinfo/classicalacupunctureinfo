@@ -2,7 +2,7 @@ The pericardium channel Beginning at a distance of 1.0 cun from the edge of the 
 Total points in the meridian -9
 Five elements points are 
 PC9 WOOD
-PC8 FIRE 
+PC8 FIRE -OWN POINT
 PC7 EARTH 
 PC5 AIR 
 PC3 WATER
