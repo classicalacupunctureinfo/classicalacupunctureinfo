@@ -1,119 +1,143 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-<title>Menu</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+
+<title>Classical Acupuncture</title>
 
 <style>
 
-:root {
---bg1:#071c1f;
---bg2:#0b2b2f;
+:root{
+--bg:#071c1f;
 --card:#0f3a3f;
---card2:#0b3035;
 --text:#e9fbff;
---muted:#a7d3dc;
+--muted:#9cc;
 --accent:#36c2c9;
---shadow:0 18px 50px rgba(0,0,0,.35);
---border:rgba(255,255,255,.10);
 --radius:18px;
-}
-
-[data-theme="light"]{
---bg1:#f0f7f7;
---bg2:#e6eeee;
---card:#ffffff;
---card2:#f9fdfd;
---text:#132a2a;
---muted:#5a7a7a;
---accent:#0d9488;
---border:rgba(13,148,136,.15);
---shadow:0 12px 40px rgba(0,50,50,.1);
 }
 
 *{box-sizing:border-box}
 
 body{
 margin:0;
-min-height:100vh;
+height:100vh;
+background:var(--bg);
 font-family:system-ui;
 color:var(--text);
-background:linear-gradient(160deg,var(--bg1),var(--bg2));
+overflow:hidden;
+}
+
+/* LOGIN */
+
+#login{
+position:fixed;
+inset:0;
+background:linear-gradient(160deg,#071c1f,#0b2b2f);
 display:flex;
 align-items:center;
 justify-content:center;
+padding:20px;
+z-index:9999;
 }
 
-.hidden{display:none}
-
-.login{
+.login-card{
 background:var(--card);
-padding:30px;
-border-radius:16px;
-width:300px;
-box-shadow:var(--shadow);
+padding:28px;
+border-radius:20px;
+width:100%;
+max-width:360px;
+box-shadow:0 20px 60px #000;
+}
+
+.login-card h2{
+margin:0 0 18px;
 text-align:center;
 }
 
-.login input{
+.login-card input{
 width:100%;
-padding:10px;
-margin:10px 0;
-border-radius:10px;
+padding:14px;
+margin-bottom:12px;
 border:none;
+border-radius:12px;
+font-size:16px;
 }
 
-.login button{
+.login-card button{
 width:100%;
-padding:10px;
+padding:14px;
 border:none;
-border-radius:10px;
+border-radius:12px;
 background:var(--accent);
-color:white;
 font-weight:700;
-cursor:pointer;
+font-size:16px;
 }
 
-.wrap{
-width:min(860px,100%);
-display:grid;
-gap:18px;
+#error{
+text-align:center;
+color:#ff8b8b;
+margin-top:10px;
+}
+
+/* APP */
+
+#app{
+display:none;
+height:100vh;
+padding:16px;
 }
 
 .panel{
+height:100%;
 background:var(--card);
-border-radius:18px;
-box-shadow:var(--shadow);
-overflow:hidden;
+border-radius:20px;
+display:flex;
+flex-direction:column;
 }
 
 .header{
 padding:18px;
-display:flex;
-justify-content:space-between;
 }
 
 .grid{
+flex:1;
 display:grid;
-grid-template-columns:repeat(2,1fr);
+grid-template-columns:1fr;
 gap:14px;
-padding:18px;
+padding:14px;
 }
 
 .btn{
-background:var(--card2);
+background:#0b3035;
 border:none;
-color:var(--text);
 border-radius:16px;
-padding:16px;
-cursor:pointer;
+padding:18px;
 text-align:left;
+color:white;
+font-size:16px;
+min-height:80px;
 }
 
-@media(max-width:640px){
-.grid{grid-template-columns:1fr}
+.footer{
+padding:12px;
+text-align:center;
+font-size:13px;
+color:var(--muted);
+}
+
+.logout{
+position:absolute;
+top:10px;
+right:10px;
+background:none;
+border:none;
+color:#aaa;
+}
+
+@media(min-width:700px){
+.grid{grid-template-columns:1fr 1fr}
 }
 
 </style>
@@ -121,54 +145,60 @@ text-align:left;
 
 <body>
 
-<!-- LOGIN SCREEN -->
-<div class="login" id="loginBox">
-<h3>Login</h3>
-<input id="user" placeholder="Username">
+<!-- LOGIN -->
+
+<div id="login">
+<div class="login-card">
+<h2>Classical Acupuncture</h2>
+
+<input id="user" placeholder="Username" autocomplete="off">
 <input id="pass" type="password" placeholder="Password">
-<button onclick="login()">Enter</button>
-<p id="err" style="color:red"></p>
+
+<button onclick="login()">LOGIN</button>
+
+<div id="error"></div>
+</div>
 </div>
 
-<!-- MAIN APP -->
-<main class="wrap hidden" id="app">
+<!-- APP -->
 
-<section class="panel">
+<div id="app">
+
+<button class="logout" onclick="logout()">Logout</button>
+
+<div class="panel">
 
 <div class="header">
-<div>
-<h2>Classical Acupuncture Info</h2>
-<p>Choose a module.</p>
-</div>
+<h3>Dashboard</h3>
 </div>
 
 <div class="grid">
 
 <button class="btn" onclick="location.href='connecting_points.html'">
-<b>Connecting Points</b><br>
-Cross reference
+<b>Connecting Points</b><br>Cross reference
 </button>
 
 <button class="btn" onclick="location.href='5elements.html'">
-<b>Five Elements</b><br>
-Dashboard
+<b>Five Elements</b><br>Dashboard
 </button>
 
 <button class="btn" onclick="location.href='meridian.html'">
-<b>Meridian</b><br>
-Meridian page
+<b>Meridian</b><br>Meridian page
 </button>
 
 <button class="btn" onclick="location.href='misc.html'">
-<b>Misc</b><br>
-Extra tools
+<b>Miscellaneous</b><br>Extra tools
 </button>
 
 </div>
 
-</section>
+<div class="footer">
+Classical Acupuncture Info
+</div>
 
-</main>
+</div>
+
+</div>
 
 <script>
 
@@ -176,22 +206,37 @@ const USER="classicalacupunctureinfo";
 const PASS="CAinfo@60";
 
 function login(){
-let u=document.getElementById("user").value;
-let p=document.getElementById("pass").value;
 
-if(u===USER && p===PASS){
-localStorage.setItem("logged","1");
-document.getElementById("loginBox").style.display="none";
-document.getElementById("app").classList.remove("hidden");
+if(
+document.getElementById("user").value===USER &&
+document.getElementById("pass").value===PASS
+){
+localStorage.setItem("auth","1");
+showApp();
 }else{
-document.getElementById("err").innerText="Invalid login";
+document.getElementById("error").innerText="Invalid login";
 }
 }
 
-if(localStorage.getItem("logged")==="1"){
-document.getElementById("loginBox").style.display="none";
-document.getElementById("app").classList.remove("hidden");
+function showApp(){
+document.getElementById("login").style.display="none";
+document.getElementById("app").style.display="block";
 }
+
+function logout(){
+localStorage.removeItem("auth");
+location.reload();
+}
+
+if(localStorage.getItem("auth")==="1"){
+showApp();
+}
+
+document.getElementById("user").focus();
+
+document.addEventListener("keydown",e=>{
+if(e.key==="Enter")login();
+});
 
 </script>
 
