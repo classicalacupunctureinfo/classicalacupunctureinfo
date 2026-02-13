@@ -1,244 +1,263 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Menu</title>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+  <style>
+    :root {
+      /* Dark Theme (Default) */
+      --bg1: #071c1f;
+      --bg2: #0b2b2f;
+      --card: #0f3a3f;
+      --card2: #0b3035;
+      --text: #e9fbff;
+      --muted: #a7d3dc;
+      --accent: #36c2c9;
+      --shadow: 0 18px 50px rgba(0,0,0,.35);
+      --border: rgba(255,255,255,.10);
+      --radius: 18px;
+    }
 
-<title>Classical Acupuncture</title>
+    /* Light Theme Overrides */
+    [data-theme="light"] {
+      --bg1: #f0f7f7;
+      --bg2: #e6eeee;
+      --card: #ffffff;
+      --card2: #f9fdfd;
+      --text: #132a2a;
+      --muted: #5a7a7a;
+      --accent: #0d9488;
+      --border: rgba(13, 148, 136, 0.15);
+      --shadow: 0 12px 40px rgba(0, 50, 50, 0.1);
+    }
 
-<style>
+    * { box-sizing: border-box; }
+    
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue";
+      color: var(--text);
+      background:
+        radial-gradient(900px 500px at 20% 20%, rgba(54,194,201,.18), transparent 55%),
+        radial-gradient(900px 500px at 80% 30%, rgba(255,255,255,.08), transparent 60%),
+        linear-gradient(160deg, var(--bg1), var(--bg2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 22px;
+      transition: background 0.4s ease, color 0.4s ease;
+    }
 
-:root{
---bg:#071c1f;
---card:#0f3a3f;
---text:#e9fbff;
---muted:#9cc;
---accent:#36c2c9;
---radius:18px;
-}
+    .wrap {
+      width: min(860px, 100%);
+      display: grid;
+      gap: 18px;
+    }
 
-*{box-sizing:border-box}
+    .header {
+      padding: 18px 18px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
 
-body{
-margin:0;
-height:100vh;
-background:var(--bg);
-font-family:system-ui;
-color:var(--text);
-overflow:hidden;
-}
+    .title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: .2px;
+      margin: 0 0 6px;
+    }
 
-/* LOGIN */
+    .subtitle {
+      margin: 0;
+      color: var(--muted);
+      font-size: .95rem;
+      line-height: 1.35;
+    }
 
-#login{
-position:fixed;
-inset:0;
-background:linear-gradient(160deg,#071c1f,#0b2b2f);
-display:flex;
-align-items:center;
-justify-content:center;
-padding:20px;
-z-index:9999;
-}
+    .panel {
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
 
-.login-card{
-background:var(--card);
-padding:28px;
-border-radius:20px;
-width:100%;
-max-width:360px;
-box-shadow:0 20px 60px #000;
-}
+    [data-theme="light"] .panel {
+      background: rgba(255, 255, 255, 0.8);
+    }
 
-.login-card h2{
-margin:0 0 18px;
-text-align:center;
-}
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      padding: 18px;
+      background: linear-gradient(180deg, rgba(0,0,0,.10), rgba(0,0,0,.18));
+    }
 
-.login-card input{
-width:100%;
-padding:14px;
-margin-bottom:12px;
-border:none;
-border-radius:12px;
-font-size:16px;
-}
+    [data-theme="light"] .grid {
+      background: rgba(0, 0, 0, 0.02);
+    }
 
-.login-card button{
-width:100%;
-padding:14px;
-border:none;
-border-radius:12px;
-background:var(--accent);
-font-weight:700;
-font-size:16px;
-}
+    .btn {
+      appearance: none;
+      border: 1px solid rgba(255,255,255,.12);
+      background: linear-gradient(180deg, rgba(15,58,63,.95), rgba(11,48,53,.95));
+      color: var(--text);
+      border-radius: 16px;
+      padding: 16px 16px;
+      text-align: left;
+      cursor: pointer;
+      transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease, background 0.3s;
+      box-shadow: 0 10px 24px rgba(0,0,0,.25);
+      position: relative;
+      overflow: hidden;
+      min-height: 86px;
+    }
 
-#error{
-text-align:center;
-color:#ff8b8b;
-margin-top:10px;
-}
+    [data-theme="light"] .btn {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
 
-/* APP */
+    .btn:hover {
+      transform: translateY(-2px);
+      border-color: rgba(54,194,201,.35);
+      box-shadow: 0 16px 36px rgba(0,0,0,.35);
+    }
 
-#app{
-display:none;
-height:100vh;
-padding:16px;
-}
+    .btn-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 6px;
+    }
 
-.panel{
-height:100%;
-background:var(--card);
-border-radius:20px;
-display:flex;
-flex-direction:column;
-}
+    .btn-title {
+      font-weight: 700;
+      font-size: 1.02rem;
+      margin: 0;
+    }
 
-.header{
-padding:18px;
-}
+    .chip {
+      font-size: .78rem;
+      color: var(--text);
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.1);
+      white-space: nowrap;
+    }
 
-.grid{
-flex:1;
-display:grid;
-grid-template-columns:1fr;
-gap:14px;
-padding:14px;
-}
+    .btn-desc {
+      margin: 0;
+      color: var(--muted);
+      font-size: .92rem;
+      line-height: 1.35;
+    }
 
-.btn{
-background:#0b3035;
-border:none;
-border-radius:16px;
-padding:18px;
-text-align:left;
-color:white;
-font-size:16px;
-min-height:80px;
-}
+    /* Theme Toggle Switch */
+    .theme-toggle {
+      width: 44px; height: 24px; background: rgba(0,0,0,0.2); border: 1px solid var(--border);
+      border-radius: 20px; position: relative; cursor: pointer; display: flex; align-items: center;
+      transition: 0.3s; flex-shrink: 0;
+    }
+    .theme-toggle::after {
+      content: '🌙'; position: absolute; left: 4px; font-size: 12px;
+      transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    [data-theme="light"] .theme-toggle::after { content: '☀️'; left: 24px; }
+    [data-theme="light"] .theme-toggle { background: #fff; }
 
-.footer{
-padding:12px;
-text-align:center;
-font-size:13px;
-color:var(--muted);
-}
+    .footer {
+      padding: 16px 18px;
+      color: var(--muted);
+      font-size: .85rem;
+    }
 
-.logout{
-position:absolute;
-top:10px;
-right:10px;
-background:none;
-border:none;
-color:#aaa;
-}
+    .divider { height: 1px; background: var(--border); }
 
-@media(min-width:700px){
-.grid{grid-template-columns:1fr 1fr}
-}
-
-</style>
+    @media (max-width: 640px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
-
 <body>
+  <main class="wrap">
+    <section class="panel">
+      <div class="header">
+        <div>
+          <h1 class="title">Classical Acupuncture Info</h1>
+          <p class="subtitle">Choose a module to continue.</p>
+        </div>
+        <div class="theme-toggle" id="themeToggle" title="Toggle Appearance"></div>
+      </div>
 
-<!-- LOGIN -->
+      <div class="divider"></div>
 
-<div id="login">
-<div class="login-card">
-<h2>Classical Acupuncture</h2>
+      <div class="grid">
+        <button class="btn" onclick="window.location.href='connecting_points.html'">
+          <div class="btn-top">
+            <p class="btn-title">Connecting Points</p>
+            <span class="chip">Open</span>
+          </div>
+          <p class="btn-desc">Cross-reference selection and view connection output.</p>
+        </button>
 
-<input id="user" placeholder="Username" autocomplete="off">
-<input id="pass" type="password" placeholder="Password">
+        <button class="btn" onclick="window.location.href='5elements.html'">
+          <div class="btn-top">
+            <p class="btn-title">Five Element Characteristics</p>
+            <span class="chip">5 Elements</span>
+          </div>
+          <p class="btn-desc">Five elements Dashboard.</p>
+        </button>
 
-<button onclick="login()">LOGIN</button>
+        <button class="btn" onclick="window.location.href='meridian.html'">
+          <div class="btn-top">
+            <p class="btn-title">Acupuncture Meridian</p>
+            <span class="chip">Meridian</span>
+          </div>
+          <p class="btn-desc">Meridian page.</p>
+        </button>
 
-<div id="error"></div>
-</div>
-</div>
+        <button class="btn" onclick="window.location.href='misc.html'">
+          <div class="btn-top">
+            <p class="btn-title">Miscellaneous</p>
+            <span class="chip">Open</span>
+          </div>
+          <p class="btn-desc">Extra tools and reference pages.</p>
+        </button>
+      </div>
 
-<!-- APP -->
+      <div class="footer">
+        Tip: Explore the visual traits and clinical associations of the systems.
+      </div>
+    </section>
+  </main>
 
-<div id="app">
+  <script>
+    const themeToggle = document.getElementById("themeToggle");
 
-<button class="logout" onclick="logout()">Logout</button>
+    function initTheme() {
+      const saved = localStorage.getItem("five_elements_theme") || "dark";
+      document.documentElement.setAttribute("data-theme", saved);
+    }
 
-<div class="panel">
+    themeToggle.onclick = () => {
+      const current = document.documentElement.getAttribute("data-theme");
+      const target = current === "light" ? "dark" : "light";
+      document.documentElement.setAttribute("data-theme", target);
+      localStorage.setItem("five_elements_theme", target);
+    };
 
-<div class="header">
-<h3>Dashboard</h3>
-</div>
-
-<div class="grid">
-
-<button class="btn" onclick="location.href='connecting_points.html'">
-<b>Connecting Points</b><br>Cross reference
-</button>
-
-<button class="btn" onclick="location.href='5elements.html'">
-<b>Five Elements</b><br>Dashboard
-</button>
-
-<button class="btn" onclick="location.href='meridian.html'">
-<b>Meridian</b><br>Meridian page
-</button>
-
-<button class="btn" onclick="location.href='misc.html'">
-<b>Miscellaneous</b><br>Extra tools
-</button>
-
-</div>
-
-<div class="footer">
-Classical Acupuncture Info
-</div>
-
-</div>
-
-</div>
-
-<script>
-
-const USER="classicalacupunctureinfo";
-const PASS="CAinfo@60";
-
-function login(){
-
-if(
-document.getElementById("user").value===USER &&
-document.getElementById("pass").value===PASS
-){
-localStorage.setItem("auth","1");
-showApp();
-}else{
-document.getElementById("error").innerText="Invalid login";
-}
-}
-
-function showApp(){
-document.getElementById("login").style.display="none";
-document.getElementById("app").style.display="block";
-}
-
-function logout(){
-localStorage.removeItem("auth");
-location.reload();
-}
-
-if(localStorage.getItem("auth")==="1"){
-showApp();
-}
-
-document.getElementById("user").focus();
-
-document.addEventListener("keydown",e=>{
-if(e.key==="Enter")login();
-});
-
-</script>
-
+    initTheme();
+  </script>
 </body>
 </html>
