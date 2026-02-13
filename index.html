@@ -1,204 +1,197 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CA Info Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dashboard</title>
     <style>
+        /* Base Theme - Light Teal & Dark Teal */
         :root {
-            /* Light Theme Palette */
-            --bg-color: #e0f2f1; /* Light Teal Bg */
-            --card-bg: #ffffff;
-            --primary-teal: #004d40; /* Dark Teal */
-            --text-color: #00241f;
-            --input-bg: #ffffff;
-            --button-text: #ffffff;
-            --shadow: rgba(0, 77, 64, 0.15);
+            --bg: #b2dfdb;       /* Light Teal */
+            --card: #ffffff;
+            --primary: #004d40;  /* Dark Teal */
+            --text: #00241f;
         }
 
         [data-theme="dark"] {
-            /* Dark Theme Palette */
-            --bg-color: #00241f;
-            --card-bg: #004d40;
-            --primary-teal: #4db6ac; /* Light Teal accents */
-            --text-color: #e0f2f1;
-            --input-bg: #00332c;
-            --button-text: #00241f;
-            --shadow: rgba(0, 0, 0, 0.4);
+            --bg: #00241f;
+            --card: #004d40;
+            --primary: #4db6ac;
+            --text: #e0f2f1;
         }
 
         body {
-            font-family: 'Roboto', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            font-family: sans-serif; /* High compatibility */
+            background-color: var(--bg);
+            color: var(--text);
             margin: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            transition: all 0.3s ease;
-        }
-
-        /* Night Mode Toggle */
-        .theme-switch {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            cursor: pointer;
-            padding: 8px 15px;
-            background: var(--primary-teal);
-            color: var(--button-text);
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-            border: none;
-            box-shadow: 0 4px 6px var(--shadow);
-        }
-
-        /* Cards & UI */
-        .container {
-            width: 90%;
-            max-width: 450px;
+            padding: 0;
             text-align: center;
         }
 
-        .card {
-            background: var(--card-bg);
-            padding: 2.5rem;
-            border-radius: 24px;
-            box-shadow: 0 15px 35px var(--shadow);
+        /* Night Mode Toggle - Fixed Top Right */
+        #theme-toggle {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 10px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 12px;
+            z-index: 100;
         }
 
-        h2 { margin-bottom: 1.5rem; font-weight: 500; }
+        .wrapper {
+            padding: 20px;
+            margin-top: 50px;
+        }
+
+        /* Login Box */
+        .login-box {
+            background: var(--card);
+            padding: 30px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            display: inline-block;
+            width: 85%;
+            max-width: 320px;
+        }
 
         input[type="password"] {
+            width: 90%;
+            padding: 15px 5%;
+            margin-bottom: 20px;
+            border: 2px solid var(--primary);
+            font-size: 18px; /* Prevents auto-zoom on iOS/Android */
+            border-radius: 4px;
+        }
+
+        /* The Grid - Old School Layout for Webview */
+        .grid-container {
+            display: none; /* Hidden until login */
             width: 100%;
-            padding: 14px;
-            margin: 15px 0;
-            border: 2px solid var(--primary-teal);
-            border-radius: 12px;
-            background: var(--input-bg);
-            color: var(--text-color);
-            font-size: 16px;
-            outline: none;
+            max-width: 500px;
+            margin: 0 auto;
         }
 
-        .btn-main {
+        .grid-row {
             width: 100%;
-            padding: 14px;
-            background-color: var(--primary-teal);
-            color: var(--button-text);
-            border: none;
+            display: block;
+            clear: both;
+            margin-bottom: 15px;
+        }
+
+        .btn-box {
+            width: 45%;
+            margin: 2.5%;
+            float: left;
+            background: var(--primary);
+            height: 120px;
             border-radius: 12px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 500;
-            transition: opacity 0.2s, transform 0.1s;
-        }
-
-        .btn-main:active { transform: scale(0.98); }
-
-        /* Dashboard Grid */
-        #dashboard {
-            display: none;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-
-        .menu-item {
-            aspect-ratio: 1/1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--card-bg);
-            border: 2px solid var(--primary-teal);
-            border-radius: 20px;
+            display: table; /* Vertical centering for old browsers */
             text-decoration: none;
-            color: var(--text-color);
-            font-weight: 500;
+            color: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        .btn-box span {
+            display: table-cell;
+            vertical-align: middle;
+            font-weight: bold;
+            font-size: 14px;
             padding: 10px;
-            text-align: center;
-            box-shadow: 0 4px 10px var(--shadow);
-            transition: transform 0.2s;
         }
 
-        .menu-item:hover { transform: translateY(-5px); }
-
-        .hidden { display: none !important; }
-
-        @media (max-width: 400px) {
-            #dashboard { grid-template-columns: 1fr; }
-            .menu-item { aspect-ratio: 4/1; }
+        .login-btn {
+            background: var(--primary);
+            color: white;
+            padding: 15px;
+            width: 100%;
+            border: none;
+            font-weight: bold;
+            border-radius: 4px;
         }
+
+        /* Clearfix for the float grid */
+        .grid-row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        .hidden { display: none; }
     </style>
 </head>
-<body>
+<body onload="init()">
 
-    <button class="theme-switch" onclick="toggleTheme()" id="theme-toggle">NIGHT MODE</button>
+    <button id="theme-toggle" onclick="toggleTheme()">TOGGLE THEME</button>
 
-    <div class="container">
-        <div id="login-view" class="card">
-            <h2>Welcome</h2>
-            <input type="password" id="password" placeholder="Enter Password">
-            <button class="btn-main" onclick="handleLogin()">LOGIN</button>
+    <div class="wrapper">
+        <div id="login-screen" class="login-box">
+            <h2 style="margin-top:0">Sign In</h2>
+            <input type="password" id="passInput" placeholder="Password">
+            <button class="login-btn" onclick="validate()">LOGIN</button>
         </div>
 
-        <div id="dashboard">
-            <a href="5elements.html" class="menu-item">Five Elements</a>
-            <a href="connecting_points.html" class="menu-item">Connecting Points</a>
-            <a href="meridian.html" class="menu-item">Meridian</a>
-            <a href="misc.html" class="menu-item">Miscellaneous</a>
-            <button class="btn-main" onclick="logout()" style="grid-column: span 2; margin-top: 20px; background: transparent; color: var(--primary-teal); border: 1px solid var(--primary-teal);">LOGOUT</button>
+        <div id="dashboard" class="grid-container">
+            <div class="grid-row">
+                <a href="5elements.html" class="btn-box"><span>Five Elements</span></a>
+                <a href="connecting_points.html" class="btn-box"><span>Connecting Points</span></a>
+            </div>
+            <div class="grid-row">
+                <a href="meridian.html" class="btn-box"><span>Meridian</span></a>
+                <a href="misc.html" class="btn-box"><span>Miscellaneous</span></a>
+            </div>
+            <div class="grid-row" style="margin-top: 30px;">
+                <button onclick="logout()" style="background:none; border:1px solid var(--primary); color:var(--primary); padding:10px; border-radius:5px;">Logout</button>
+            </div>
         </div>
     </div>
 
-    <script>
-        // --- Persistence Logic ---
-        window.onload = function() {
+    <script type="text/javascript">
+        // Using basic JS for older Android Webview compatibility
+        function init() {
             // Check Theme
-            if (localStorage.getItem('theme') === 'dark') {
-                document.documentElement.setAttribute('data-theme', 'dark');
-                document.getElementById('theme-toggle').innerText = 'LIGHT MODE';
+            if (localStorage.getItem('mode') === 'dark') {
+                document.body.setAttribute('data-theme', 'dark');
             }
-            // Check Login Status
-            if (localStorage.getItem('isLoggedIn') === 'true') {
-                showDashboard();
-            }
-        };
-
-        function handleLogin() {
-            const pass = document.getElementById('password').value;
-            if (pass === "CAinfo@60") {
-                localStorage.setItem('isLoggedIn', 'true');
-                showDashboard();
-            } else {
-                alert("Wrong password!");
+            // Check Session
+            if (localStorage.getItem('auth') === 'true') {
+                showMenu();
             }
         }
 
-        function showDashboard() {
-            document.getElementById('login-view').classList.add('hidden');
-            document.getElementById('dashboard').style.display = 'grid';
+        function validate() {
+            var val = document.getElementById('passInput').value;
+            // Manual string check
+            if (val === "CAinfo@60") {
+                localStorage.setItem('auth', 'true');
+                showMenu();
+            } else {
+                alert("Incorrect Password");
+            }
+        }
+
+        function showMenu() {
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
         }
 
         function logout() {
-            localStorage.removeItem('isLoggedIn');
-            location.reload();
+            localStorage.removeItem('auth');
+            window.location.reload();
         }
 
-        // --- Theme Logic ---
         function toggleTheme() {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            if (currentTheme === 'dark') {
-                document.documentElement.setAttribute('data-theme', 'light');
-                localStorage.setItem('theme', 'light');
-                document.getElementById('theme-toggle').innerText = 'NIGHT MODE';
+            var current = document.body.getAttribute('data-theme');
+            if (current === 'dark') {
+                document.body.removeAttribute('data-theme');
+                localStorage.setItem('mode', 'light');
             } else {
-                document.documentElement.setAttribute('data-theme', 'dark');
-                localStorage.setItem('theme', 'dark');
-                document.getElementById('theme-toggle').innerText = 'LIGHT MODE';
+                document.body.setAttribute('data-theme', 'dark');
+                localStorage.setItem('mode', 'dark');
             }
         }
     </script>
