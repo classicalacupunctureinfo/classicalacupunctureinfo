@@ -1,245 +1,263 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CA Info Hub</title>
-    <style>
-        :root {
-            --bg: #e0f2f1;
-            --surface: #ffffff;
-            --primary: #004d40;
-            --accent: #00796b;
-            --text: #00241f;
-            --shadow: rgba(0, 77, 64, 0.12);
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Menu</title>
 
-        [data-theme="dark"] {
-            --bg: #00241f;
-            --surface: #00332c;
-            --primary: #4db6ac;
-            --accent: #80cbc4;
-            --text: #e0f2f1;
-            --shadow: rgba(0, 0, 0, 0.4);
-        }
+  <style>
+    :root {
+      /* Dark Theme (Default) */
+      --bg1: #071c1f;
+      --bg2: #0b2b2f;
+      --card: #0f3a3f;
+      --card2: #0b3035;
+      --text: #e9fbff;
+      --muted: #a7d3dc;
+      --accent: #36c2c9;
+      --shadow: 0 18px 50px rgba(0,0,0,.35);
+      --border: rgba(255,255,255,.10);
+      --radius: 18px;
+    }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            transition: background 0.3s ease;
-        }
+    /* Light Theme Overrides */
+    [data-theme="light"] {
+      --bg1: #f0f7f7;
+      --bg2: #e6eeee;
+      --card: #ffffff;
+      --card2: #f9fdfd;
+      --text: #132a2a;
+      --muted: #5a7a7a;
+      --accent: #0d9488;
+      --border: rgba(13, 148, 136, 0.15);
+      --shadow: 0 12px 40px rgba(0, 50, 50, 0.1);
+    }
 
-        /* Modern Toggle */
-        .top-bar {
-            width: 100%;
-            padding: 15px;
-            display: flex;
-            justify-content: flex-end;
-            box-sizing: border-box;
-        }
+    * { box-sizing: border-box; }
+    
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue";
+      color: var(--text);
+      background:
+        radial-gradient(900px 500px at 20% 20%, rgba(54,194,201,.18), transparent 55%),
+        radial-gradient(900px 500px at 80% 30%, rgba(255,255,255,.08), transparent 60%),
+        linear-gradient(160deg, var(--bg1), var(--bg2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 22px;
+      transition: background 0.4s ease, color 0.4s ease;
+    }
 
-        #theme-btn {
-            background: var(--surface);
-            border: 1px solid var(--primary);
-            color: var(--primary);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: bold;
-            letter-spacing: 1px;
-            cursor: pointer;
-        }
+    .wrap {
+      width: min(860px, 100%);
+      display: grid;
+      gap: 18px;
+    }
 
-        .main-container {
-            width: 100%;
-            max-width: 400px;
-            padding: 20px;
-            box-sizing: border-box;
-            text-align: center;
-        }
+    .header {
+      padding: 18px 18px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
 
-        /* Glassmorphism Card */
-        .card {
-            background: var(--surface);
-            padding: 30px 20px;
-            border-radius: 24px;
-            box-shadow: 0 10px 30px var(--shadow);
-            margin-top: 20px;
-        }
+    .title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: .2px;
+      margin: 0 0 6px;
+    }
 
-        h1 { font-size: 24px; margin-bottom: 25px; font-weight: 300; }
+    .subtitle {
+      margin: 0;
+      color: var(--muted);
+      font-size: .95rem;
+      line-height: 1.35;
+    }
 
-        input[type="password"] {
-            width: 100%;
-            padding: 16px;
-            margin-bottom: 20px;
-            border: 1.5px solid #cfd8dc;
-            border-radius: 12px;
-            background: var(--bg);
-            color: var(--text);
-            font-size: 16px;
-            box-sizing: border-box;
-            outline: none;
-        }
+    .panel {
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
 
-        .btn-prime {
-            width: 100%;
-            padding: 16px;
-            background: var(--primary);
-            color: var(--bg);
-            border: none;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 16px;
-            box-shadow: 0 4px 12px var(--shadow);
-        }
+    [data-theme="light"] .panel {
+      background: rgba(255, 255, 255, 0.8);
+    }
 
-        /* Legacy-Compatible Grid */
-        #dashboard {
-            display: none;
-            width: 100%;
-            overflow: hidden;
-        }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      padding: 18px;
+      background: linear-gradient(180deg, rgba(0,0,0,.10), rgba(0,0,0,.18));
+    }
 
-        .menu-row {
-            width: 100%;
-            display: block;
-            margin-bottom: 15px;
-        }
+    [data-theme="light"] .grid {
+      background: rgba(0, 0, 0, 0.02);
+    }
 
-        .menu-item {
-            width: 46%;
-            margin: 2%;
-            float: left;
-            background: var(--surface);
-            height: 130px;
-            border-radius: 20px;
-            display: table;
-            text-decoration: none;
-            color: var(--text);
-            box-shadow: 0 6px 15px var(--shadow);
-            border: 1px solid rgba(128, 203, 196, 0.2);
-            box-sizing: border-box;
-            transition: transform 0.2s;
-        }
+    .btn {
+      appearance: none;
+      border: 1px solid rgba(255,255,255,.12);
+      background: linear-gradient(180deg, rgba(15,58,63,.95), rgba(11,48,53,.95));
+      color: var(--text);
+      border-radius: 16px;
+      padding: 16px 16px;
+      text-align: left;
+      cursor: pointer;
+      transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease, background 0.3s;
+      box-shadow: 0 10px 24px rgba(0,0,0,.25);
+      position: relative;
+      overflow: hidden;
+      min-height: 86px;
+    }
 
-        .menu-item span {
-            display: table-cell;
-            vertical-align: middle;
-            font-weight: 500;
-            font-size: 14px;
-            padding: 10px;
-        }
+    [data-theme="light"] .btn {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
 
-        .menu-row:after { content: ""; display: table; clear: both; }
+    .btn:hover {
+      transform: translateY(-2px);
+      border-color: rgba(54,194,201,.35);
+      box-shadow: 0 16px 36px rgba(0,0,0,.35);
+    }
 
-        .logout-link {
-            display: inline-block;
-            margin-top: 30px;
-            color: var(--primary);
-            text-decoration: none;
-            font-size: 14px;
-            opacity: 0.7;
-        }
-    </style>
+    .btn-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 6px;
+    }
+
+    .btn-title {
+      font-weight: 700;
+      font-size: 1.02rem;
+      margin: 0;
+    }
+
+    .chip {
+      font-size: .78rem;
+      color: var(--text);
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.1);
+      white-space: nowrap;
+    }
+
+    .btn-desc {
+      margin: 0;
+      color: var(--muted);
+      font-size: .92rem;
+      line-height: 1.35;
+    }
+
+    /* Theme Toggle Switch */
+    .theme-toggle {
+      width: 44px; height: 24px; background: rgba(0,0,0,0.2); border: 1px solid var(--border);
+      border-radius: 20px; position: relative; cursor: pointer; display: flex; align-items: center;
+      transition: 0.3s; flex-shrink: 0;
+    }
+    .theme-toggle::after {
+      content: '🌙'; position: absolute; left: 4px; font-size: 12px;
+      transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    [data-theme="light"] .theme-toggle::after { content: '☀️'; left: 24px; }
+    [data-theme="light"] .theme-toggle { background: #fff; }
+
+    .footer {
+      padding: 16px 18px;
+      color: var(--muted);
+      font-size: .85rem;
+    }
+
+    .divider { height: 1px; background: var(--border); }
+
+    @media (max-width: 640px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
-<body onload="checkAuth()">
-
-    <div class="top-bar">
-        <button id="theme-btn" onclick="toggleTheme()">DARK MODE</button>
-    </div>
-
-    <div class="main-container">
-        <div id="login-screen" class="card">
-            <h1>Portal Access</h1>
-            <input type="password" id="pw" placeholder="Password">
-            <button class="btn-prime" onclick="login()">ENTER</button>
+<body>
+  <main class="wrap">
+    <section class="panel">
+      <div class="header">
+        <div>
+          <h1 class="title">Classical Acupuncture Info</h1>
+          <p class="subtitle">Choose a module to continue.</p>
         </div>
+        <div class="theme-toggle" id="themeToggle" title="Toggle Appearance"></div>
+      </div>
 
-        <div id="dashboard">
-            <h1 id="dash-title">Dashboard</h1>
-            <div class="menu-row">
-                <a href="5elements.html" class="menu-item"><span>Five Elements</span></a>
-                <a href="connecting_points.html" class="menu-item"><span>Connecting Points</span></a>
-            </div>
-            <div class="menu-row">
-                <a href="meridian.html" class="menu-item"><span>Meridian</span></a>
-                <a href="misc.html" class="menu-item"><span>Miscellaneous</span></a>
-            </div>
-            <a href="#" class="logout-link" onclick="logout()">Sign Out</a>
-        </div>
-    </div>
+      <div class="divider"></div>
 
-    <script>
-        // --- Cookie Management ---
-        function setCookie(name, value) {
-            // No 'expires' means it is a Session Cookie (clears when browser closes)
-            document.cookie = name + "=" + value + "; path=/; SameSite=Lax";
-        }
+      <div class="grid">
+        <button class="btn" onclick="window.location.href='connecting_points.html'">
+          <div class="btn-top">
+            <p class="btn-title">Connecting Points</p>
+            <span class="chip">Open</span>
+          </div>
+          <p class="btn-desc">Cross-reference selection and view connection output.</p>
+        </button>
 
-        function getCookie(name) {
-            var nameEQ = name + "=";
-            var ca = document.cookie.split(';');
-            for(var i=0;i < ca.length;i++) {
-                var c = ca[i];
-                while (c.charAt(0)==' ') c = c.substring(1,c.length);
-                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
-            }
-            return null;
-        }
+        <button class="btn" onclick="window.location.href='5elements.html'">
+          <div class="btn-top">
+            <p class="btn-title">Five Element Characteristics</p>
+            <span class="chip">5 Elements</span>
+          </div>
+          <p class="btn-desc">Five elements Dashboard.</p>
+        </button>
 
-        // --- Auth Logic ---
-        function checkAuth() {
-            // Restore Theme preference (still using localStorage for theme as it's not sensitive)
-            if (localStorage.getItem('dark') === 'true') {
-                document.documentElement.setAttribute('data-theme', 'dark');
-                document.getElementById('theme-btn').innerText = 'LIGHT MODE';
-            }
+        <button class="btn" onclick="window.location.href='meridian.html'">
+          <div class="btn-top">
+            <p class="btn-title">Acupuncture Meridian</p>
+            <span class="chip">Meridian</span>
+          </div>
+          <p class="btn-desc">Meridian page.</p>
+        </button>
 
-            if (getCookie("authenticated") === "true") {
-                showDashboard();
-            }
-        }
+        <button class="btn" onclick="window.location.href='misc.html'">
+          <div class="btn-top">
+            <p class="btn-title">Miscellaneous</p>
+            <span class="chip">Open</span>
+          </div>
+          <p class="btn-desc">Extra tools and reference pages.</p>
+        </button>
+      </div>
 
-        function login() {
-            var input = document.getElementById('pw').value;
-            if (input === "CAinfo@60") {
-                setCookie("authenticated", "true");
-                showDashboard();
-            } else {
-                alert("Access Denied");
-            }
-        }
+      <div class="footer">
+        Tip: Explore the visual traits and clinical associations of the systems.
+      </div>
+    </section>
+  </main>
 
-        function showDashboard() {
-            document.getElementById('login-screen').style.display = 'none';
-            document.getElementById('dashboard').style.display = 'block';
-        }
+  <script>
+    const themeToggle = document.getElementById("themeToggle");
 
-        function logout() {
-            document.cookie = "authenticated=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
-            location.reload();
-        }
+    function initTheme() {
+      const saved = localStorage.getItem("five_elements_theme") || "dark";
+      document.documentElement.setAttribute("data-theme", saved);
+    }
 
-        // --- Theme Logic ---
-        function toggleTheme() {
-            var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-            if (isDark) {
-                document.documentElement.removeAttribute('data-theme');
-                localStorage.setItem('dark', 'false');
-                document.getElementById('theme-btn').innerText = 'DARK MODE';
-            } else {
-                document.documentElement.setAttribute('data-theme', 'dark');
-                localStorage.setItem('dark', 'true');
-                document.getElementById('theme-btn').innerText = 'LIGHT MODE';
-            }
-        }
-    </script>
+    themeToggle.onclick = () => {
+      const current = document.documentElement.getAttribute("data-theme");
+      const target = current === "light" ? "dark" : "light";
+      document.documentElement.setAttribute("data-theme", target);
+      localStorage.setItem("five_elements_theme", target);
+    };
+
+    initTheme();
+  </script>
 </body>
 </html>
