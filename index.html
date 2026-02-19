@@ -4,192 +4,211 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>Welcome</title>
+<title>Classical Acupuncture</title>
 
 <style>
 
+*{box-sizing:border-box}
+
 body{
-margin:0; 
+margin:0;
 height:100vh;
 font-family:system-ui,Arial;
 background:#071c1f;
 color:#e9fbff;
 overflow:hidden;
+transition:.25s;
 }
 
-/* ===== LOGIN ===== */
+body.light{
+background:#eef6f6;
+color:#132a2a;
+}
+
+/* ================= LOGIN ================= */
 
 #login{
 position:fixed;
-top:0;left:0;right:0;bottom:0;
+inset:0;
 display:flex;
 align-items:center;
 justify-content:center;
-background:
-radial-gradient(circle at 20% 20%, rgba(54,194,201,.25), transparent 50%),
-linear-gradient(160deg,#071c1f,#0b2b2f);
-z-index:9999;
+padding:4vw;
+background:linear-gradient(160deg,#071c1f,#0b2b2f);
 }
+
+body.light #login{background:#eef6f6}
 
 .login-card{
-width:90%;
-max-width:360px;
-background:rgba(15,58,63,.95);
-padding:28px;
+width:92vw;
+max-width:420px;
+background:#0f3a3f;
+padding:6vw;
 border-radius:22px;
-box-shadow:0 20px 60px rgba(0,0,0,.5);
 text-align:center;
+box-shadow:0 20px 60px rgba(0,0,0,.5);
+position:relative;
 }
 
+body.light .login-card{background:#fff}
+
 .login-card h2{
-margin:0 0 18px;
+margin:0 0 4vw;
+font-size:5vw;
 }
 
 .login-card input{
 width:100%;
-padding:14px;
-border-radius:14px;
+padding:3.5vw;
 border:none;
-font-size:16px;
-margin-bottom:14px;
-outline:none;
+border-radius:14px;
+font-size:4vw;
+margin-bottom:4vw;
 }
 
 .login-card button{
 width:100%;
-padding:14px;
+padding:3.5vw;
 border:none;
 border-radius:14px;
 background:#36c2c9;
 font-weight:700;
-font-size:16px;
-cursor:pointer;
+font-size:4vw;
 }
 
-#error{
-color:#ff8b8b;
-min-height:20px;
+#error{color:#ff8080;font-size:3.5vw}
+
+/* Toggle */
+
+.toggle{
+position:absolute;
+top:10px;
+right:12px;
+width:44px;height:24px;
+background:#0b3035;
+border-radius:20px;
 }
 
-/* ===== APP ===== */
+.toggle:after{
+content:"🌙";
+position:absolute;
+left:4px;top:3px;
+font-size:12px;
+transition:.3s;
+}
+
+body.light .toggle{background:#ccc}
+body.light .toggle:after{content:"☀️";left:26px}
+
+/* normalize */
+
+@media(min-width:600px){
+.login-card h2{font-size:22px}
+.login-card input,
+.login-card button{font-size:16px;padding:14px}
+#error{font-size:14px}
+}
+
+/* ================= APP ================= */
 
 #app{
 display:none;
 height:100vh;
-padding:16px;
+overflow:auto;
 }
 
-.panel{
-height:100%;
-background:rgba(15,58,63,.9);
-border-radius:24px;
-box-shadow:0 18px 50px rgba(0,0,0,.4);
-display:flex;
-flex-direction:column;
-position:relative;
-}
-
-.header{
-display:flex;
-align-items:center;
-gap:12px;
+.dashboard{
+max-width:1000px;
+margin:auto;
 padding:18px;
-font-size:18px;
-font-weight:700;
 }
 
-.header svg{
-width:42px;
-height:42px;
-opacity:.85;
+.topbar{
+display:flex;
+justify-content:flex-end;
+margin-bottom:10px;
 }
+
+/* Hero */
+
+.hero{
+background:linear-gradient(160deg,#0f3a3f,#0b3035);
+border-radius:26px;
+padding:22px;
+margin-bottom:18px;
+box-shadow:0 14px 40px rgba(0,0,0,.4);
+}
+
+body.light .hero{background:#fff}
+
+.hero h2{margin:0;font-size:22px}
+.hero p{margin:4px 0 0;color:#9cc;font-size:13px}
+body.light .hero p{color:#666}
+
+/* Grid */
 
 .grid{
-flex:1;
-padding:14px;
 display:grid;
 grid-template-columns:1fr;
-grid-gap:14px;
+gap:16px;
 }
 
-.btn{
-background:#0b3035;
-border-radius:18px;
-padding:18px;
-display:flex;
-align-items:center;
-gap:14px;
-text-decoration:none;
-color:white;
-box-shadow:0 8px 20px rgba(0,0,0,.35);
+/* Cards */
+
+.card{
+background:#0f3a3f;
+border-radius:22px;
+padding:20px;
 position:relative;
 overflow:hidden;
-transition:transform .12s ease, box-shadow .12s ease;
+box-shadow:0 10px 30px rgba(0,0,0,.35);
 }
 
-.btn:active{
-transform:scale(.97);
-box-shadow:0 4px 10px rgba(0,0,0,.4);
+body.light .card{background:#fff}
+
+.card:active{transform:scale(.97)}
+
+.card a{position:absolute;inset:0}
+
+/* Card text */
+
+.card b{display:block;font-size:16px}
+.card small{display:block;margin-top:4px;color:#9cc}
+body.light .card small{color:#666}
+
+/* DOTS */
+
+.dots span{
+position:absolute;
+border-radius:50%;
+opacity:.6;
+animation:float 6s infinite alternate;
 }
 
-.icon{
-width:32px;
-height:32px;
-flex-shrink:0;
-fill:currentColor;
+@keyframes float{
+from{transform:translateY(0)}
+to{transform:translateY(-12px)}
 }
 
-.icon-connect{color:#36c2c9}
-.icon-elements{color:#ffd166}
-.icon-meridian{color:#ef476f}
-.icon-misc{color:#8ecae6}
+/* Per-card colors */
 
-.btn-text b{display:block}
-.btn-text small{
-display:block;
-color:#a7d3dc;
-margin-top:4px;
-}
+.c1 span{background:#36c2c9}
+.c2 span{background:#ffd166}
+.c3 span{background:#ef476f}
+.c4 span{background:#8ecae6}
+.c5 span{background:#95d5b2}
+.c6 span{background:#cdb4db}
+
+/* Footer */
 
 .footer{
 text-align:center;
-padding:12px;
-font-size:13px;
+margin:20px 0;
+font-size:12px;
 color:#9cc;
 }
 
-.logout{
-position:absolute;
-top:12px;
-right:16px;
-background:none;
-border:none;
-color:#aaa;
-font-size:13px;
-cursor:pointer;
-}
-
-/* Ripple */
-
-.ripple{
-position:absolute;
-border-radius:50%;
-background:rgba(255,255,255,.35);
-transform:scale(0);
-animation:ripple .5s linear;
-pointer-events:none;
-}
-
-@keyframes ripple{
-to{
-transform:scale(4);
-opacity:0;
-}
-}
-
-.btn:active .icon{
-filter:drop-shadow(0 0 6px currentColor);
-}
+body.light .footer{color:#777}
 
 @media(min-width:700px){
 .grid{grid-template-columns:1fr 1fr}
@@ -204,10 +223,17 @@ filter:drop-shadow(0 0 6px currentColor);
 
 <div id="login">
 <div class="login-card">
+
+<div class="toggle" onclick="toggleTheme()"></div>
+
 <h2>Classical Acupuncture</h2>
+
 <input id="pass" type="password" placeholder="Enter Password">
+
 <button onclick="doLogin()">Unlock</button>
+
 <div id="error"></div>
+
 </div>
 </div>
 
@@ -215,72 +241,58 @@ filter:drop-shadow(0 0 6px currentColor);
 
 <div id="app">
 
-<div class="panel">
+<div class="dashboard">
 
-<button class="logout" onclick="logout()">Logout</button>
+<div class="topbar">
+<div class="toggle" onclick="toggleTheme()"></div>
+</div>
 
-<div class="header">
-<svg viewBox="0 0 24 24" fill="#36c2c9">
-<circle cx="12" cy="12" r="10"/>
-<path d="M12 6v12M6 12h12" stroke="#071c1f" stroke-width="2"/>
-</svg>
-Classical Acupuncture Info 
+<div class="hero">
+<h2>Dashboard</h2>
+<p>Clinical reference</p>
 </div>
 
 <div class="grid">
 
-<a class="btn" href="connecting_points.html" onclick="ripple(event)">
-<svg class="icon icon-connect" viewBox="0 0 24 24">
-<path d="M10 13a5 5 0 0 1 0-7l2-2a5 5 0 0 1 7 7l-1 1"/>
-<path d="M14 11a5 5 0 0 1 0 7l-2 2a5 5 0 0 1-7-7l1-1"/>
-</svg>
-<div class="btn-text">
-<b>Connecting Points</b>
-<small>Cross reference selection</small>
+<div class="card c1">
+<div class="dots"></div>
+<b>Connecting Points</b><small>Cross reference</small>
+<a href="connecting_points.html"></a>
 </div>
-</a>
 
-<a class="btn" href="5elements.html" onclick="ripple(event)">
-<svg class="icon icon-elements" viewBox="0 0 24 24">
-<path d="M12 2l4 8h-8z"/>
-<circle cx="6" cy="18" r="3"/>
-<circle cx="18" cy="18" r="3"/>
-</svg>
-<div class="btn-text">
-<b>Five Elements</b>
-<small>Element characteristics</small>
+<div class="card c2">
+<div class="dots"></div>
+<b>Five Elements</b><small>Traits</small>
+<a href="5elements.html"></a>
 </div>
-</a>
 
-<a class="btn" href="meridian.html" onclick="ripple(event)">
-<svg class="icon icon-meridian" viewBox="0 0 24 24">
-<path d="M3 12h18"/>
-<path d="M12 3v18"/>
-<circle cx="12" cy="12" r="3"/>
-</svg>
-<div class="btn-text">
-<b>Meridian</b>
-<small>Acupuncture pathways</small>
+<div class="card c3">
+<div class="dots"></div>
+<b>Meridian</b><small>Energy</small>
+<a href="meridian.html"></a>
 </div>
-</a>
 
-<a class="btn" href="misc.html" onclick="ripple(event)">
-<svg class="icon icon-misc" viewBox="0 0 24 24">
-<circle cx="12" cy="12" r="3"/>
-<path d="M19.4 15a7 7 0 0 0 .1-6"/>
-<path d="M4.5 9a7 7 0 0 0 0 6"/>
-</svg>
-<div class="btn-text">
-<b>Miscellaneous</b>
-<small>Extra tools</small>
+<div class="card c4">
+<div class="dots"></div>
+<b>Miscellaneous</b><small>Tools</small>
+<a href="misc.html"></a>
 </div>
-</a>
+
+<div class="card c5">
+<div class="dots"></div>
+<b>Module 5</b><small>Coming soon</small>
+<a href="#"></a>
+</div>
+
+<div class="card c6">
+<div class="dots"></div>
+<b>Module 6</b><small>Coming soon</small>
+<a href="#"></a>
+</div>
 
 </div>
 
-<div class="footer">
-Classical Acupuncture Info
-</div>
+<div class="footer">Classical Acupuncture Info</div>
 
 </div>
 </div>
@@ -289,55 +301,60 @@ Classical Acupuncture Info
 
 var PASSWORD="CAinfo@60";
 
+/* AUTH */
+
 function doLogin(){
 var p=document.getElementById("pass").value;
 if(p===PASSWORD){
 sessionStorage.setItem("auth","1");
-showApp();
+login.style.display="none";
+app.style.display="block";
 }else{
-document.getElementById("error").innerHTML="Wrong password";
+error.innerHTML="Wrong password";
 }
-}
-
-function showApp(){
-document.getElementById("login").style.display="none";
-document.getElementById("app").style.display="block";
-}
-
-function logout(){
-sessionStorage.removeItem("auth");
-location.reload();
 }
 
 if(sessionStorage.getItem("auth")==="1"){
-showApp();
+login.style.display="none";
+app.style.display="block";
 }
+
+/* THEME */
+
+function toggleTheme(){
+if(document.body.className==="light"){
+document.body.className="";
+sessionStorage.setItem("theme","dark");
+}else{
+document.body.className="light";
+sessionStorage.setItem("theme","light");
+}
+}
+
+if(sessionStorage.getItem("theme")==="light"){
+document.body.className="light";
+}
+
+/* ENTER */
 
 document.onkeydown=function(e){
-if(e.keyCode==13){
-doLogin();
-}
+if(e.keyCode==13){doLogin();}
 };
 
-document.getElementById("pass").focus();
+/* CREATE DOTS */
 
-/* Ripple effect */
+var cards=document.getElementsByClassName("dots");
 
-function ripple(e){
-var btn=e.currentTarget;
-var circle=document.createElement("span");
-circle.className="ripple";
-var d=Math.max(btn.offsetWidth,btn.offsetHeight);
-circle.style.width=d+"px";
-circle.style.height=d+"px";
-circle.style.left=(e.offsetX-d/2)+"px";
-circle.style.top=(e.offsetY-d/2)+"px";
-btn.appendChild(circle);
-setTimeout(function(){
-if(circle.parentNode){
-circle.parentNode.removeChild(circle);
+for(var i=0;i<cards.length;i++){
+for(var j=0;j<6;j++){
+var s=document.createElement("span");
+s.style.width=6+Math.random()*10+"px";
+s.style.height=s.style.width;
+s.style.left=Math.random()*90+"%";
+s.style.top=Math.random()*60+"%";
+s.style.animationDelay=(Math.random()*5)+"s";
+cards[i].appendChild(s);
 }
-},500);
 }
 
 </script>
