@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Classical Acupuncture</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:system-ui,Arial;background:#000;overflow:hidden}
+#bg{position:fixed;inset:0;background:url('homescreen.jpg') center/cover no-repeat}
+#bg:after{content:"";position:absolute;inset:0;background:linear-gradient(rgba(0,0,0,.18),rgba(0,0,0,.45))}
+#hint{position:fixed;bottom:34px;width:100%;text-align:center;color:#fff;font-size:17px;
+text-shadow:0 2px 8px #000;animation:float 2.2s ease-in-out infinite;z-index:3}
+@keyframes float{50%{transform:translateY(-8px)}}
+#ham{position:fixed;top:22px;right:22px;width:64px;height:64px;border-radius:22px;
+backdrop-filter:blur(18px);background:rgba(255,255,255,.15);
+border:1px solid rgba(255,255,255,.28);
+box-shadow:0 12px 30px rgba(0,0,0,.35), inset 1px 1px 1px rgba(255,255,255,.35);
+display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:5}
+#ham div,#ham div:before,#ham div:after{width:28px;height:3px;background:#fff;border-radius:5px;position:relative;content:""}
+#ham div:before,#ham div:after{position:absolute;left:0}
+#ham div:before{top:-8px}
+#ham div:after{top:8px}
+#menu{position:fixed;top:0;right:-340px;width:320px;height:100%;
+background:rgba(22,35,45,.35);backdrop-filter:blur(28px);
+border-left:1px solid rgba(255,255,255,.25);
+box-shadow:-15px 0 45px rgba(0,0,0,.45), inset 1px 0 1px rgba(255,255,255,.15);
+transition:.4s;z-index:4;padding:90px 18px 20px}
+#menu.open{right:0}
+.item{display:block;text-decoration:none;color:#fff;margin:14px 0;padding:18px 20px;
+border-radius:20px;background:rgba(255,255,255,.12);
+border:1px solid rgba(255,255,255,.18);
+box-shadow:inset 1px 1px 2px rgba(255,255,255,.18),0 10px 20px rgba(0,0,0,.25);
+transition:.2s}
+.item:hover,.item:active{transform:translateX(-4px) scale(.98)}
+.item b{display:block;font-size:17px}
+.item small{opacity:.8}
+</style>
+</head>
+<body>
+<div id="bg"></div>
+
+<div id="ham" onclick="menu.classList.toggle('open')"><div></div></div>
+
+<div id="menu">
+<a class="item" href="connecting_points.html"><b>Connecting Points</b><small>Cross reference</small></a>
+<a class="item" href="5elements.html"><b>Five Elements</b><small>Traits</small></a>
+<a class="item" href="meridian.html"><b>Meridian</b><small>Energy</small></a>
+<a class="item" href="misc.html"><b>Miscellaneous</b><small>Tools</small></a>
+<a class="item" href="#"><b>Module 5</b><small>Coming soon</small></a>
+<a class="item" href="#"><b>Module 6</b><small>Coming soon</small></a>
+</div>
+
+<div id="hint">☞ Tap the menu to begin</div>
+</body>
+</html>
